@@ -1,0 +1,48 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block content %}
+{% block extrahead %}
+
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3">
+                <h3>Gestión De Inventario </h3> 
+                <div class="col-12" style="margin-bottom: 15px;"></div>               
+                <div class="row mt-4 mb-4">
+                    {% if profiles.group_id == 2%}
+                    <!-- 
+                        <div class="col-12 col-sm-3 mb-3">
+                            <a href="{% url 'new_user' %}" class="button form-control">Nuevo Producto</a>
+                            <div class="col-12" style="margin-bottom: 30px;"></div> 
+                        </div>
+                        -->
+                    {% endif %}
+                    
+                        <div class="col-12 col-sm-3 mb-3">
+                            <div class="col-12" style="margin-bottom: 25px;"></div>
+                            <a href="{% url 'inventario_listado' %}" class="button form-control">Listado</a>
+                        </div>
+                        
+                        <div class="col-12 col-sm-3 mb-3">
+                            <div class="col-12" style="margin-bottom: 25px;"></div>
+                            <a href="{% url 'categories_create' %}" class="button form-control">Nueva Categoria</a>
+                        </div>  
+                        
+                    <!-- 
+                    <div class="col-12 col-sm-3 mb-3">
+                        <div class="col-12" style="margin-bottom: 25px;"></div>
+                        <a href="{% url 'carga_masiva' %}" class="button">Carga Masiva</a>
+                        <div class="col-12" style="margin-bottom: 30px;"></div> 
+                        <a href="{% url 'admin_dashboard' %}" class="button">Dashboard</a>
+                        <div class="col-12" style="margin-bottom: 30px;"></div>
+                        -->
+                        <a href="{% url 'admin_main' %}" class="button button--gray form-control">Volver</a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -3,12 +3,21 @@ from ejemplos import views #importará los métodos que generemos en nuestra app
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 ejemplos_urlpatterns = [
     path('ejemplos_main/',views.ejemplos_main,name="ejemplos_main"),
     path('ejemplos_habilidad_add/',views.ejemplos_habilidad_add,name="ejemplos_habilidad_add"),
     path('ejemplos_habilidad_save/',views.ejemplos_habilidad_save,name="ejemplos_habilidad_save"),
-    path('ejemplos_habilidad_ver/<habilidad_id>/',views.ejemplos_habilidad_ver,name="ejemplos_habilidad_ver"),
+    path('ejemplos_habilidad_save/<int:habilidad_id>/',views.ejemplos_habilidad_save,name="ejemplos_habilidad_save"),
+    path('ejemplos_habilidades_updatezz/',views.ejemplos_habilidad_updatezz,name="ejemplos_habilidades_updatezz"),
+    path('ejemplos_habilidad_ver/<int:habilidad_id>/',views.ejemplos_habilidad_ver,name="ejemplos_habilidad_ver"),
+    path('ejemplos_habilidad_eliminar/<int:habilidad_id>/',views.ejemplos_habilidad_eliminar,name="ejemplos_habilidad_eliminar"),
     path('ejemplos_list_habilidades/',views.ejemplos_list_habilidades,name="ejemplos_list_habilidades"),
+    path('ejemplos_habilidades_update/<int:habilidad_id>',views.ejemplos_habilidades_update,name="ejemplos_habilidades_update"),
+    path('ejemplos_habilidades_update/ejemplo_habilidades_updatezz/<habilidad_id>',views.ejemplos_habilidades_update,name="ejemplos_habilidades_update"),
     path('ejemplos_carga_masiva/',views.ejemplos_carga_masiva,name="ejemplos_carga_masiva"),
     path('ejemplos_carga_masiva_save/',views.ejemplos_carga_masiva_save,name="ejemplos_carga_masiva_save"),
     path('import_file/',views.import_file,name="import_file"),
@@ -59,5 +68,6 @@ ejemplos_urlpatterns = [
     path("category_del_rest/",views.category_del_rest),
 
     ]
-
+if settings.DEBUG:
+    ejemplos_urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     

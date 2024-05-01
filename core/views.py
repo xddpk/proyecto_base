@@ -10,19 +10,40 @@ from django.http import (HttpResponse, HttpResponseBadRequest,
 from django.shortcuts import redirect, render #permite renderizar vistas basadas en funciones o redireccionar a otras funciones
 from django.template import RequestContext # contexto del sistema
 from django.views.decorators.csrf import csrf_exempt #decorador que nos permitira realizar conexiones csrf
-
 from registration.models import Profile #importa el modelo profile, el que usaremos para los perfiles de usuarios
 
 # Create your views here.
 def home(request):
     return redirect('login')
 
-@login_required
+"""@login_required
 def pre_check_profile(request):
-    #por ahora solo esta creada pero aún no la implementaremos
-    pass
+    profile = Profile.objects.filter(user_id=request.user.id).first() # Obtener el perfil del usuario
+    if profile: # Si el perfil existe
+        if profile.first_session == 'Si': # Si es la primera sesión
+            profile.first_session = 'No' # Marcar que ya no es la primera sesión
+            profile.save() # Guardar el cambio en el perfil
+            return redirect('password_reset_form') # Redirigir a la página de cambio de contraseña"""
+    
+def check_profile(request):
+    try:
+        profile = Profile.objects.get(user_id=request.user.id)
+    except Profile.DoesNotExist:
+        messages.add_message(request, messages.INFO, 'No se encontró el perfil asociado a su usuario. Por favor, contacte a los administradores.')
+        return redirect('login')
 
-@login_required
+    if profile.group_id == 1:
+        inicio_sesion = profile.first_session
+        if inicio_sesion == 'No':
+            return redirect('admin_main')
+        elif inicio_sesion == 'Si':
+            profile.first_session = 'No'
+            profile.save()
+            return render(request, 'registration/password_change_form.html')
+    else:
+        return redirect('logout')
+        
+"""@login_required
 def check_profile(request):  
     try:
         profile = Profile.objects.filter(user_id=request.user.id).get()    
@@ -33,5 +54,5 @@ def check_profile(request):
         #return HttpResponse('Usted se ha autentificado')
         return redirect('admin_main')
     else:
-        return redirect('logout')
+        return redirect('logout')"""
 

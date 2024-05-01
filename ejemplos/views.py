@@ -29,6 +29,27 @@ from ejemplos.models import *
 
 from django.conf import settings #importamos el archivo settings, para usar constantes declaradas en él
 from django.core.mail import EmailMultiAlternatives #libreria para el envio de correos
+from django.shortcuts import render
+import matplotlib.pyplot as plt
+import numpy as np
+@login_required
+def grafico(request):
+    # Datos para el gráfico de ejemplo
+    categorias = ['A', 'B', 'C', 'D', 'E']
+    valores = [23, 45, 56, 78, 33]
+
+    # Crear el gráfico de barras
+    plt.bar(categorias, valores)
+    plt.xlabel('Categorías')
+    plt.ylabel('Valores')
+    plt.title('Gráfico de ejemplo')
+
+    # Guardar el gráfico en un archivo
+    nombre_archivo = 'static/grafico.png'  # Asegúrate de tener una carpeta "static" en tu aplicación Django
+    plt.savefig(nombre_archivo)
+
+    # Renderizar la plantilla con el gráfico
+    return render(request, 'grafico.html', {'imagen_grafico': nombre_archivo})
 
 @login_required
 def ejemplos_main(request):
@@ -48,8 +69,8 @@ def ejemplos_habilidad_add(request):
     template_name = 'ejemplos/ejemplos_add.html'
     return render(request,template_name,{'template_name':template_name,'profile':profile})
 
-@login_required
-def ejemplos_habilidad_save(request):
+"""@login_required
+def ejemplos_habilidad_save(request, habilidad_id):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
@@ -69,17 +90,80 @@ def ejemplos_habilidad_save(request):
         return redirect('ejemplos_list_habilidades')
     else:
         messages.add_message(request, messages.INFO, 'Error en el método de envío')
-        return redirect('check_group_main')
-@login_required
-def ejemplos_habilidad_ver(request,habilidad_id):
+        return redirect('check_group_main')"""
+def ejemplos_habilidad_save(request, habilidad_id):
     profile = Profile.objects.get(user_id=request.user.id)
     if profile.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
-    habildad_data = Habilidad.objects.get(pk=habilidad_id)
     template_name = 'ejemplos/ejemplos_habilidad_ver.html'
-    return render(request,template_name,{'template_name':template_name,'profile':profile,'habildad_data':habildad_data})
-
+    nombre = request.POST.get('nombre')
+    nivel = request.POST.get('nivel')
+    Habilidad.objects.filter(pk=habilidad_id).update(nombre=nombre)
+    Habilidad.objects.filter(pk=habilidad_id).update(nivel=nivel)
+    return redirect('ejemplos_list_habilidades')
+@login_required
+def ejemplos_habilidad_updatezz(request,habilidad_id):
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    template_name = 'ejemplos/ejemplos_habilidad_ver.html'
+    nombre = request.POST.get('nombre')
+    nivel = request.POST.get('nivel')
+    Habilidad.objects.filter(pk=habilidad_id).update(nombre=nombre)
+    Habilidad.objects.filter(pk=habilidad_id).update(nivel=nivel)
+    template_name = 'ejemplos/ejemplos_habilidades_update.html'
+    return render(request, template_name, {'template_name': template_name, 'profile': profile, 'habilidad_data': habilidad_data, 'habilidad_id': habilidad_id})
+@login_required
+def ejemplos_habilidad_ver(request, habilidad_id):
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
+        return redirect('check_group_main')
+    habilidad_data = Habilidad.objects.get(pk=habilidad_id)
+    template_name = 'ejemplos/ejemplos_habilidad_ver.html'
+    return render(request, template_name, {'template_name': template_name, 'profile': profile, 'habilidad_data': habilidad_data, 'habilidad_id': habilidad_id})
+"""@login_required
+def ejemplos_habilidades_update(request,habilidad_id):
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    habilidad_data = Habilidad.objects.get(pk=habilidad_id)
+    template_name = 'ejemplos/ejemplos_habilidades_update.html'
+    return render(request,template_name,{'template_name':template_name,'profile':profile,'habilidad_data':habilidad_data})"""
+"""@login_required
+def ejemplos_habilidad_update(request, habilidad_id):
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    template_name = 'ejemplos/ejemplos_habilidad_ver.html'
+    
+    nombre = request.POST.get('nombre')
+    nivel = request.POST.get('nivel')
+    Habilidad.objects.filter(pk=habilidad_id).update(nombre=nombre)
+    Habilidad.objects.filter(pk=habilidad_id).update(nivel=nivel)
+    template_name = 'ejemplos/ejemplos_habilidades_update.html'
+    return render(request,template_name,{'template_name':template_name,'profile':profile,})"""
+@login_required    
+def ejemplos_habilidad_eliminar(request,habilidad_id):
+    habildad_data=Habilidad.objects.get(id=habilidad_id)
+    habildad_data.delete()
+    return redirect('ejemplos_list_habilidades')    
+        
+@login_required
+def ejemplos_habilidades_update(request,habilidad_id):
+    profile = Profile.objects.get(user_id=request.user.id)
+    if profile.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    
+    habilidad_data = Habilidad.objects.get(pk=habilidad_id)
+    template_name = 'ejemplos/ejemplos_habilidades_update.html'
+    
+    return render(request, template_name, {'template_name': template_name, 'profile': profile, 'habilidad_data': habilidad_data, 'habilidad_id': habilidad_id})
 @login_required
 def ejemplos_list_habilidades(request,page=None,search=None):
     profile = Profile.objects.get(user_id=request.user.id)
@@ -415,7 +499,7 @@ def ejemplos_correo1(request):
     return redirect('ejemplos_main')   
 
 @login_required
-def send_mail_ejemplo1(request,mail_to,data_1):
+def send_mail_ejemplo1(request,data_1):
     #Ejemplo que permite enviar un correo solo con texto, el metodo, recibe por parametro la información para su ejecución    
     from_email = settings.DEFAULT_FROM_EMAIL #exporta desde el settings.py, el correo de envio por defecto
     subject = "Asunto del correo"    
@@ -436,7 +520,7 @@ def send_mail_ejemplo1(request,mail_to,data_1):
                         </body>
                     </html>            
                 """
-    msg = EmailMultiAlternatives(subject, html_content, from_email, [mail_to])
+    msg = EmailMultiAlternatives(subject, html_content, from_email, ['pedrozzzlp@gmail.com'])
     msg.content_subtype = "html"
     msg.attach_alternative(html_content, "text/html")
     msg.send()

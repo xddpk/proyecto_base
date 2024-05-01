@@ -69,7 +69,12 @@
                         <td>{{h.nombre}}</td>
                         <td>{{h.nivel}}</td>
                         <td>
-                            <a href="{% url 'ejemplos_habilidad_ver' h.id %}">Ver</a>
+                            <a href="{% url 'ejemplos_habilidad_ver' h.id %}">Ver </a>
+                            &nbsp; <!-- estaban muy pegados -->
+                            &nbsp; <!-- estaban muy pegados -->
+                            <a href="{% url 'ejemplos_habilidades_update' h.id %}">   Actualizar</a>
+                            &nbsp; <!-- estaban muy pegados -->
+                            <a href="{% url 'ejemplos_habilidad_eliminar' h.id %}">   Delete</a>
                         </td>
                     </tr>
                 {% endfor %}
