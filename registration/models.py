@@ -13,6 +13,3 @@ class Profile(models.Model):
     horas_trabajadas = models.FloatField(default=0)
     class Meta:
         ordering = ['user__username']
-
-
-
