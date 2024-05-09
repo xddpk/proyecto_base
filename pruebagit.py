@@ -3,4 +3,5 @@
 #maxi
 
 
-#pedro gay
+la_verdad="pedro gay"
+print(la_verdad)
