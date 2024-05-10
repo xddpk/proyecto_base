@@ -8,10 +8,10 @@
 <header class='mb-5'>
     <div class="row">
         <div class="col-12 col-sm-8 mb-3">
-            <h2 class='h2 medium text-blue'>Listado de usuarios activos {{group}}</h2>
+            <h2 class='h2 medium text-blue'>Listado de categorias</h2>
         </div>
         <div class="col-12 col-sm-4 mb-3">
-            <a href="{% url 'list_main' group.id %}" class="button button--gray form-control">Volver</a>
+            <a href="{% url 'inventario_main' %}" class="button button--gray form-control">Volver</a>
         </div>
     </div>
     <div class="d-flex flex-column flex-lg-row mt-2">
@@ -27,7 +27,7 @@
     </div>
     <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
         {% csrf_token %}
-        <input name="search" id="search" type="text" placeholder='Buscar por nombre'/>
+        <input name="search" id="search" type="text" placeholder='Buscar categoria'/>
         <button type="submit" class="button button--gray">
             <span class="material-icons-outlined">
                 search
@@ -37,38 +37,30 @@
     <form>       
 </div>
 <div class="table-container mt-5">
-    <table class="table table-user">
+    <table class="table table-use">
         <thead>
             <tr>
-                <th width="20%" scope="col">Nombre Usuario</th>
-                <th width="30%" scope="col">Nombre Completo</th>
-                <th width="30%" scope="col">Correo</th>
+                <th width="20%" scope="col">Nombre de Categoría</th>
                 {% if profiles.group_id == 1 %}
                     <th width="15%" scope="col">Funciones</th>
                 {% endif %}
             </tr>
         </thead>
         <tbody>
-            {% for s in user_list %}
+            {% for category in categories_list %}
                 <tr>
-                    <th scope="row">{{s.user_name}}</th>
-                    <th scope="row">{{s.name}}</th>
-                    <th scope="row">{{s.mail}}</th>
-                    {% if profiles.group_id == 1 %}
-                        <th scope="row">
-                            {% if s.id != request.user.id %}
-                                <a href="{% url 'edit_user' s.id %}">
-                                    Edita Usuario
-                                </a>
-                                {% if s.id != request.user.id %}
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <a href="{% url 'user_block' s.id  %}" data-toggle="modal" data-target="#userBlock" data-u_id="{{s.id}}" data-u_name="{{s.name}}"  data-page="{{page}}">
-                                        Bloquea Usuario
-                                    </a>
-                                {% endif %}
-                            {% endif %}
-                        </th>   
-                    {% endif %}                            
+                    <th scope="row"> {{ category.category_group_name }}</th>
+                    <th scope="row">
+                        <a href="{% url 'categories_delete' category.id %}">
+                            eliminar categoria
+                        </a>
+                        <a href="{% url 'categories_edit' category.id %}">
+                            Editar categoria
+                        </a>
+                </th> 
+                    {% if profiles.group_id == 2 or profiles.group_id == 1  %}
+                      
+                {% endif %}     
                 </tr>
             {% endfor %}
         </tbody>
