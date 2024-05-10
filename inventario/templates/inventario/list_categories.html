@@ -8,7 +8,7 @@
 <header class='mb-5'>
     <div class="row">
         <div class="col-12 col-sm-8 mb-3">
-            <h2 class='h2 medium text-blue'>Listado Productos </h2>
+            <h2 class='h2 medium text-blue'>Listado de categorias</h2>
         </div>
         <div class="col-12 col-sm-4 mb-3">
             <a href="{% url 'inventario_main' %}" class="button button--gray form-control">Volver</a>
@@ -27,7 +27,7 @@
     </div>
     <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
         {% csrf_token %}
-        <input name="search" id="search" type="text" placeholder='Buscar no listo'/>
+        <input name="search" id="search" type="text" placeholder='Buscar categoria'/>
         <button type="submit" class="button button--gray">
             <span class="material-icons-outlined">
                 search
@@ -37,71 +37,42 @@
     <form>       
 </div>
 <div class="table-container mt-5">
-    <table class="table table-user">
+    <table class="table table-use">
         <thead>
             <tr>
-                <th width="20%" scope="col">Nombre</th>
-                <th width="20%" scope="col">Descripción</th>
-                <th width="30%" scope="col">Stock</th>
-                <th width="30%" scope="col">Precio $</th>
-                <th width="30%" scope="col">Categoría</th>
-                <th width="30%" scope="col">Estado</th>
+                <th width="20%" scope="col">Nombre de Categoría</th>
                 {% if profiles.group_id == 1 %}
                     <th width="15%" scope="col">Funciones</th>
                 {% endif %}
             </tr>
         </thead>
         <tbody>
-            
-            {% for p in producto_list %}
+            {% for category in categories_list %}
                 <tr>
-                    <th scope="row">{{ p.nombre_producto }}</th>
-                    <th scope="row">{{ p.descripcion_producto }}</th>
-                    <th scope="row">{{ p.stock_producto }}</th>
-                    <th scope="row">{{ p.precio_producto }}</th> 
-                    <th scope="row">{{ p.categoria_data }}</th> 
+                    <th scope="row"> {{ category.category_group_name }}</th>
                     <th scope="row">
-                        {% if p.stock_producto < p.stock_minimo_producto %}
-                            <a href="{% url 'producto_create3' p.id %}">
-                                Bajo
-                            </a>
-                        {% elif p.stock_maximo_producto < p.stock_producto  %}
-                            Alto
-                        {% else %}
-                            Medio
-                        {% endif %}
-                    </th>   
-                    <!-- acá debe ir logica y boton para el estado-->  
+                        <a href="{% url 'categories_delete' category.id %}">
+                            eliminar categoria
+                        </a>
+                        <a href="{% url 'categories_edit' category.id %}">
+                            Editar categoria
+                        </a>
+                </th> 
                     {% if profiles.group_id == 2 or profiles.group_id == 1  %}
-                        <th scope="row">
-                            
-                            
-                                <a href="{% url 'producto_edit' p.id %}">
-                                    Edita Producto
-                                </a>
-                                <a href="{% url 'producto_delete' p.id %}">
-                                    elimina Producto
-                                </a>
-                                
-                                
-                            
-                        </th>   
-                    {% endif %}                            
+                      
+                {% endif %}     
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <script>
-        console.log(producto_list);
-    </script>
     <!-- Paginación -->
         {% if paginator.num_pages > 1 %}
             <div class="d-flex">
                 <nav aria-label="Page navigation example" class="ms-auto">
                     <ul class="pagination pagination-table">
-                        {% if producto_list.has_previous %}
+                        {% if user_list.has_previous %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ producto_list.previous_page_number}}&search={{search}}" aria-label="Previous">
+                                <a class="page-link" href="?page={{ user_list.previous_page_number}}&search={{search}}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
@@ -112,14 +83,14 @@
                         {% endif %}
                         {% for i in paginator.page_range %}
                             {% if i >= page|sub:2  and i < page|add:3  %}
-                                <li class="page-item {% if producto_list.number == i %}active{% endif %}">
+                                <li class="page-item {% if user_list.number == i %}active{% endif %}">
                                     <a class="page-link" href="?page={{ i }}&search={{search}}">{{ i }}</a>
                                 </li>                        
                             {% endif %}
                         {% endfor %}
-                        {% if producto_list.has_next %}
+                        {% if user_list.has_next %}
                             <li class="page-item ">
-                                <a class="page-link" href="?page={{ producto_list.next_page_number }}&search={{search}}">&raquo;</a>
+                                <a class="page-link" href="?page={{ user_list.next_page_number }}&search={{search}}">&raquo;</a>
                             </li>
                         {% else %}
                             <li class="page-item disabled">

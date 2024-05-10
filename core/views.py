@@ -31,7 +31,7 @@ def check_profile(request):
     except Profile.DoesNotExist:
         messages.add_message(request, messages.INFO, 'No se encontró el perfil asociado a su usuario. Por favor, contacte a los administradores.')
         return redirect('login')
-
+    profile_datos=Profile.objects.get(user_id=request.user.id)
     if profile.group_id == 1:
         inicio_sesion = profile.first_session
         if inicio_sesion == 'No':
@@ -39,7 +39,8 @@ def check_profile(request):
         elif inicio_sesion == 'Si':
             profile.first_session = 'No'
             profile.save()
-            return render(request, 'registration/password_change_form.html')
+    
+        return render(request, 'registration/password_change_form.html', {'profile_id': Profile.objects.get(user_id=request.user.id).id})
     else:
         return redirect('logout')
         

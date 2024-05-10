@@ -133,6 +133,7 @@ def edit_user(request,user_id):
     user_data = User.objects.get(pk=user_id)
     profile_data = Profile.objects.get(user_id=user_id)
     groups = Group.objects.get(pk=profile_data.group_id) 
+
     profile_list = Group.objects.all().exclude(pk=0).order_by('name')    
     template_name = 'administrator/edit_user.html'
     return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list})
