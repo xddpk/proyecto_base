@@ -24,6 +24,8 @@ from django.utils.decorators import method_decorator
 from dateutil import relativedelta
 from registration.models import Profile
 
+#validaciones .py!!!!! <---------------------------------
+from extensiones import validacion
 
 @login_required
 def admin_main(request):
@@ -52,37 +54,54 @@ def new_user(request):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
+
         grupo = request.POST.get('grupo')
         rut = request.POST.get('rut')
         first_name = request.POST.get('name')
         last_name = request.POST.get('last_name1')
         email = request.POST.get('email')
         mobile = request.POST.get('mobile')
-        
-        #el metodo no contempla validacioens deberá realizarlas
-        rut_exist = User.objects.filter(username=rut).count()
-        mail_exist = User.objects.filter(email=email).count()
-        if rut_exist == 0:
-            if mail_exist == 0:
-                user = User.objects.create_user(
-                    username= rut,
-                    email=email,
-                    password=rut,
-                    first_name=first_name,
-                    last_name=last_name,
-                    )
-                profile_save = Profile(
-                    user_id = user.id,
-                    group_id = grupo,
-                    first_session = 'Si',
-                    token_app_session = 'No',
-                )
-                profile_save.save()
-                messages.add_message(request, messages.INFO, 'Usuario creado con exito')                             
+        #Posiblemente unificar los if con "&", PERO CAMBIAR LOS MENSAJES ELSE/ O QUIZAS CREAR UNA NUEVA FUNCION.<-----
+        if validacion.validar_rut(rut): #<- de validaciones saca validar_email 
+            messages.add_message(request, messages.INFO, 'Rut valido '+rut) # quitar
+            if validacion.validar_email(email): #<- de validaciones saca validar_email 
+
+                messages.add_message(request, messages.INFO, 'correo valido') # quitar
+                rut_exist = User.objects.filter(username=rut).count()
+                mail_exist = User.objects.filter(email=email).count()
+                if rut_exist == 0:
+                    if mail_exist == 0:
+                        user = User.objects.create_user(
+                            username= rut,
+                            email=email,
+                            password=rut,
+                            first_name=first_name,
+                            last_name=last_name,
+                            )
+                        profile_save = Profile(
+                            user_id = user.id,
+                            group_id = grupo,
+                            first_session = 'Si',
+                            token_app_session = 'No',
+                        )
+                        profile_save.save()
+                        messages.add_message(request, messages.INFO, 'Usuario creado con exito')                             
+                    else:
+                        messages.add_message(request, messages.INFO, 'El correo que esta tratando de ingresar, ya existe en nuestros registros')                             
+                else:
+                    messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')
+
+
             else:
-                messages.add_message(request, messages.INFO, 'El correo que esta tratando de ingresar, ya existe en nuestros registros')                             
+                messages.add_message(request, messages.INFO, 'correo invalido')            
         else:
-            messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')                         
+            messages.add_message(request, messages.INFO, 'Rut invalido')
+
+        
+        
+
+        #el metodo no contempla validacioens deberá realizarlas
+                                 
     groups = Group.objects.all().exclude(pk=0).order_by('id')
     template_name = 'administrator/new_user.html'
     return render(request,template_name,{'groups':groups})
