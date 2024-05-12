@@ -84,7 +84,7 @@ def inventario_listado(request,page=None,search=None):
     producto_list = paginator.get_page(page)
     print(producto_list)
     template_name = 'inventario/inventario_listado.html'
-    return render(request,template_name,{'profiles':profiles,'producto_list':producto_list,'paginator':paginator,'page':page })
+    return render(request,template_name,{'profiles':profiles,'producto_list':producto_list,'paginator':paginator,'page':page,'search':search })
 
 
 
@@ -487,27 +487,19 @@ def list_categories(request,page=None,search=None):
         search = request.POST.get('search') 
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
-    print("search> ",search)
+    
     categories_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None":# si la cadena de búsqueda viene vacia
+    if search == None or search == "":# si la cadena de búsqueda viene vacia
         categories_all = Category_group.objects.all()
+        
     else:#si la cadena de búsqueda trae datos
-        categories_all =  Category_group.objects.filter(category_group_name=search).order_by('category_group_name')#Ascendente         
-    paginator = Paginator(categories_all, 30)  
+        categories_all =  Category_group.objects.filter(category_group_name=search).order_by('category_group_name')#Ascendente  
+           
+    paginator = Paginator(categories_all,1 )  
     categories_list = paginator.get_page(page)
     template_name = 'inventario/list_categories.html'
-    return render(request,template_name,{'categories_list':categories_list,'paginator':paginator,'page':page })
+    return render(request,template_name,{'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
 
-"""@login_required
-def categories_edit(request,categories_id):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    name= request.POST.get('name')
-    Category_group.objects.filter(pk=categories_id).update(category_group_name=name)
-    template_name='inventario/categorias_editar.html'
-    return render(request,template_name,{'name':name, 'categories_id':categories_id})"""
 def categories_edit(request,categories_id):
     profiles = Profile.objects.get(user_id = request.user.id)
     if profiles.group_id != 1:
@@ -533,22 +525,6 @@ def categories_edit(request,categories_id):
     return render(request,template_name,{'category_data':category_data})
 
 
-
-"""@login_required
-def categories_save_edit(request, categories_id):
-
-    if request.method=='POST':
-        name= request.POST.get('name')
-        state=True
-        if name=='':
-            messages.add_message(request,messages.INFO,'Debe ingresar un nombre para la categoria')
-            return('categories_create')    
-        categories_save=Category_group(
-            category_group_name=name,
-        )
-    category_group_name.filter(pk=categories_id).update(name=name)
-    messages.add_message(request,messages.INFO,'Categoria actualizada con exito')
-    return redirect('inventario_main')"""
 
 def categories_save_edit(request, categories_id):
     profiles = Profile.objects.get(user_id=request.user.id)
