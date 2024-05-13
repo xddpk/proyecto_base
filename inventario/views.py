@@ -503,8 +503,7 @@ def list_categories(request,page=None,search=None):
         
     else:#si la cadena de búsqueda trae datos
         categories_all =  Category_group.objects.filter(category_group_name=search).order_by('category_group_name')#Ascendente  
-           
-    paginator = Paginator(categories_all,1 )  
+    paginator = Paginator(categories_all,30 )  
     categories_list = paginator.get_page(page)
     template_name = 'inventario/list_categories.html'
     return render(request,template_name,{'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
