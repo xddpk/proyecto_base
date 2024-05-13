@@ -70,9 +70,9 @@
             <div class="d-flex">
                 <nav aria-label="Page navigation example" class="ms-auto">
                     <ul class="pagination pagination-table">
-                        {% if user_list.has_previous %}
+                        {% if categories_list.has_previous %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ user_list.previous_page_number}}&search={{search}}" aria-label="Previous">
+                                <a class="page-link" href="?page={{ categories_list.previous_page_number}}&search={{search}}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
@@ -83,14 +83,14 @@
                         {% endif %}
                         {% for i in paginator.page_range %}
                             {% if i >= page|sub:2  and i < page|add:3  %}
-                                <li class="page-item {% if user_list.number == i %}active{% endif %}">
+                                <li class="page-item {% if categories_list.number == i %}active{% endif %}">
                                     <a class="page-link" href="?page={{ i }}&search={{search}}">{{ i }}</a>
                                 </li>                        
                             {% endif %}
                         {% endfor %}
-                        {% if user_list.has_next %}
+                        {% if categories_list.has_next %}
                             <li class="page-item ">
-                                <a class="page-link" href="?page={{ user_list.next_page_number }}&search={{search}}">&raquo;</a>
+                                <a class="page-link" href="?page={{ categories_list.next_page_number }}&search={{search}}">&raquo;</a>
                             </li>
                         {% else %}
                             <li class="page-item disabled">
