@@ -54,6 +54,7 @@ def new_user(request):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
+        validar=True
 
         grupo = request.POST.get('grupo')
         rut = request.POST.get('rut')
@@ -61,47 +62,59 @@ def new_user(request):
         last_name = request.POST.get('last_name1')
         email = request.POST.get('email')
         mobile = request.POST.get('mobile')
+        cargo = request.POST.get('position')
+
+        rut_exist = User.objects.filter(username=rut).count()
+        mail_exist = User.objects.filter(email=email).count()
+        print (mail_exist)
+        #cambie toda la estructura pero no me gusta tanto (ineficiente)
+
+        if validacion.validar_soloString(first_name)==False: #<- de validaciones Strings
+            validar=False
+            messages.add_message(request, messages.INFO, 'Error en Nombre: invalido')  
+        if validacion.validar_soloString(last_name)==False: #<- de validaciones Strings
+            validar=False
+            messages.add_message(request, messages.INFO, 'Error en Apellido: invalido')
+        if validacion.validar_soloString(cargo)==False: #<- de validaciones Strings
+            validar=False                               #cargo     QUIZAS SE VA
+            messages.add_message(request, messages.INFO, 'Error en cargo: invalido')
+        if validacion.validar_numCelular(mobile)==False:
+            validar=False
+            messages.add_message(request, messages.INFO, 'Error en numero de telefono: Ingrese un numero telefonico valido')#Buscar regeex numero chilenos
+
         #Posiblemente unificar los if con "&", PERO CAMBIAR LOS MENSAJES ELSE/ O QUIZAS CREAR UNA NUEVA FUNCION.<-----
-        if validacion.validar_rut(rut): #<- de validaciones saca validar_email 
-            messages.add_message(request, messages.INFO, 'Rut valido '+rut) # quitar
-            if validacion.validar_email(email): #<- de validaciones saca validar_email 
 
-                messages.add_message(request, messages.INFO, 'correo valido') # quitar
-                rut_exist = User.objects.filter(username=rut).count()
-                mail_exist = User.objects.filter(email=email).count()
-                if rut_exist == 0:
-                    if mail_exist == 0:
-                        user = User.objects.create_user(
-                            username= rut,
-                            email=email,
-                            password=rut,
-                            first_name=first_name,
-                            last_name=last_name,
-                            )
-                        profile_save = Profile(
-                            user_id = user.id,
-                            group_id = grupo,
-                            first_session = 'Si',
-                            token_app_session = 'No',
+        if rut_exist==1:
+                if validacion.validar_rut(rut)==False: #<- de validaciones saca validar_rut
+                    messages.add_message(request, messages.INFO, 'Rut invalido')  
+                    validar=False
+                messages.add_message(request, messages.INFO, 'Rut ya esta registrado')
+                validar=False
+        if mail_exist==1:
+                if validacion.validar_email(email)==False: #<- de validaciones saca validar_email
+                    messages.add_message(request, messages.INFO, 'Email invalido')  
+                    validar=False
+                messages.add_message(request, messages.INFO, 'Este correo ya esta registrado')  
+                validar=False
+        
+        if validar == True:
+                    user = User.objects.create_user(
+                        username= rut,
+                        email=email,
+                        password=rut,
+                        first_name=first_name.capitalize(),#hace que el primero sea mayuscula (.capitalize())
+                        last_name=last_name.capitalize()#hace que el primero sea mayuscula (.capitalize())
                         )
-                        profile_save.save()
-                        messages.add_message(request, messages.INFO, 'Usuario creado con exito')                             
-                    else:
-                        messages.add_message(request, messages.INFO, 'El correo que esta tratando de ingresar, ya existe en nuestros registros')                             
-                else:
-                    messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')
-
-
-            else:
-                messages.add_message(request, messages.INFO, 'correo invalido')            
-        else:
-            messages.add_message(request, messages.INFO, 'Rut invalido')
-
-        
-        
-
+                    profile_save = Profile(
+                        user_id = user.id,
+                        group_id = grupo,
+                        first_session = 'Si',
+                        token_app_session = 'No',
+                        )
+                    profile_save.save()
+                    messages.add_message(request, messages.INFO, 'Usuario creado con exito')                             
+ 
         #el metodo no contempla validacioens deberá realizarlas
-                                 
     groups = Group.objects.all().exclude(pk=0).order_by('id')
     template_name = 'administrator/new_user.html'
     return render(request,template_name,{'groups':groups})
@@ -121,6 +134,7 @@ def list_main2(request):
 @login_required
 def edit_user(request,user_id):
     profiles = Profile.objects.get(user_id = request.user.id)
+    validar = True
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
@@ -133,19 +147,37 @@ def edit_user(request,user_id):
         group = request.POST.get('group')
         user_data_count = User.objects.filter(pk=user_id).count()
         user_data = User.objects.get(pk=user_id)
-        profile_data = Profile.objects.get(user_id=user_id)    
+        profile_data = Profile.objects.get(user_id=user_id)
+
         if user_data_count == 1:
+            #CUMPLE CON LA FORMA DE UN EMAIL
+            if validacion.validar_email(email)==False:
+                validar=False
+            #SOLO STRING
+            if validacion.validar_soloString(first_name)== False:
+                validar=False
+            if validacion.validar_soloString(last_name)== False:
+                validar=False
+            #si el correo existe
             if user_data.email != email:
                 user_mail_count_all = User.objects.filter(email=email).count()
                 if user_mail_count_all > 0:
-                    messages.add_message(request, messages.INFO, 'El correo '+str(email)+' ya existe en nuestros registros asociado a otro usuario, por favor utilice otro ')                             
+                    #que es page
+                    messages.add_message(request, messages.INFO, 'El correo '+str(email)+' ya existe en nuestros registros asociado a otro usuario, por favor utilice otro ')       
                     return redirect('list_user_active2',page)
-            User.objects.filter(pk = user_id).update(first_name = first_name)
-            User.objects.filter(pk = user_id).update(last_name = last_name)  
-            User.objects.filter(pk = user_id).update(email = email)  
-            Profile.objects.filter(user_id = user_id).update(group_id = group)                
-            messages.add_message(request, messages.INFO, 'Usuario '+user_data.first_name +' '+user_data.last_name+' editado con éxito')                             
-            return redirect('list_user_active2')
+            #Si se cumple Todas las especificaciones lleva aca -Enzo
+            if validar == True:
+                User.objects.filter(pk = user_id).update(first_name = first_name.capitalize())
+                User.objects.filter(pk = user_id).update(last_name = last_name.capitalize())  
+                User.objects.filter(pk = user_id).update(email = email)
+                Profile.objects.filter(user_id = user_id).update(group_id = group)                
+                messages.add_message(request, messages.INFO, 'Usuario '+user_data.first_name +' '+user_data.last_name+' editado con éxito')                             
+                return redirect('list_user_active2')
+            #Si no se cumple alguna de las especificaciones lleva aca -Enzo
+            else:
+                messages.add_message(request, messages.INFO, 'Complete segun lo pedido') 
+                #que es page                            
+                return redirect('list_user_active2',page)
         else:
             messages.add_message(request, messages.INFO, 'Hubo un error al editar el Usuario '+user_data.first_name +' '+user_data.last_name)
             return redirect('list_user_active2')    
