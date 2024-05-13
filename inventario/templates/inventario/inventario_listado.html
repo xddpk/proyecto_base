@@ -55,25 +55,36 @@
             
             {% for p in producto_list %}
                 <tr>
-                    
-                    <th scope="row">{{p.nombre_producto}}</th>
-                    <th scope="row">{{p.descripcion_producto}}</th>
-                    <th scope="row">{{p.stock_producto}}</th>
-                    <th scope="row">{{p.precio_producto}}</th> 
-                    <th scope="row">{{p.categoria_data}}</th> 
-                    <!-- acá debe ir logica y boton para el estado-->
-                    <th scope="row"></th>   
+                    <th scope="row">{{ p.nombre_producto }}</th>
+                    <th scope="row">{{ p.descripcion_producto }}</th>
+                    <th scope="row">{{ p.stock_producto }}</th>
+                    <th scope="row">{{ p.precio_producto }}</th> 
+                    <th scope="row">{{ p.categoria_data }}</th> 
+                    <th scope="row">
+                        {% if p.stock_producto < p.stock_minimo_producto %}
+                            <a href="{% url 'producto_create3' p.id %}">
+                                Bajo
+                            </a>
+                        {% elif p.stock_maximo_producto < p.stock_producto  %}
+                            Alto
+                        {% else %}
+                            Medio
+                        {% endif %}
+                    </th>   
                     <!-- acá debe ir logica y boton para el estado-->  
-                    {% if profiles.group_id == 2 %}
+                    {% if profiles.group_id == 2 or profiles.group_id == 1  %}
                         <th scope="row">
-                            {% if p.id != request.user.id %}
-                            <!--
-                                <a href="{% url 'producto_editar' p.id %}">
+                            
+                            
+                                <a href="{% url 'producto_edit' p.id %}">
                                     Edita Producto
                                 </a>
-                                -->
+                                <a href="{% url 'producto_delete' p.id %}">
+                                    elimina Producto
+                                </a>
                                 
-                            {% endif %}
+                                
+                            
                         </th>   
                     {% endif %}                            
                 </tr>

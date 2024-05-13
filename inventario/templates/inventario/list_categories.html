@@ -1,0 +1,107 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block content %}
+{% block extrahead %}
+
+{% endblock %}
+<header class='mb-5'>
+    <div class="row">
+        <div class="col-12 col-sm-8 mb-3">
+            <h2 class='h2 medium text-blue'>Listado de categorias</h2>
+        </div>
+        <div class="col-12 col-sm-4 mb-3">
+            <a href="{% url 'inventario_main' %}" class="button button--gray form-control">Volver</a>
+        </div>
+    </div>
+    <div class="d-flex flex-column flex-lg-row mt-2">
+        <p class='body--normal text-gray'>
+            {% lorem 2 b random %}
+        </p>
+    </div>
+
+</header>
+<div class="d-flex flex-column flex-lg-row my-5">
+    <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
+        <div class="feedback body--small normal"></div>
+    </div>
+    <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+        {% csrf_token %}
+        <input name="search" id="search" type="text" placeholder='Buscar categoria' />
+        <button type="submit" class="button button--gray">
+            <span class="material-icons-outlined">
+                search
+            </span>
+        </button>
+        
+    <form>       
+</div>
+<div class="table-container mt-5">
+    <table class="table table-use">
+        <thead>
+            <tr>
+                <th width="20%" scope="col">Nombre de Categoría</th>
+                {% if profiles.group_id == 1 %}
+                    <th width="15%" scope="col">Funciones</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories_list %}
+                <tr>
+                    <th scope="row"> {{ category.category_group_name }}</th>
+                    <th scope="row">
+                        <a href="{% url 'categories_delete' category.id %}">
+                            eliminar categoria
+                        </a>
+                        <a href="{% url 'categories_edit' category.id %}">
+                            Editar categoria
+                        </a>
+                </th> 
+                    {% if profiles.group_id == 2 or profiles.group_id == 1  %}
+                      
+                {% endif %}     
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+<!-- Paginación -->
+{% if categories_list.paginator.num_pages > 1 %}
+    <div class="d-flex">
+        <nav aria-label="Page navigation example" class="ms-auto">
+            <ul class="pagination pagination-table">
+                {% if categories_list.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ categories_list.previous_page_number }}&search={{ search }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+                    </li>                        
+                {% endif %}
+                {% for i in categories_list.paginator.page_range %}
+                    {% if i >= categories_list.number|sub:2  and i < categories_list.number|add:3  %}
+                        <li class="page-item {% if categories_list.number == i %}active{% endif %}">
+                            <a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a>
+                        </li>                        
+                    {% endif %}
+                {% endfor %}
+                {% if categories_list.has_next %}
+                    <li class="page-item ">
+                        <a class="page-link" href="?page={{ categories_list.next_page_number }}&search={{ search }}">&raquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">&raquo;</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+{% endif %}  
+<!-- Paginación -->
+  
+{% endblock %}
