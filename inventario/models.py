@@ -6,7 +6,7 @@ from django.db import models #importa los metodos necesarios para trabajar con m
 
 
 class Producto(models.Model):
-
+    codigo_producto = models.CharField(max_length = 100,null=True, blank=True)  
     nombre_producto = models.CharField(max_length = 100,null=True, blank=True)  
     precio_producto = models.IntegerField(null=True, blank=True)
     stock_producto = models.IntegerField(null=True, blank=True)

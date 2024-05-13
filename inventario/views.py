@@ -133,6 +133,7 @@ def producto_save(request):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
+        codigo_producto = request.POST.get('codigo_producto')
         category_group_id = request.POST.get('category_group_id')
         nombre_producto = request.POST.get('nombre')
         precio_producto = request.POST.get('precio')
@@ -142,6 +143,7 @@ def producto_save(request):
         descripcion_producto = request.POST.get('descripcion_producto')
 
         producto = Producto(
+            codigo_producto = codigo_producto,
             nombre_producto = nombre_producto,
             precio_producto = precio_producto,
             stock_producto = stock_producto,
@@ -169,6 +171,7 @@ def producto_edit(request,producto_id):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
+        codigo_producto = request.POST.get('codigo_producto')
         category_group_id = request.POST.get('category_group_id')
         nombre_producto = request.POST.get('nombre')
         precio_producto = request.POST.get('precio')
@@ -181,7 +184,7 @@ def producto_edit(request,producto_id):
         producto_data = Producto.objects.get(pk=producto_id)
     
         if producto_data_count == 1:
-            
+            Producto.objects.filter(pk = producto_id).update(codigo_producto = codigo_producto)
             Producto.objects.filter(pk = producto_id).update(nombre_producto = nombre_producto)
             Producto.objects.filter(pk = producto_id).update(precio_producto = precio_producto)  
             Producto.objects.filter(pk = producto_id).update(stock_producto = stock_producto)  
@@ -292,7 +295,7 @@ def import_inventario(request):
     wb = xlwt.Workbook(encoding='utf-8') #creo el libro
     ws = wb.add_sheet('carga_masiva') #creo la hoja con nombre carga_masiva
     row_num = 0
-    columns = ['nombre_producto','precio_producto','stock_producto','descripcion_producto','estado_producto']#username, first_name, last_name, email
+    columns = ['codigo_producto','nombre_producto','precio_producto','stock_producto','descripcion_producto','estado_producto']#username, first_name, last_name, email
     #----Estilo----
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
@@ -306,17 +309,19 @@ def import_inventario(request):
     date_format.num_format_str = 'dd/MM/yyyy'
     for row in range(1):
         row_num += 1 #una fila más aya
-        for col_num in range(5):
-            if col_num == 0:
+        for col_num in range(6):
+            if col_num == 0:                           
+                ws.write(row_num, col_num, '0 0000 1001' , font_style)
+            if col_num == 1:
                 #se escriben los datos
                 ws.write(row_num, col_num, 'Procesador' , font_style)
-            if col_num == 1:                           
+            if col_num == 2:                           
                 ws.write(row_num, col_num, '125000' , font_style)
-            if col_num == 2:
+            if col_num == 3:
                 ws.write(row_num, col_num, '10' , font_style)
-            if col_num == 3:                           
-                ws.write(row_num, col_num, 'nucleo' , font_style)
             if col_num == 4:                           
+                ws.write(row_num, col_num, 'nucleo' , font_style)
+            if col_num == 5:                           
                 ws.write(row_num, col_num, 'bajo' , font_style)
     wb.save(response)
     return response  
@@ -342,27 +347,31 @@ def carga_masiva_save2(request):
 
         acc = 0
         for item in data.itertuples():
-            nombre_producto = str(item[1])
-            precio_producto = int(item[2])
-            stock_producto = int(item[3])
-            descripcion_producto = str(item[4])
-            estado_producto = str(item[5])
+            codigo_producto = str(item[1])
+            nombre_producto = str(item[2])
+            precio_producto = int(item[3])
+            stock_producto = int(item[4])
+            descripcion_producto = str(item[5])
+            estado_producto = str(item[6])
+            code_exist = Producto.objects.filter(codigo_producto=codigo_producto).count()
+            if code_exist == 0:
+                inventario_save = Producto(
+                    codigo_producto = codigo_producto,
+                    nombre_producto=nombre_producto,
+                    precio_producto=precio_producto,
+                    stock_producto=stock_producto,
+                    descripcion_producto=descripcion_producto,
+                    estado_producto=estado_producto,
+                )
+                inventario_save.save()
+                category_save = Category(
+                    producto_id = inventario_save.id,
+                    category_group_id = 0
+                )
+                category_save.save()
+                
 
-            inventario_save = Producto(
-                nombre_producto=nombre_producto,
-                precio_producto=precio_producto,
-                stock_producto=stock_producto,
-                descripcion_producto=descripcion_producto,
-                estado_producto=estado_producto,
-            )
-            inventario_save.save()
-            category_save = Category(
-                producto_id = inventario_save.id,
-            )
-            category_save.save()
-            
-
-            acc += 1
+                acc += 1
 
         messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
         return redirect('carga_masiva2')

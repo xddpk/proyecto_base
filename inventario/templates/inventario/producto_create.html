@@ -1,4 +1,4 @@
-% extends 'core/base_admin.html' %}
+{% extends 'core/base_admin.html' %}
 {% load static %}
 
 {% block content %}
@@ -12,6 +12,10 @@
                 <form method="post" action="{% url 'producto_save' %}">
                     {% csrf_token %}
                     <div class="row"> 
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="text">codigo Producto</label>
+                            <input type="text" id="codigo_producto" name="codigo_producto" placeholder="0 000000 000000"/>
+                        </div> 
                         <div class="col-12 col-sm-8 mb-3">
                             <label for="text">Nombre Producto</label>
                             <input type="text" name="nombre" placeholder="RTX 4090"/>

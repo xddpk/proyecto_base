@@ -306,32 +306,6 @@ def list_user_block2(request,page=None,search=None):
     return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
 
 
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    if page == None:
-        page = request.GET.get('page')
-    else:
-        page = page
-    if request.GET.get('page') == None:
-        page = page
-    else:
-        page = request.GET.get('page')
-    #group = Group.objects.get(pk=group_id)
-    user_all = []
-    user_array = User.objects.filter(is_active='f').order_by('first_name')
-    for us in user_array:
-        profile_data = Profile.objects.get(user_id=us.id)
-        profile = profile_data.group
-        name = us.first_name+' '+us.last_name
-        user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-        
-    paginator = Paginator(user_all, 30)  
-    user_list = paginator.get_page(page)
-    template_name = 'administrator/list_user_block2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page})
-
 @login_required
 def user_block(request,user_id):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -538,27 +512,33 @@ def carga_masiva_save(request):
         except Exception as e:
             messages.add_message(request, messages.INFO, 'Error al leer el archivo Excel: ' + str(e))
             return redirect('carga_masiva')
-
         acc = 0
         for item in data.itertuples():
             username = str(item[1])
             first_name = str(item[2])
             last_name = str(item[3])
             email = str(item[4])
-
-            user_save = User.objects.create(
+            rut_exist = User.objects.filter(username=username).count()
+            
+            if rut_exist == 0:
+                user_save = User.objects.create(
                 username=username,
                 first_name=first_name,
                 last_name=last_name,
                 email=email
-            )
-            profile_save = Profile.objects.create(
-                user=user_save,
-                group_id=1,
-                first_session='No',
-                token_app_session='No'
-            )
-            acc += 1
+                )
+                profile_save = Profile.objects.create(
+                    user=user_save,
+                    group_id=1,
+                    first_session='No',
+                    token_app_session='No'
+                )
+                acc += 1
+            
+            
+    
+    
+            
 
         messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
         return redirect('carga_masiva')
