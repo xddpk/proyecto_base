@@ -83,17 +83,16 @@ def new_user(request):
             messages.add_message(request, messages.INFO, 'Error en numero de telefono: Ingrese un numero telefonico valido')#Buscar regeex numero chilenos
 
         #Posiblemente unificar los if con "&", PERO CAMBIAR LOS MENSAJES ELSE/ O QUIZAS CREAR UNA NUEVA FUNCION.<-----
-
-        if rut_exist==1:
-                if validacion.validar_rut(rut)==False: #<- de validaciones saca validar_rut
+        if validacion.validar_rut(rut)==False: #<- de validaciones saca validar_rut
                     messages.add_message(request, messages.INFO, 'Rut invalido')  
                     validar=False
+        if rut_exist==1:
                 messages.add_message(request, messages.INFO, 'Rut ya esta registrado')
                 validar=False
-        if mail_exist==1:
-                if validacion.validar_email(email)==False: #<- de validaciones saca validar_email
+        if validacion.validar_email(email)==False: #<- de validaciones saca validar_email
                     messages.add_message(request, messages.INFO, 'Email invalido')  
                     validar=False
+        if mail_exist==1:
                 messages.add_message(request, messages.INFO, 'Este correo ya esta registrado')  
                 validar=False
         
