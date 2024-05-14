@@ -6,15 +6,16 @@
     <main role="main">
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
-                <h3>Listado Perfiles Generales  </h3> 
+                <h3 class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">Listado Perfiles Generales  </h3> 
                 <div class="row mt-4 mb-4">
-                    <div class="col-12 col-sm-3 mb-3">
+                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                        
                         <a href="{% url 'list_user_active2' %}" class="button form-control">Activos</a>
                     </div>
-                    <div class="col-12 col-sm-3 mb-3">
+                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;" >
                         <a href="{% url 'list_user_block2' %}" class="button form-control">Bloqueados</a>
                     </div>
-                    <div class="col-12 col-sm-3 mb-3">
+                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
                         <a href="{% url 'users_main' %}" class="button button--gray form-control">Volver</a>
                     </div>
                 </div>

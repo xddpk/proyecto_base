@@ -205,7 +205,7 @@ def ejemplos_list_habilidades(request,page=None,search=None):
     paginator = Paginator(h_list, 10) 
     h_list_paginate= paginator.get_page(page)   
     template_name = 'ejemplos/ejemplos_list_habilidades.html'
-    return render(request,template_name,{'template_name':template_name,'h_list_paginate':h_list_paginate,'paginator':paginator,'page':page})
+    return render(request,template_name,{'template_name':template_name,'h_list_paginate':h_list_paginate,'paginator':paginator,'page':page,'search':search})
 
 #CARGA MASIVA
 @login_required
