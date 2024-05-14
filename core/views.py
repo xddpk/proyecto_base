@@ -36,18 +36,11 @@ def check_profile(request):
         inicio_sesion = profile.first_session
         if inicio_sesion == 'No':
             return redirect('admin_main')
-<<<<<<< HEAD
-        else:
-            #Profile.objects.filter(user_id = request.user.id).update(first_session = 'No')  
-            #Profile.objects.filter(user_id = request.user.id).update(token_app_session = 'No')  
-            return render(request, 'registration/password_change_form.html', {'profile_id': Profile.objects.get(user_id=request.user.id).id})
-=======
         elif inicio_sesion == 'Si':
             profile.first_session = 'No'
             profile.save()
     
         return render(request, 'registration/password_change_form.html', {'profile_id': Profile.objects.get(user_id=request.user.id).id})
->>>>>>> 16934d030efbff60a5761db961392befb9616219
     else:
         return redirect('logout')
         
