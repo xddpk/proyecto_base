@@ -3,20 +3,6 @@
 {% load mathfilters %}
 {% block content %}
 {% block extrahead %}
-<script>
-    function confirmarCambio(event) {
-        // Mostrar la alerta de confirmación
-        var confirmacion = confirm("¿Estás seguro de que desea realizar esta accion?");
-    
-        // Si el usuario no confirma, prevenir la acción por defecto
-        if (!confirmacion) {
-            event.preventDefault();
-            alert("Cambio cancelado.");
-        } else {
-            alert("Accion realizada exitosamente.");
-        }
-    }
-</script>
 
 {% endblock %}
 <header class='mb-5'>
@@ -28,7 +14,7 @@
             <a href="{% url 'list_main2' %}" class="button button--gray form-control">Volver</a>
         </div>
     </div>
-    <div class="d-flex flex-column flex-lg-row mt-2">   
+    <div class="d-flex flex-column flex-lg-row mt-2">
         <p class='body--normal text-gray'>
             {% lorem 2 b random %}
         </p>
@@ -74,13 +60,13 @@
                     
                         {% if s.id != request.user.id %}
                             <th scope="row">
-                            <a href="{% url 'user_activate' s.id  %}" onclick="confirmarCambio(event);">
+                            <a href="{% url 'user_activate' s.id  %}">
                                 Activa Usuario
                             </a>
                             </th>
                             <th scope="row">
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <a href="{% url 'user_delete' s.id  %}" onclick="confirmarCambio(event);">
+                            <a href="{% url 'user_delete' s.id  %}">
                                 Elimina Usuario
                             </a>
                             </th>

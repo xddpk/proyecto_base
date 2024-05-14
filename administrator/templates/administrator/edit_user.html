@@ -2,18 +2,12 @@
 {% load static %}
 {% block content %}
 {% block extrahead %}
-<script>
-    // Función para mostrar la alerta cuando se envía el formulario
-    function mostrarAlerta() {
-        alert("¡El Usuario fue modificado con exito!");
-    }
-</script>
 {% endblock %}
     <main role="main">
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
                 <h3>Nuevo Usuario</h3> 
-                <form action="" method="post" onsubmit="mostrarAlerta()">
+                <form action="" method="post">
                     {% csrf_token %}
                     <input type="hidden" value="{{ user_data.id }}" name="user_id" id="user_id">
                     <input type="hidden" value="{{ groups.id }}" name="grupo" id="grupo">
