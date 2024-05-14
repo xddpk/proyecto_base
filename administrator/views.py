@@ -87,12 +87,14 @@ def new_user(request):
         if validacion.validar_rut(rut)==False: #<- de validaciones saca validar_rut
                     messages.add_message(request, messages.INFO, 'Rut invalido')  
                     validar=False
+
         if validacion.validar_email(email)==False: #<- de validaciones saca validar_email
                     messages.add_message(request, messages.INFO, 'Email invalido')  
                     validar=False
         if rut_exist==1:
                 messages.add_message(request, messages.INFO, 'Rut ya esta registrado')
                 validar=False
+
         if mail_exist==1:
                 messages.add_message(request, messages.INFO, 'Este correo ya esta registrado')  
                 validar=False

@@ -7,10 +7,10 @@ from inventario.models import *
 from django.db.models import Avg, Count, Q
 from registration.models import Profile
 from django.urls import reverse_lazy
+from extensiones import validacion
 # Create your views here.
 import xlwt
 import pandas as pd
-
 
 
 
@@ -140,23 +140,43 @@ def producto_save(request):
         stock_minimo_producto = request.POST.get('stock_minimo')
         stock_maximo_producto = request.POST.get('stock_maximo')
         descripcion_producto = request.POST.get('descripcion_producto')
-
-        producto = Producto(
-            nombre_producto = nombre_producto,
-            precio_producto = precio_producto,
-            stock_producto = stock_producto,
-            stock_minimo_producto = stock_minimo_producto,
-            stock_maximo_producto = stock_maximo_producto,
-            descripcion_producto = descripcion_producto,
+        validar=True
+        Produc_exist = Producto.objects.filter(nombre_producto=nombre_producto).count()
+        if Produc_exist == 1:
+            validar = False
+            messages.add_message(request, messages.INFO, 'Este producto ya a sido creado anteriormente')
+        if int(precio_producto) < 0:
+            messages.add_message(request, messages.INFO, 'El precio del producto no puede ser negativo')
+            validar=False
+        if int(stock_producto) <0:
+            messages.add_message(request, messages.INFO, 'El stock del producto no puede ser negativo')
+            validar=False
+        if int(stock_minimo_producto) < 0:
+            messages.add_message(request, messages.INFO, 'El stock minimo del producto no puede ser negativo')
+            validar=False    
+        if int(stock_maximo_producto) < 0:
+            messages.add_message(request, messages.INFO, 'El stock maximo del producto no puede ser negativo')
+            validar=False   
+        if int(stock_minimo_producto) > int(stock_maximo_producto):
+            messages.add_message(request, messages.INFO, 'El stock minimo no puede ser maxor al stock maximo del producto')
+            validar=False
+        if validar == True:
+            producto = Producto(
+                nombre_producto = nombre_producto,
+                precio_producto = precio_producto,
+                stock_producto = stock_producto,
+                stock_minimo_producto = stock_minimo_producto,
+                stock_maximo_producto = stock_maximo_producto,
+                descripcion_producto = descripcion_producto,
+                )
+            producto.save()
+            category_save = Category(
+                producto_id = producto.id,
+                category_group_id = category_group_id,
+                
             )
-        producto.save()
-        category_save = Category(
-            producto_id = producto.id,
-            category_group_id = category_group_id,
-            
-        )
-        category_save.save()
-        messages.add_message(request, messages.INFO, 'Producto creado con exito')                                                
+            category_save.save()
+            messages.add_message(request, messages.INFO, 'Producto creado con exito')                                                
     template_name = 'inventario/inventario_main.html'
     return render(request,template_name)
 
@@ -179,16 +199,38 @@ def producto_edit(request,producto_id):
         descripcion_producto = request.POST.get('descripcion_producto')
         producto_data_count = Producto.objects.filter(pk=producto_id).count()
         producto_data = Producto.objects.get(pk=producto_id)
+        validar =True
     
-        if producto_data_count == 1:
-            
+        if producto_data.nombre_producto != nombre_producto:
+                Produc_exist = Producto.objects.filter(nombre_producto=nombre_producto).count()
+                if Produc_exist > 0:
+                    #que es page
+                    messages.add_message(request, messages.INFO, 'El correo '+str(nombre_producto)+' ya existe en nuestros registros asociado a otro usuario, por favor utilice otro ')
+                    validar=False
+        
+        if int(precio_producto) < 0:
+            messages.add_message(request, messages.INFO, 'El precio del producto no puede ser negativo')
+            validar=False
+        if int(stock_producto) <0:
+            messages.add_message(request, messages.INFO, 'El stock del producto no puede ser negativo')
+            validar=False
+        if int(stock_minimo_producto) < 0:
+            messages.add_message(request, messages.INFO, 'El stock minimo del producto no puede ser negativo')
+            validar=False    
+        if int(stock_maximo_producto) < 0:
+            messages.add_message(request, messages.INFO, 'El stock maximo del producto no puede ser negativo')
+            validar=False   
+        if int(stock_minimo_producto) > int(stock_maximo_producto):
+            messages.add_message(request, messages.INFO, 'El stock minimo no puede ser maxor al stock maximo del producto')
+            validar=False
+        if validar == True:
             Producto.objects.filter(pk = producto_id).update(nombre_producto = nombre_producto)
             Producto.objects.filter(pk = producto_id).update(precio_producto = precio_producto)  
             Producto.objects.filter(pk = producto_id).update(stock_producto = stock_producto)  
             Category.objects.filter(producto_id = producto_id).update(category_group_id = category_group_id)    
             Producto.objects.filter(pk = producto_id).update(stock_minimo_producto = stock_minimo_producto)
             Producto.objects.filter(pk = producto_id).update(stock_maximo_producto = stock_maximo_producto)  
-            Producto.objects.filter(pk = producto_id).update(descripcion_producto = descripcion_producto)             
+            Producto.objects.filter(pk = producto_id).update(descripcion_producto = descripcion_producto)  
             messages.add_message(request, messages.INFO, 'Producto  '+producto_data.nombre_producto +' editado con éxito')                             
             return redirect('inventario_listado')
         else:
@@ -236,16 +278,28 @@ def categories_create(request):
 @login_required
 def categories_save(request):
 
+    
     if request.method=='POST':
         name= request.POST.get('name')
         state=True
+        validar = True
+        categories_exist = Category.objects.filter(category_group_name=name).count()
+        if categories_exist==1:
+            validar=False
+            messages.add_message(request,messages.INFO,'Solo puede haber un tipo de categoria')
         if name=='':
             messages.add_message(request,messages.INFO,'Debe ingresar un nombre para la categoria')
-            return('categories_create')    
-        categories_save=Category_group(
-            category_group_name=name,
-        )
-        categories_save.save()
+            return('categories_create')   
+        if validacion.validar_soloString(name)==False:
+            validar=False
+            messages.add_message(request,messages.INFO,'El nombre solo debe contener letras')
+        
+        if validar==True:
+            categories_save=Category_group(
+                category_group_name=name.capitalize(),
+            )
+            
+            categories_save.save()
     messages.add_message(request,messages.INFO,'Categoria creada con exito')
     return redirect('inventario_main')
 
@@ -421,14 +475,25 @@ def categories_save(request):
     if request.method=='POST':
         name= request.POST.get('name')
         state=True
+        validar = True
+        categories_exist = Category_group.objects.filter(category_group_name=name).count()
+        if categories_exist==1:
+            validar=False
+            messages.add_message(request,messages.INFO,'Solo puede haber un tipo de categoria')
         if name=='':
             messages.add_message(request,messages.INFO,'Debe ingresar un nombre para la categoria')
-            return('categories_create')    
-        categories_save=Category_group(
-            category_group_name=name,
-        )
-        categories_save.save()
-    messages.add_message(request,messages.INFO,'Categoria creada con exito')
+            return('categories_create')   
+        if validacion.validar_soloString(name)==False:
+            validar=False
+            messages.add_message(request,messages.INFO,'El nombre solo debe contener letras')
+        
+        if validar==True:
+            categories_save=Category_group(
+                category_group_name=name,
+            )
+            
+            categories_save.save()
+            messages.add_message(request,messages.INFO,'Categoria creada con exito')
     return redirect('inventario_main')
     
 
@@ -442,7 +507,6 @@ def categories_delete(request,categories_id):
     category_data_count = Category_group.objects.filter(pk=categories_id).count()
     category_data = Category_group.objects.get(pk=categories_id)     
     if category_data_count == 1:
-        
         
         categoria = Category.objects.filter(category_group_id=categories_id)
         for c in categoria:
@@ -523,7 +587,7 @@ def categories_edit(request,categories_id):
         category_data = Category_group.objects.get(pk=categories_id) 
         print(category_data.category_group_name)
         if category_data_count == 1:
-            
+
             Category_group.objects.filter(pk = categories_id).update(category_group_name = category_group_name)
             messages.add_message(request, messages.INFO, 'Categoria  '+ category_data.category_group_name +' editado con éxito')                             
             return redirect('list_categories')
