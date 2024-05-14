@@ -16,14 +16,14 @@ from registration.models import Profile #importa el modelo profile, el que usare
 def home(request):
     return redirect('login')
 
-"""@login_required
+@login_required
 def pre_check_profile(request):
     profile = Profile.objects.filter(user_id=request.user.id).first() # Obtener el perfil del usuario
     if profile: # Si el perfil existe
         if profile.first_session == 'Si': # Si es la primera sesión
-            profile.first_session = 'No' # Marcar que ya no es la primera sesión
-            profile.save() # Guardar el cambio en el perfil
-            return redirect('password_reset_form') # Redirigir a la página de cambio de contraseña"""
+            Profile.objects.filter(user_id = request.user.id).update(first_session = 'No')  
+            Profile.objects.filter(user_id = request.user.id).update(token_app_session = 'No') 
+            return redirect('admin_main') # Redirigir a la página de cambio de contraseña
     
 def check_profile(request):
     try:

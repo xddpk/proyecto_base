@@ -8,6 +8,7 @@ def validar_soloString(dato):
         return False
 def validar_numCelular(numero):
     regex = r"^(\+?56)?(\s?)(0?9)(\s?)[98765432]\d{7}$"#puede llevar o no +56 pero debe llevar 9 y el total de digitos debe ser 7 (sin contar  56)
+
     if re.match(regex,numero):
         return True
     else:
@@ -37,27 +38,4 @@ def validar_email(email):
         return True
     else:
         return False
-    
 
-
-
-validacion=True
-
-string="aaa"
-email="enzo@hotmail.es"
-rut="20915611-3"
-numero="974383875"
-nombre = "hola"
-
-if validar_soloString(string)==False:
-    validacion=False
-if validar_email(email)==False:
-    validacion=False
-if validar_rut(rut)==False:
-    validacion=False
-if validar_numCelular(numero)==False:
-    validacion=False
-if validacion==True:
-    print("token")
-else:
-    print("Complete las casillas segun lo pedido")

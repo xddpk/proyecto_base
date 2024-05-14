@@ -78,6 +78,7 @@ def new_user(request):
         if validacion.validar_soloString(cargo)==False: #<- de validaciones Strings
             validar=False                               #cargo     QUIZAS SE VA
             messages.add_message(request, messages.INFO, 'Error en cargo: invalido')
+
         if validacion.validar_numCelular(mobile)==False:
             validar=False
             messages.add_message(request, messages.INFO, 'Error en numero de telefono: Ingrese un numero telefonico valido')#Buscar regeex numero chilenos
@@ -86,16 +87,17 @@ def new_user(request):
         if validacion.validar_rut(rut)==False: #<- de validaciones saca validar_rut
                     messages.add_message(request, messages.INFO, 'Rut invalido')  
                     validar=False
-        if rut_exist==1:
-                messages.add_message(request, messages.INFO, 'Rut ya esta registrado')
-                validar=False
+
         if validacion.validar_email(email)==False: #<- de validaciones saca validar_email
                     messages.add_message(request, messages.INFO, 'Email invalido')  
                     validar=False
+        if rut_exist==1:
+                messages.add_message(request, messages.INFO, 'Rut ya esta registrado')
+                validar=False
+
         if mail_exist==1:
                 messages.add_message(request, messages.INFO, 'Este correo ya esta registrado')  
                 validar=False
-        
         if validar == True:
                     user = User.objects.create_user(
                         username= rut,
@@ -190,7 +192,6 @@ def edit_user(request,user_id):
 
 @login_required    
 def list_user_active2(request,page=None,search=None):
-    
     profiles = Profile.objects.get(user_id = request.user.id)
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
@@ -228,6 +229,10 @@ def list_user_active2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
+            paginator = Paginator(user_all, 1)  
+        user_list = paginator.get_page(page)
+        template_name = 'administrator/list_user_active2.html'
+        return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
             
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
@@ -243,10 +248,10 @@ def list_user_active2(request,page=None,search=None):
     
     #user_array = User.objects.filter(is_active='t').order_by('first_name')
     #profile_data = Profile.objects.all()
-    paginator = Paginator(user_all, 30)  
+    paginator = Paginator(user_all, 1)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
+    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page ,'search':search })
 
 @login_required    
 def list_user_block2(request,page=None,search=None):
@@ -287,7 +292,10 @@ def list_user_block2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-            
+        paginator = Paginator(user_all, 1)  
+        user_list = paginator.get_page(page)
+        template_name = 'administrator/list_user_block2.html'
+        return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están inactivos y se ordena por primer nombre de forma ascendente
@@ -301,37 +309,11 @@ def list_user_block2(request,page=None,search=None):
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})            
     
     #profile_data = Profile.objects.all()
-    paginator = Paginator(user_all, 30)  
+    paginator = Paginator(user_all, 1)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_block2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
+    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page ,'search':search})
 
-
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    if page == None:
-        page = request.GET.get('page')
-    else:
-        page = page
-    if request.GET.get('page') == None:
-        page = page
-    else:
-        page = request.GET.get('page')
-    #group = Group.objects.get(pk=group_id)
-    user_all = []
-    user_array = User.objects.filter(is_active='f').order_by('first_name')
-    for us in user_array:
-        profile_data = Profile.objects.get(user_id=us.id)
-        profile = profile_data.group
-        name = us.first_name+' '+us.last_name
-        user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-        
-    paginator = Paginator(user_all, 30)  
-    user_list = paginator.get_page(page)
-    template_name = 'administrator/list_user_block2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page})
 
 @login_required
 def user_block(request,user_id):
@@ -539,27 +521,33 @@ def carga_masiva_save(request):
         except Exception as e:
             messages.add_message(request, messages.INFO, 'Error al leer el archivo Excel: ' + str(e))
             return redirect('carga_masiva')
-
         acc = 0
         for item in data.itertuples():
             username = str(item[1])
             first_name = str(item[2])
             last_name = str(item[3])
             email = str(item[4])
-
-            user_save = User.objects.create(
+            rut_exist = User.objects.filter(username=username).count()
+            
+            if rut_exist == 0:
+                user_save = User.objects.create(
                 username=username,
                 first_name=first_name,
                 last_name=last_name,
                 email=email
-            )
-            profile_save = Profile.objects.create(
-                user=user_save,
-                group_id=1,
-                first_session='No',
-                token_app_session='No'
-            )
-            acc += 1
+                )
+                profile_save = Profile.objects.create(
+                    user=user_save,
+                    group_id=1,
+                    first_session='No',
+                    token_app_session='No'
+                )
+                acc += 1
+            
+            
+    
+    
+            
 
         messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
         return redirect('carga_masiva')

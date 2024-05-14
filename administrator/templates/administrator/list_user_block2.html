@@ -57,17 +57,20 @@
                     <th scope="row">{{s.mail}}</th>
                     <th scope="row">{{s.profile}}</th>
                     {% if profiles.group_id == 1 %}
-                    <th scope="row">
+                    
                         {% if s.id != request.user.id %}
+                            <th scope="row">
                             <a href="{% url 'user_activate' s.id  %}">
                                 Activa Usuario
                             </a>
+                            </th>
+                            <th scope="row">
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <a href="{% url 'user_delete' s.id  %}">
                                 Elimina Usuario
                             </a>
-                        {% endif %}
-                    </th>   
+                            </th>
+                        {% endif %} 
                 {% endif %}                            
                 </tr>
             {% endfor %}

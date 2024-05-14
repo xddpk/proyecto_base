@@ -84,7 +84,7 @@ def inventario_listado(request,page=None,search=None):
     producto_list = paginator.get_page(page)
     print(producto_list)
     template_name = 'inventario/inventario_listado.html'
-    return render(request,template_name,{'profiles':profiles,'producto_list':producto_list,'paginator':paginator,'page':page })
+    return render(request,template_name,{'profiles':profiles,'producto_list':producto_list,'paginator':paginator,'page':page,'search':search })
 
 
 
@@ -555,12 +555,16 @@ def list_categories(request,page=None,search=None):
     categories_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search == "None":# si la cadena de búsqueda viene vacia
         categories_all = Category_group.objects.all()
+        paginator = Paginator(categories_all, 1)  
+        categories_list = paginator.get_page(page)
+        template_name = 'inventario/list_categories.html'
+        return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
     else:#si la cadena de búsqueda trae datos
         categories_all =  Category_group.objects.filter(category_group_name=search).order_by('category_group_name')#Ascendente         
-    paginator = Paginator(categories_all, 30)  
-    categories_list = paginator.get_page(page)
-    template_name = 'inventario/list_categories.html'
-    return render(request,template_name,{'categories_list':categories_list,'paginator':paginator,'page':page })
+        paginator = Paginator(categories_all, 1)  
+        categories_list = paginator.get_page(page)
+        template_name = 'inventario/list_categories.html'
+        return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
 
 """@login_required
 def categories_edit(request,categories_id):
