@@ -133,7 +133,10 @@ def producto_save(request):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
+<<<<<<< HEAD
         codigo_producto = request.POST.get('codigo_producto')
+=======
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
         category_group_id = request.POST.get('category_group_id')
         nombre_producto = request.POST.get('nombre')
         precio_producto = request.POST.get('precio')
@@ -143,7 +146,10 @@ def producto_save(request):
         descripcion_producto = request.POST.get('descripcion_producto')
 
         producto = Producto(
+<<<<<<< HEAD
             codigo_producto = codigo_producto,
+=======
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
             nombre_producto = nombre_producto,
             precio_producto = precio_producto,
             stock_producto = stock_producto,
@@ -171,7 +177,10 @@ def producto_edit(request,producto_id):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
+<<<<<<< HEAD
         codigo_producto = request.POST.get('codigo_producto')
+=======
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
         category_group_id = request.POST.get('category_group_id')
         nombre_producto = request.POST.get('nombre')
         precio_producto = request.POST.get('precio')
@@ -184,7 +193,11 @@ def producto_edit(request,producto_id):
         producto_data = Producto.objects.get(pk=producto_id)
     
         if producto_data_count == 1:
+<<<<<<< HEAD
             Producto.objects.filter(pk = producto_id).update(codigo_producto = codigo_producto)
+=======
+            
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
             Producto.objects.filter(pk = producto_id).update(nombre_producto = nombre_producto)
             Producto.objects.filter(pk = producto_id).update(precio_producto = precio_producto)  
             Producto.objects.filter(pk = producto_id).update(stock_producto = stock_producto)  
@@ -295,7 +308,11 @@ def import_inventario(request):
     wb = xlwt.Workbook(encoding='utf-8') #creo el libro
     ws = wb.add_sheet('carga_masiva') #creo la hoja con nombre carga_masiva
     row_num = 0
+<<<<<<< HEAD
     columns = ['codigo_producto','nombre_producto','precio_producto','stock_producto','descripcion_producto','estado_producto']#username, first_name, last_name, email
+=======
+    columns = ['nombre_producto','precio_producto','stock_producto','descripcion_producto','estado_producto']#username, first_name, last_name, email
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
     #----Estilo----
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
@@ -309,6 +326,7 @@ def import_inventario(request):
     date_format.num_format_str = 'dd/MM/yyyy'
     for row in range(1):
         row_num += 1 #una fila más aya
+<<<<<<< HEAD
         for col_num in range(6):
             if col_num == 0:                           
                 ws.write(row_num, col_num, '0 0000 1001' , font_style)
@@ -322,6 +340,19 @@ def import_inventario(request):
             if col_num == 4:                           
                 ws.write(row_num, col_num, 'nucleo' , font_style)
             if col_num == 5:                           
+=======
+        for col_num in range(5):
+            if col_num == 0:
+                #se escriben los datos
+                ws.write(row_num, col_num, 'Procesador' , font_style)
+            if col_num == 1:                           
+                ws.write(row_num, col_num, '125000' , font_style)
+            if col_num == 2:
+                ws.write(row_num, col_num, '10' , font_style)
+            if col_num == 3:                           
+                ws.write(row_num, col_num, 'nucleo' , font_style)
+            if col_num == 4:                           
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
                 ws.write(row_num, col_num, 'bajo' , font_style)
     wb.save(response)
     return response  
@@ -347,6 +378,7 @@ def carga_masiva_save2(request):
 
         acc = 0
         for item in data.itertuples():
+<<<<<<< HEAD
             codigo_producto = str(item[1])
             nombre_producto = str(item[2])
             precio_producto = int(item[3])
@@ -372,6 +404,29 @@ def carga_masiva_save2(request):
                 
 
                 acc += 1
+=======
+            nombre_producto = str(item[1])
+            precio_producto = int(item[2])
+            stock_producto = int(item[3])
+            descripcion_producto = str(item[4])
+            estado_producto = str(item[5])
+
+            inventario_save = Producto(
+                nombre_producto=nombre_producto,
+                precio_producto=precio_producto,
+                stock_producto=stock_producto,
+                descripcion_producto=descripcion_producto,
+                estado_producto=estado_producto,
+            )
+            inventario_save.save()
+            category_save = Category(
+                producto_id = inventario_save.id,
+            )
+            category_save.save()
+            
+
+            acc += 1
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
 
         messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
         return redirect('carga_masiva2')
@@ -496,6 +551,7 @@ def list_categories(request,page=None,search=None):
         search = request.POST.get('search') 
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
+<<<<<<< HEAD
     
     categories_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search == "":# si la cadena de búsqueda viene vacia
@@ -508,6 +564,33 @@ def list_categories(request,page=None,search=None):
     template_name = 'inventario/list_categories.html'
     return render(request,template_name,{'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
 
+=======
+    print("search> ",search)
+    categories_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
+    if search == None or search == "None":# si la cadena de búsqueda viene vacia
+        categories_all = Category_group.objects.all()
+        paginator = Paginator(categories_all, 1)  
+        categories_list = paginator.get_page(page)
+        template_name = 'inventario/list_categories.html'
+        return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
+    else:#si la cadena de búsqueda trae datos
+        categories_all =  Category_group.objects.filter(category_group_name=search).order_by('category_group_name')#Ascendente         
+        paginator = Paginator(categories_all, 1)  
+        categories_list = paginator.get_page(page)
+        template_name = 'inventario/list_categories.html'
+        return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
+
+"""@login_required
+def categories_edit(request,categories_id):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    name= request.POST.get('name')
+    Category_group.objects.filter(pk=categories_id).update(category_group_name=name)
+    template_name='inventario/categorias_editar.html'
+    return render(request,template_name,{'name':name, 'categories_id':categories_id})"""
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
 def categories_edit(request,categories_id):
     profiles = Profile.objects.get(user_id = request.user.id)
     if profiles.group_id != 1:
@@ -534,6 +617,25 @@ def categories_edit(request,categories_id):
 
 
 
+<<<<<<< HEAD
+=======
+"""@login_required
+def categories_save_edit(request, categories_id):
+
+    if request.method=='POST':
+        name= request.POST.get('name')
+        state=True
+        if name=='':
+            messages.add_message(request,messages.INFO,'Debe ingresar un nombre para la categoria')
+            return('categories_create')    
+        categories_save=Category_group(
+            category_group_name=name,
+        )
+    category_group_name.filter(pk=categories_id).update(name=name)
+    messages.add_message(request,messages.INFO,'Categoria actualizada con exito')
+    return redirect('inventario_main')"""
+
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
 def categories_save_edit(request, categories_id):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id != 1:

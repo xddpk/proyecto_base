@@ -227,6 +227,10 @@ def list_user_active2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
+            paginator = Paginator(user_all, 1)  
+        user_list = paginator.get_page(page)
+        template_name = 'administrator/list_user_active2.html'
+        return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
             
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
@@ -242,10 +246,10 @@ def list_user_active2(request,page=None,search=None):
     
     #user_array = User.objects.filter(is_active='t').order_by('first_name')
     #profile_data = Profile.objects.all()
-    paginator = Paginator(user_all, 30)  
+    paginator = Paginator(user_all, 1)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
+    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page ,'search':search })
 
 @login_required    
 def list_user_block2(request,page=None,search=None):
@@ -286,7 +290,10 @@ def list_user_block2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-            
+        paginator = Paginator(user_all, 1)  
+        user_list = paginator.get_page(page)
+        template_name = 'administrator/list_user_block2.html'
+        return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están inactivos y se ordena por primer nombre de forma ascendente
@@ -300,10 +307,10 @@ def list_user_block2(request,page=None,search=None):
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})            
     
     #profile_data = Profile.objects.all()
-    paginator = Paginator(user_all, 30)  
+    paginator = Paginator(user_all, 1)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_block2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
+    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page ,'search':search})
 
 
 @login_required
