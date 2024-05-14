@@ -78,25 +78,24 @@ def new_user(request):
         if validacion.validar_soloString(cargo)==False: #<- de validaciones Strings
             validar=False                               #cargo     QUIZAS SE VA
             messages.add_message(request, messages.INFO, 'Error en cargo: invalido')
+
         if validacion.validar_numCelular(mobile)==False:
             validar=False
             messages.add_message(request, messages.INFO, 'Error en numero de telefono: Ingrese un numero telefonico valido')#Buscar regeex numero chilenos
 
         #Posiblemente unificar los if con "&", PERO CAMBIAR LOS MENSAJES ELSE/ O QUIZAS CREAR UNA NUEVA FUNCION.<-----
-
-        if rut_exist==1:
-                if validacion.validar_rut(rut)==False: #<- de validaciones saca validar_rut
+        if validacion.validar_rut(rut)==False: #<- de validaciones saca validar_rut
                     messages.add_message(request, messages.INFO, 'Rut invalido')  
                     validar=False
+        if validacion.validar_email(email)==False: #<- de validaciones saca validar_email
+                    messages.add_message(request, messages.INFO, 'Email invalido')  
+                    validar=False
+        if rut_exist==1:
                 messages.add_message(request, messages.INFO, 'Rut ya esta registrado')
                 validar=False
         if mail_exist==1:
-                if validacion.validar_email(email)==False: #<- de validaciones saca validar_email
-                    messages.add_message(request, messages.INFO, 'Email invalido')  
-                    validar=False
                 messages.add_message(request, messages.INFO, 'Este correo ya esta registrado')  
                 validar=False
-        
         if validar == True:
                     user = User.objects.create_user(
                         username= rut,
@@ -191,7 +190,6 @@ def edit_user(request,user_id):
 
 @login_required    
 def list_user_active2(request,page=None,search=None):
-    
     profiles = Profile.objects.get(user_id = request.user.id)
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
@@ -244,10 +242,10 @@ def list_user_active2(request,page=None,search=None):
     
     #user_array = User.objects.filter(is_active='t').order_by('first_name')
     #profile_data = Profile.objects.all()
-    paginator = Paginator(user_all, 1)  
+    paginator = Paginator(user_all, 30)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
+    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
 
 @login_required    
 def list_user_block2(request,page=None,search=None):
@@ -305,7 +303,7 @@ def list_user_block2(request,page=None,search=None):
     paginator = Paginator(user_all, 30)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_block2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
+    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
 
 
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -332,7 +330,7 @@ def list_user_block2(request,page=None,search=None):
     paginator = Paginator(user_all, 30)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_block2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search})
+    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page})
 
 @login_required
 def user_block(request,user_id):
