@@ -16,11 +16,11 @@
                 <div class="card mr-2" style="width: 100%;">
                     <h1>Gráfico de barras</h1>
                     <img src="{{ imagen_grafico }}" alt="Gráfico">
-                    <h5 class="card-header">Empleados</h5>
+                    <h5 class="card-header">Productos</h5>
                     <div class="card-body">
                         <div class="row mb-2">
                             <div class="col-sm-7 text-center" style="font-size: 50px">
-                                {{usuarios_count}}
+                                {{productos_count}}
                             </div>
                             <div class="col-sm-5 text-center">
                                 <span class="mt-2 material-icons-outlined" style="font-size: 50px">
@@ -30,7 +30,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <p class="card-text mb-2">Cantidad de Empleados</p>
+                                <p class="card-text mb-2">Cantidad de Productos</p>
                             </div>
                             <div class="col-sm-12 text-center">
                                 <a href="#" class="btn btn-primary">Detalle</a>
@@ -41,11 +41,11 @@
             </div> 
             <div class="col-sm-4">    
                 <div class="card mr-2" style="width: 100%;">
-                    <h5 class="card-header">Empleados despedidos</h5>
+                    <h5 class="card-header">Grupos</h5>
                     <div class="card-body">
                         <div class="row mb-2">
                             <div class="col-sm-7 text-center" style="font-size: 50px">
-                                {{usuarios_baneados_count}}
+                                {{categorias_productos}}
                             </div>
                             <div class="col-sm-5 text-center">
                                 <span class="mt-2 material-icons-outlined" style="font-size: 50px">
@@ -55,7 +55,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <p class="card-text mb-2">Cantidad de Empleados despedidos</p>
+                                <p class="card-text mb-2">Cantidad de grupos </p>
                             </div>
                             <div class="col-sm-12 text-center">
                                 <a href="#" class="btn btn-primary">Detalle</a>
@@ -139,7 +139,7 @@
                 data: {
                     labels: {{data_label|safe}},
                     datasets: [{
-                        label: 'Cargos',
+                        label: 'Grupos',
                         data: {{data_set|safe}},
                         backgroundColor: {{data_color|safe}},
                         hoverOffset: 0

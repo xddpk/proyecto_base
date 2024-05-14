@@ -24,6 +24,8 @@ from django.utils.decorators import method_decorator
 from dateutil import relativedelta
 from registration.models import Profile
 
+#validaciones .py!!!!! <---------------------------------
+from extensiones import validacion
 
 @login_required
 def admin_main(request):
@@ -52,37 +54,66 @@ def new_user(request):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
+        validar=True
+
         grupo = request.POST.get('grupo')
         rut = request.POST.get('rut')
         first_name = request.POST.get('name')
         last_name = request.POST.get('last_name1')
         email = request.POST.get('email')
         mobile = request.POST.get('mobile')
-        
-        #el metodo no contempla validacioens deberá realizarlas
+        cargo = request.POST.get('position')
+
         rut_exist = User.objects.filter(username=rut).count()
         mail_exist = User.objects.filter(email=email).count()
-        if rut_exist == 0:
-            if mail_exist == 0:
-                user = User.objects.create_user(
-                    username= rut,
-                    email=email,
-                    password=rut,
-                    first_name=first_name,
-                    last_name=last_name,
-                    )
-                profile_save = Profile(
-                    user_id = user.id,
-                    group_id = grupo,
-                    first_session = 'Si',
-                    token_app_session = 'No',
-                )
-                profile_save.save()
-                messages.add_message(request, messages.INFO, 'Usuario creado con exito')                             
-            else:
-                messages.add_message(request, messages.INFO, 'El correo que esta tratando de ingresar, ya existe en nuestros registros')                             
-        else:
-            messages.add_message(request, messages.INFO, 'El rut que esta tratando de ingresar, ya existe en nuestros registros')                         
+        print (mail_exist)
+        #cambie toda la estructura pero no me gusta tanto (ineficiente)
+
+        if validacion.validar_soloString(first_name)==False: #<- de validaciones Strings
+            validar=False
+            messages.add_message(request, messages.INFO, 'Error en Nombre: invalido')  
+        if validacion.validar_soloString(last_name)==False: #<- de validaciones Strings
+            validar=False
+            messages.add_message(request, messages.INFO, 'Error en Apellido: invalido')
+        if validacion.validar_soloString(cargo)==False: #<- de validaciones Strings
+            validar=False                               #cargo     QUIZAS SE VA
+            messages.add_message(request, messages.INFO, 'Error en cargo: invalido')
+
+        if validacion.validar_numCelular(mobile)==False:
+            validar=False
+            messages.add_message(request, messages.INFO, 'Error en numero de telefono: Ingrese un numero telefonico valido')#Buscar regeex numero chilenos
+
+        #Posiblemente unificar los if con "&", PERO CAMBIAR LOS MENSAJES ELSE/ O QUIZAS CREAR UNA NUEVA FUNCION.<-----
+        if validacion.validar_rut(rut)==False: #<- de validaciones saca validar_rut
+                    messages.add_message(request, messages.INFO, 'Rut invalido')  
+                    validar=False
+        if validacion.validar_email(email)==False: #<- de validaciones saca validar_email
+                    messages.add_message(request, messages.INFO, 'Email invalido')  
+                    validar=False
+        if rut_exist==1:
+                messages.add_message(request, messages.INFO, 'Rut ya esta registrado')
+                validar=False
+        if mail_exist==1:
+                messages.add_message(request, messages.INFO, 'Este correo ya esta registrado')  
+                validar=False
+        if validar == True:
+                    user = User.objects.create_user(
+                        username= rut,
+                        email=email,
+                        password=rut,
+                        first_name=first_name.capitalize(),#hace que el primero sea mayuscula (.capitalize())
+                        last_name=last_name.capitalize()#hace que el primero sea mayuscula (.capitalize())
+                        )
+                    profile_save = Profile(
+                        user_id = user.id,
+                        group_id = grupo,
+                        first_session = 'Si',
+                        token_app_session = 'No',
+                        )
+                    profile_save.save()
+                    messages.add_message(request, messages.INFO, 'Usuario creado con exito')                             
+ 
+        #el metodo no contempla validacioens deberá realizarlas
     groups = Group.objects.all().exclude(pk=0).order_by('id')
     template_name = 'administrator/new_user.html'
     return render(request,template_name,{'groups':groups})
@@ -102,6 +133,7 @@ def list_main2(request):
 @login_required
 def edit_user(request,user_id):
     profiles = Profile.objects.get(user_id = request.user.id)
+    validar = True
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
@@ -114,32 +146,50 @@ def edit_user(request,user_id):
         group = request.POST.get('group')
         user_data_count = User.objects.filter(pk=user_id).count()
         user_data = User.objects.get(pk=user_id)
-        profile_data = Profile.objects.get(user_id=user_id)    
+        profile_data = Profile.objects.get(user_id=user_id)
+
         if user_data_count == 1:
+            #CUMPLE CON LA FORMA DE UN EMAIL
+            if validacion.validar_email(email)==False:
+                validar=False
+            #SOLO STRING
+            if validacion.validar_soloString(first_name)== False:
+                validar=False
+            if validacion.validar_soloString(last_name)== False:
+                validar=False
+            #si el correo existe
             if user_data.email != email:
                 user_mail_count_all = User.objects.filter(email=email).count()
                 if user_mail_count_all > 0:
-                    messages.add_message(request, messages.INFO, 'El correo '+str(email)+' ya existe en nuestros registros asociado a otro usuario, por favor utilice otro ')                             
+                    #que es page
+                    messages.add_message(request, messages.INFO, 'El correo '+str(email)+' ya existe en nuestros registros asociado a otro usuario, por favor utilice otro ')       
                     return redirect('list_user_active2',page)
-            User.objects.filter(pk = user_id).update(first_name = first_name)
-            User.objects.filter(pk = user_id).update(last_name = last_name)  
-            User.objects.filter(pk = user_id).update(email = email)  
-            Profile.objects.filter(user_id = user_id).update(group_id = group)                
-            messages.add_message(request, messages.INFO, 'Usuario '+user_data.first_name +' '+user_data.last_name+' editado con éxito')                             
-            return redirect('list_user_active2')
+            #Si se cumple Todas las especificaciones lleva aca -Enzo
+            if validar == True:
+                User.objects.filter(pk = user_id).update(first_name = first_name.capitalize())
+                User.objects.filter(pk = user_id).update(last_name = last_name.capitalize())  
+                User.objects.filter(pk = user_id).update(email = email)
+                Profile.objects.filter(user_id = user_id).update(group_id = group)                
+                messages.add_message(request, messages.INFO, 'Usuario '+user_data.first_name +' '+user_data.last_name+' editado con éxito')                             
+                return redirect('list_user_active2')
+            #Si no se cumple alguna de las especificaciones lleva aca -Enzo
+            else:
+                messages.add_message(request, messages.INFO, 'Complete segun lo pedido') 
+                #que es page                            
+                return redirect('list_user_active2',page)
         else:
             messages.add_message(request, messages.INFO, 'Hubo un error al editar el Usuario '+user_data.first_name +' '+user_data.last_name)
             return redirect('list_user_active2')    
     user_data = User.objects.get(pk=user_id)
     profile_data = Profile.objects.get(user_id=user_id)
     groups = Group.objects.get(pk=profile_data.group_id) 
+
     profile_list = Group.objects.all().exclude(pk=0).order_by('name')    
     template_name = 'administrator/edit_user.html'
     return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list})
 
 @login_required    
 def list_user_active2(request,page=None,search=None):
-    
     profiles = Profile.objects.get(user_id = request.user.id)
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
@@ -177,6 +227,10 @@ def list_user_active2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
+            paginator = Paginator(user_all, 1)  
+        user_list = paginator.get_page(page)
+        template_name = 'administrator/list_user_active2.html'
+        return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
             
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
@@ -192,10 +246,10 @@ def list_user_active2(request,page=None,search=None):
     
     #user_array = User.objects.filter(is_active='t').order_by('first_name')
     #profile_data = Profile.objects.all()
-    paginator = Paginator(user_all, 30)  
+    paginator = Paginator(user_all, 1)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
+    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page ,'search':search })
 
 @login_required    
 def list_user_block2(request,page=None,search=None):
@@ -236,7 +290,10 @@ def list_user_block2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-            
+        paginator = Paginator(user_all, 1)  
+        user_list = paginator.get_page(page)
+        template_name = 'administrator/list_user_block2.html'
+        return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están inactivos y se ordena por primer nombre de forma ascendente
@@ -250,37 +307,11 @@ def list_user_block2(request,page=None,search=None):
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})            
     
     #profile_data = Profile.objects.all()
-    paginator = Paginator(user_all, 30)  
+    paginator = Paginator(user_all, 1)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_block2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
+    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page ,'search':search})
 
-
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    if page == None:
-        page = request.GET.get('page')
-    else:
-        page = page
-    if request.GET.get('page') == None:
-        page = page
-    else:
-        page = request.GET.get('page')
-    #group = Group.objects.get(pk=group_id)
-    user_all = []
-    user_array = User.objects.filter(is_active='f').order_by('first_name')
-    for us in user_array:
-        profile_data = Profile.objects.get(user_id=us.id)
-        profile = profile_data.group
-        name = us.first_name+' '+us.last_name
-        user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-        
-    paginator = Paginator(user_all, 30)  
-    user_list = paginator.get_page(page)
-    template_name = 'administrator/list_user_block2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page})
 
 @login_required
 def user_block(request,user_id):
@@ -488,27 +519,33 @@ def carga_masiva_save(request):
         except Exception as e:
             messages.add_message(request, messages.INFO, 'Error al leer el archivo Excel: ' + str(e))
             return redirect('carga_masiva')
-
         acc = 0
         for item in data.itertuples():
             username = str(item[1])
             first_name = str(item[2])
             last_name = str(item[3])
             email = str(item[4])
-
-            user_save = User.objects.create(
+            rut_exist = User.objects.filter(username=username).count()
+            
+            if rut_exist == 0:
+                user_save = User.objects.create(
                 username=username,
                 first_name=first_name,
                 last_name=last_name,
                 email=email
-            )
-            profile_save = Profile.objects.create(
-                user=user_save,
-                group_id=1,
-                first_session='No',
-                token_app_session='No'
-            )
-            acc += 1
+                )
+                profile_save = Profile.objects.create(
+                    user=user_save,
+                    group_id=1,
+                    first_session='No',
+                    token_app_session='No'
+                )
+                acc += 1
+            
+            
+    
+    
+            
 
         messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
         return redirect('carga_masiva')

@@ -1,0 +1,76 @@
+<<<<<<< HEAD
+{% extends 'core/base_admin.html' %}
+=======
+% extends 'core/base_admin.html' %}
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
+{% load static %}
+
+{% block content %}
+{% block extrahead %}
+
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3">
+                <h3>Nuevo Producto</h3> 
+                <form method="post" action="{% url 'producto_save' %}">
+                    {% csrf_token %}
+                    <div class="row"> 
+                        <div class="col-12 col-sm-8 mb-3">
+<<<<<<< HEAD
+                            <label for="text">codigo Producto</label>
+                            <input type="text" id="codigo_producto" name="codigo_producto" placeholder="0 000000 000000"/>
+                        </div> 
+                        <div class="col-12 col-sm-8 mb-3">
+=======
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
+                            <label for="text">Nombre Producto</label>
+                            <input type="text" name="nombre" placeholder="RTX 4090"/>
+                        </div>  
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="text">Categoria</label>
+                            <select name="category_group_id" id="category_group_id" class="form-control border" required>
+                                <option value="">----------</option>
+                                {% for g in category_groups %}
+                                <option value="{{g.id}}">{{g.category_group_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>  
+                    </div>    
+                    <div class="row">                       
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="text">Precio $</label>
+                            <input type="number" class="form-control border" id="precio" name="precio" placeholder="$Valor del producto" autofocus maxlength="254" required/>
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="text">Unidades</label>
+                            <input type="number" class="form-control border" id="stock" name="stock" placeholder="Cantidad" required/>
+                        </div>                        
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="text">Stock minimo producto</label>
+                            <input type="number" class="form-control border" id="stock_minimo" name="stock_minimo" placeholder="Stock minimo/" required/>
+                        </div>                        
+                    </div>
+                    <div class="row"> 
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="text">Stock Máximo producto (*)</label>
+                            <input type="number" class="form-control border" id="stock_maximo" name="stock_maximo"  placeholder="/Stock maximo" required/>
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="text">Descripción producto</label>
+                            <input type="text" class="form-control border" placeholder="Especificaciones" id="descripcion_producto" name="descripcion_producto" required/>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-12 col-sm-6 mb-3">
+                            <input type="submit" value="Crear Producto" class="button form-control">
+                        </div>
+                        <div class="col-12 col-sm-6 mb-3">
+                            <a href="{% url 'inventario_main' %}" class="button button--gray form-control">Volver</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}

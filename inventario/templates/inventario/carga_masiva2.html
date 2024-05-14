@@ -10,20 +10,24 @@
         <div class="col-md-11">
             <div class="mb-3">
                 <div class="d-flex flex-column align-items-center align-items-lg-start">
-                    <form action="{% url 'carga_masiva_save' %}" method="post" enctype="multipart/form-data">
+                    <form action="{% url 'carga_masiva_save2' %}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                             <div class="mb-0 col-md-12">
-                                <label for="category_name" class="form-label"><a href="{% url 'import_administrator' %}">Descarga archivo de importación</a></label>
+                                <label for="category_name" class="form-label"><a href="{% url 'import_inventario'  %}">Descarga archivo de importación</a></label>
                                 <input type="file" name="myfile" class="form-control" required>
                                 <div class="feedback body--small normal"></div>
                             </div>
                             <div class="row">  
                                 <div class="col-12 col-sm-6">
-                                    <br><button class="button form-control mt-2" type="submit">Cargar</button>
+                                    <button class="button form-control mt-2" type="submit">Cargar</button>
                                 </div>
-                                <div class="col-12 col-sm-6">
-                                    <br><a href="{% url 'users_main' %}" class="button button--gray form-control mt-2">Volver</a>
+                                <div class="col-12 col-sm-4 mb-3">
+<<<<<<< HEAD
+                                    <br><a href="{% url 'inventario_main' %}" class="button button--gray form-control">Volver</a>
+=======
+                                    <a href="{% url 'inventario_main' %}" class="button button--gray form-control">Volver</a>
+>>>>>>> 16934d030efbff60a5761db961392befb9616219
                                 </div>
                             </div>                        
                         </div>
@@ -37,7 +41,7 @@
                 <p class='text-blue'>No cuenta con acceso a esta vista</p>
             </div>
             <div class="col-12 col-sm-4 mb-3">
-                <a href="{% url 'users_main'%}" class="button button--gray form-control">Volver</a>
+                <a href="{% url 'inventario_main' %}" class="button button--gray form-control">Volver</a>
             </div>
         </div>
     {% endif %}

@@ -6,7 +6,7 @@ from django.db import models #importa los metodos necesarios para trabajar con m
 
 
 class Producto(models.Model):
-
+    codigo_producto = models.CharField(max_length = 100,null=True, blank=True)  
     nombre_producto = models.CharField(max_length = 100,null=True, blank=True)  
     precio_producto = models.IntegerField(null=True, blank=True)
     stock_producto = models.IntegerField(null=True, blank=True)
@@ -35,10 +35,21 @@ class Producto(models.Model):
     def __str__(self):
         return self.stock_producto
 
-#group = models.ForeignKey(Group, on_delete=models.CASCADE, default=1) 
+
+class Category_group(models.Model):
+    category_group_name = models.CharField(max_length=100, null=True, blank=True)
+    
+    class Meta:
+        verbose_name = 'Category_group'
+        verbose_name_plural = 'Category_groups'
+        ordering = ['category_group_name']
+    
+    def __str__(self):
+        return self.category_group_name
+
 class Category(models.Model):
     producto = models.OneToOneField(Producto, on_delete=models.CASCADE, null=True)
-    category_name = models.CharField(max_length=100, null=True, blank=True)
+    category_group = models.ForeignKey(Category_group, on_delete=models.CASCADE, default=2) 
     category_state = models.CharField(max_length=100, null=True, blank=True, default='Activa')
 
     class Meta:
@@ -46,8 +57,6 @@ class Category(models.Model):
         verbose_name_plural = 'Categorys'
         ordering = ['producto__stock_producto']
     
-    def __str__(self):
-        return self.category_name
     
 
 
