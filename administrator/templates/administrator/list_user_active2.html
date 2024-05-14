@@ -3,7 +3,20 @@
 {% load mathfilters %}
 {% block content %}
 {% block extrahead %}
-
+<script>
+    function confirmarCambio(event) {
+        // Mostrar la alerta de confirmación
+        var confirmacion = confirm("¿Estás seguro de que deseas realizar este cambio?");
+    
+        // Si el usuario no confirma, prevenir la acción por defecto
+        if (!confirmacion) {
+            event.preventDefault();
+            alert("Cambio cancelado.");
+        } else {
+            alert("Cambio realizado exitosamente.");
+        }
+    }
+</script>
 {% endblock %}
 <header class='mb-5'>
     <div class="row">
@@ -66,9 +79,9 @@
                                 {% if s.id != request.user.id %}
                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                     <th scope="row">
-                                    <a href="{% url 'user_block' s.id  %}" data-toggle="modal" data-target="#userBlock" data-u_id="{{s.id}}" data-u_name="{{s.name}}"  data-page="{{page}}">
-                                        Bloquea Usuario
-                                    </a>
+                                        <a href="{% url 'user_block' s.id %}" onclick="confirmarCambio(event);">
+                                            Bloquea Usuario
+                                        </a>
                                     </th>
                                 {% endif %}
                             {% endif %}
