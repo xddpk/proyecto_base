@@ -10,13 +10,11 @@
                 <h3>Gestión De proveedores </h3> 
                 <div class="col-12" style="margin-bottom: 15px;"></div>               
                 <div class="row mt-4 mb-4">
-                    {% if profiles.group_id == 3%}
-                    <!-- 
-                        <div class="col-12 col-sm-3 mb-3">
-                            <a href="{% url 'new_user' %}" class="button form-control">Nuevo Producto</a>
-                            <div class="col-12" style="margin-bottom: 30px;"></div> 
-                        </div>
-                        -->
+                    {% if profiles.group_id == 1 or profiles.group_id == 3 %}
+                    <div class="col-12 col-sm-3 mb-3"  style="margin-bottom: 25px;">
+                        <div class="col-12" style="margin-bottom: 25px;"></div>
+                        <a href="{% url 'proveedor_create' %}" class="button form-control">Nuevo Proveedor</a>
+                    </div> 
                     {% endif %}
                     
 

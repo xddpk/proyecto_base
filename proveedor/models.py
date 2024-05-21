@@ -75,7 +75,7 @@ class Calle(models.Model):
         return self.nombre_calle
     
 class Direccion(models.Model):
-    numero_dirrecion = models.CharField(max_length=100, null=True, blank=True)
+    numero_dirrecion = models.IntegerField( null=True, blank=True)
     calle = models.ForeignKey(Calle, on_delete=models.CASCADE) 
     
     class Meta:
@@ -91,14 +91,13 @@ class Direccion(models.Model):
 class ProveedorDireccion(models.Model):
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE) 
     direccion = models.ForeignKey(Direccion, on_delete=models.CASCADE) 
-    departamento = models.CharField(max_length=100, null=True, blank=True)
-    piso = models.CharField(max_length=100, null=True, blank=True)
-    
-    
+    departamento = models.IntegerField( null=True, blank=True)
+    piso = models.IntegerField( null=True, blank=True)
 
     class Meta:
         verbose_name = 'ProveedorDireccion'
         verbose_name_plural = 'ProveedorDirecciones'  
+        ordering = ['proveedor']
 
 class OrdenProducto(models.Model):
     #producto = models.OneToOneField(Producto, on_delete=models.CASCADE, null=True)

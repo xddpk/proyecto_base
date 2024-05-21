@@ -566,16 +566,7 @@ def list_categories(request,page=None,search=None):
         template_name = 'inventario/list_categories.html'
         return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
 
-"""@login_required
-def categories_edit(request,categories_id):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    name= request.POST.get('name')
-    Category_group.objects.filter(pk=categories_id).update(category_group_name=name)
-    template_name='inventario/categorias_editar.html'
-    return render(request,template_name,{'name':name, 'categories_id':categories_id})"""
+
 def categories_edit(request,categories_id):
     profiles = Profile.objects.get(user_id = request.user.id)
     if profiles.group_id != 1:
