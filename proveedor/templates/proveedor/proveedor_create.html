@@ -16,6 +16,11 @@
                             <label for="name">Nombre Proveedor (*)</label>
                             <input type="text" class="form-control border" id="name" name="name" autofocus maxlength="254" required/>
                         </div>
+                        <div class="row"> 
+                            <div class="col-12 col-sm-8 mb-3">
+                                <label for="rut">Rut</label>
+                                <input type="text" name="rut"  required oninput="checkRut(this)" autofocus maxlength="254" required id="rut" class="form-control border" placeholder="Rut (Ej: 17605812-2)"/>
+                            </div>
                         <select name="region" id="region" class="form-control border" required>
                             <option value="">----------</option>
                             {% for r in regiones %}

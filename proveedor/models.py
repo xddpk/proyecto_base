@@ -4,6 +4,7 @@ from inventario.models import *
 
 class Proveedor(models.Model):
     
+    rut_proveedor = models.CharField(max_length = 100,null=True, blank=True) 
     nombre_proveedor = models.CharField(max_length = 100,null=True, blank=True)  
     correo_proveedor = models.CharField(max_length = 100,null=True, blank=True)  
     telefono_proveedor = models.IntegerField(null=True, blank=True)
