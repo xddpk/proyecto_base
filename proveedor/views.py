@@ -17,6 +17,9 @@ from django.http import JsonResponse
 #validaciones .py!!!!! <---------------------------------
 from extensiones import validacion
 # Create your views here.
+#numero de elementos para el listado
+global num_elemento 
+num_elemento = 30
 
 
 
@@ -92,15 +95,13 @@ def proveedor_save(request):
             )
             proveedor_save.save()
 
-            proveedorcalle_save = Calle (
-                nombre_calle = calle,
-                comuna_id = comuna ,
-            )
-            proveedorcalle_save.save()
-
             direccion_save = Direccion (
+                nombre_calle = calle, 
                 numero_dirrecion = numero,
-                calle_id = proveedorcalle_save.id,
+                departamento = departamento,
+                piso = piso,
+                comuna_id = comuna,
+                
                 
                 )
             direccion_save.save()
@@ -109,8 +110,6 @@ def proveedor_save(request):
 
                 direccion_id = direccion_save.id,
                 proveedor_id = proveedor_save.id,
-                departamento = departamento,
-                piso = piso,
                 
             )
             
@@ -190,7 +189,7 @@ def edit_proveedor(request,proveedor_id):
             return redirect('proveedor_lista_activo')    
     proveedor_data = Proveedor.objects.get(pk=proveedor_id) 
     proveedor_direcciones = ProveedorDireccion.objects.get(proveedor_id=proveedor_id)
-    proveedor_direcciones = ProveedorDireccion.objects.get(proveedor_id=proveedor_id).dirrecion_id
+    #proveedor_direcciones = ProveedorDireccion.objects.get(proveedor_id=proveedor_id).dirrecion_id
 
     direccion = Direccion.objects.get()
 
@@ -205,6 +204,7 @@ def proveedor_lista_activo(request,page=None,search=None):
     if profiles.group_id != 1 and profiles.group_id != 3:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
+    
     if page == None:
         page = request.GET.get('page')
     else:
@@ -226,17 +226,20 @@ def proveedor_lista_activo(request,page=None,search=None):
         search = request.POST.get('search') 
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
-    print("search> ",search)
     proveedor_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None":# si la cadena de búsqueda viene vacia
+    if search == None or search.lower() == "none":# si la cadena de búsqueda viene vacia
         #usuario_count = proveedor.objects.filter(is_active='t').count()
         proveedor_array = Proveedor.objects.filter(estado_proveedor='t').order_by('nombre_proveedor')
         
         for pr in proveedor_array:
-            
             #se guarda la información del usuario
-            proveedor_all.append({'id':pr.id,'nombre_proveedor':pr.nombre_proveedor,'correo_proveedor':pr.correo_proveedor,'telefono_proveedor':pr.telefono_proveedor,'rut_proveedor':pr.rut_proveedor})
-            paginator = Paginator(proveedor_all, 30)  
+            proveedor_all.append({'id':pr.id,
+                                'nombre_proveedor':pr.nombre_proveedor,
+                                'correo_proveedor':pr.correo_proveedor,
+                                'telefono_proveedor':pr.telefono_proveedor,
+                                'rut_proveedor':pr.rut_proveedor}
+                                )
+        paginator = Paginator(proveedor_all, num_elemento)  
         proveedor_list = paginator.get_page(page)
         template_name = 'proveedor/proveedor_lista_activo.html'
         return render(request,template_name,{'profiles':profiles,'proveedor_list':proveedor_list,'paginator':paginator,'page':page,'search':search })
@@ -249,11 +252,16 @@ def proveedor_lista_activo(request,page=None,search=None):
         for pr in proveedor_array:
             
             #se guarda la información del usuario
-            proveedor_all.append({'id':pr.id,'nombre_proveedor':pr.nombre_proveedor,'correo_proveedor':pr.correo_proveedor,'telefono_proveedor':pr.telefono_proveedor,'rut_proveedor':pr.rut_proveedor})
+            proveedor_all.append({'id':pr.id,
+                                'nombre_proveedor':pr.nombre_proveedor,
+                                'correo_proveedor':pr.correo_proveedor,
+                                'telefono_proveedor':pr.telefono_proveedor,
+                                'rut_proveedor':pr.rut_proveedor}
+                                )
             
     #user_array = User.objects.filter(is_active='t').order_by('nombre_proveedor')
     #profile_data = Profile.objects.all()
-    paginator = Paginator(proveedor_all, 30)  
+    paginator = Paginator(proveedor_all, num_elemento)  
     proveedor_list = paginator.get_page(page)
     template_name = 'proveedor/proveedor_lista_activo.html'
     return render(request,template_name,{'profiles':profiles,'proveedor_list':proveedor_list,'paginator':paginator,'page':page ,'search':search })
@@ -292,10 +300,9 @@ def proveedor_lista_bloqueado(request,page=None,search=None):
         proveedor_array = Proveedor.objects.filter(estado_proveedor='f').order_by('nombre_proveedor')
         
         for pr in proveedor_array:
-            
             #se guarda la información del usuario
             proveedor_all.append({'id':pr.id,'nombre_proveedor':pr.nombre_proveedor,'correo_proveedor':pr.correo_proveedor,'telefono_proveedor':pr.telefono_proveedor,'rut_proveedor':pr.rut_proveedor})
-            paginator = Paginator(proveedor_all, 30)  
+        paginator = Paginator(proveedor_all, num_elemento)  
         proveedor_list = paginator.get_page(page)
         template_name = 'proveedor/proveedor_lista_bloqueado.html'
         return render(request,template_name,{'profiles':profiles,'proveedor_list':proveedor_list,'paginator':paginator,'page':page,'search':search })
@@ -312,7 +319,7 @@ def proveedor_lista_bloqueado(request,page=None,search=None):
             
     #user_array = User.objects.filter(is_active='t').order_by('nombre_proveedor')
     #profile_data = Profile.objects.all()
-    paginator = Paginator(proveedor_all, 30)  
+    paginator = Paginator(proveedor_all, num_elemento)  
     proveedor_list = paginator.get_page(page)
     template_name = 'proveedor/proveedor_lista_bloqueado.html'
     return render(request,template_name,{'profiles':profiles,'proveedor_list':proveedor_list,'paginator':paginator,'page':page ,'search':search })
@@ -337,8 +344,7 @@ def proveedor_block(request,proveedor_id):
         return redirect('proveedor_lista_activo')        
     else:
         messages.add_message(request, messages.INFO, 'Hubo un error al bloquear el Proveedor '+proveedor_data.nombre_proveedor )
-        return redirect('proveedor_lista_activo')   
-         
+        return redirect('proveedor_lista_activo')    
 @login_required
 def proveedor_activate(request,proveedor_id):
     profiles = Profile.objects.get(user_id = request.user.id)

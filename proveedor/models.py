@@ -63,21 +63,17 @@ class Comuna(models.Model):
     def __str__(self):
         return self.nombre_comuna
     
-class Calle(models.Model):
-    nombre_calle = models.CharField(max_length=100, null=True, blank=True)
-    comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE) 
-    
-    class Meta:
-        verbose_name = 'Calle'
-        verbose_name_plural = 'Calles'
-        ordering = ['nombre_calle']
-    
-    def __str__(self):
-        return self.nombre_calle
     
 class Direccion(models.Model):
     numero_dirrecion = models.IntegerField( null=True, blank=True)
-    calle = models.ForeignKey(Calle, on_delete=models.CASCADE) 
+    nombre_calle = models.CharField(max_length=100, null=True, blank=True)
+    departamento = models.IntegerField( null=True, blank=True)
+    piso = models.IntegerField( null=True, blank=True)
+    comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE) 
+    #calle, numero, apartamento, 
+    def obtener_direccion (self):
+        direccion = self.nombre_calle + " " + self.numero_dirrecion
+        return direccion
     
     class Meta:
         verbose_name = 'Direccion'
@@ -92,8 +88,7 @@ class Direccion(models.Model):
 class ProveedorDireccion(models.Model):
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE) 
     direccion = models.ForeignKey(Direccion, on_delete=models.CASCADE) 
-    departamento = models.IntegerField( null=True, blank=True)
-    piso = models.IntegerField( null=True, blank=True)
+    
 
     class Meta:
         verbose_name = 'ProveedorDireccion'
