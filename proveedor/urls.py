@@ -14,12 +14,14 @@ proveedor_urlpatterns = [
     path('load-comunas/', views.load_comunas, name='load_comunas'),
     path('proveedor_save/',views.proveedor_save, name='proveedor_save'), 
     
+    path('direccion_create/<proveedor_id>/',views.direccion_create, name='direccion_create'),   
+    path('direccion_save/<proveedor_id>/',views.direccion_save, name='direccion_save'), 
+    
     path('proveedor_block/<proveedor_id>/',views.proveedor_block, name='proveedor_block'),
     path('proveedor_activate/<proveedor_id>',views.proveedor_activate, name='proveedor_activate'),
     path('proveedor_delete/<proveedor_id>',views.proveedor_delete, name='proveedor_delete'),
     path('edit_proveedor/<proveedor_id>/',views.edit_proveedor, name='edit_proveedor'),
     
-     
     
     path('proveedor_lista_activo/',views.proveedor_lista_activo, name='proveedor_lista_activo'),     
     path('proveedor_lista_activo/<groups>/<page>/',views.proveedor_lista_activo, name='proveedor_lista_activo'),  

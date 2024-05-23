@@ -44,6 +44,63 @@ def proveedor_create(request):
     regiones = Region.objects.all()
     return render(request,template_name,{'regiones':regiones, 'profiles':profiles})
 
+@login_required
+def direccion_create(request, proveedor_id):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 3:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    template_name = 'proveedor/direccion_create.html'
+    regiones = Region.objects.all()
+    return render(request,template_name,{'regiones':regiones, 'profiles':profiles, 'id':proveedor_id})
+
+
+
+@login_required
+def direccion_save(request, proveedor_id):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 3:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+
+    if request.method=='POST':
+        
+        region= request.POST.get('region')
+        comuna= request.POST.get('comuna')
+        calle= request.POST.get('calle')
+        numero= request.POST.get('numero')
+        departamento= request.POST.get('departamento')
+        piso= request.POST.get('piso')
+        state=True
+        validar = True
+        
+        if validar==True:
+
+            direccion_save = Direccion (
+                nombre_calle = calle, 
+                numero_dirrecion = numero,
+                departamento = departamento,
+                piso = piso,
+                comuna_id = comuna,
+                
+                
+                )
+            direccion_save.save()
+            
+            proveedordireccion_save = ProveedorDireccion (
+
+                direccion_id = direccion_save.id,
+                proveedor_id = proveedor_id,
+                
+            )
+            
+            proveedordireccion_save.save()
+
+            
+            
+            messages.add_message(request,messages.INFO,'Dirección creado con exito')
+    return redirect('proveedor_main')
+
 # views.py
 
 
@@ -188,15 +245,91 @@ def edit_proveedor(request,proveedor_id):
             messages.add_message(request, messages.INFO, 'Hubo un error al editar el Proveedor '+proveedor_data.nombre_proveedor)
             return redirect('proveedor_lista_activo')    
     proveedor_data = Proveedor.objects.get(pk=proveedor_id) 
-    proveedor_direcciones = ProveedorDireccion.objects.get(proveedor_id=proveedor_id)
+    #proveedor_direcciones = ProveedorDireccion.objects.filter(proveedor_id=proveedor_id)
     #proveedor_direcciones = ProveedorDireccion.objects.get(proveedor_id=proveedor_id).dirrecion_id
 
-    direccion = Direccion.objects.get()
+   
 
     template_name = 'proveedor/edit_proveedor.html'
-    return render(request,template_name,{'proveedor_data':proveedor_data, 'dirreciones_data':proveedor_direcciones})
+    return render(request,template_name,{'proveedor_data':proveedor_data})
 
     
+    """
+@login_required    
+def proveedor_lista_direccion(request,proveedor_id,page=None,search=None):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 3:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    
+    if page == None:
+        page = request.GET.get('page')
+    else:
+        page = page
+    if request.GET.get('page') == None:
+        page = page
+    else:
+        page = request.GET.get('page')
+    #logica que permite recibir la cadena de búsqueda y propoga a través del paginador
+    if search == None:
+        search = request.GET.get('search')
+    else:
+        search = search
+    if request.GET.get('search') == None:
+        search = search
+    else:
+        search = request.GET.get('search') 
+    if request.method == 'POST':
+        search = request.POST.get('search') 
+        page = None
+    #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
+    dirreciones_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
+    if search == None or search.lower() == "none":# si la cadena de búsqueda viene vacia
+        #usuario_count = proveedor.objects.filter(is_active='t').count()
+        proveedordireccion_array = ProveedorDireccion.objects.filter(proveedor_id = proveedor_id)
+        dirrecion_array = Direccion.objects.filter(pk = )
+        
+        
+        
+        
+        
+        for pr in dirrecion_array:
+            #se guarda la información del usuario
+            dirreciones_all.append({'id':pr.id,
+                                'nombre_proveedor':pr.nombre_proveedor,
+                                'correo_proveedor':pr.correo_proveedor,
+                                'telefono_proveedor':pr.telefono_proveedor,
+                                'rut_proveedor':pr.rut_proveedor}
+                                )
+        paginator = Paginator(dirreciones_all, num_elemento)  
+        proveedor_list = paginator.get_page(page)
+        template_name = 'proveedor/proveedor_lista_activo.html'
+        return render(request,template_name,{'profiles':profiles,'proveedor_list':proveedor_list,'paginator':paginator,'page':page,'search':search })
+            
+    else:#si la cadena de búsqueda trae datos
+        #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
+        #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
+        dirrecion_array =  Proveedor.objects.filter(Q(nombre_proveedor__icontains=search)|Q(rut_proveedor__icontains=search)).filter(estado_proveedor='t').order_by('nombre_proveedor')#Ascendente
+        
+        for pr in dirrecion_array:
+            
+            #se guarda la información del usuario
+            dirreciones_all.append({'id':pr.id,
+                                'nombre_proveedor':pr.nombre_proveedor,
+                                'correo_proveedor':pr.correo_proveedor,
+                                'telefono_proveedor':pr.telefono_proveedor,
+                                'rut_proveedor':pr.rut_proveedor}
+                                )
+            
+    #user_array = User.objects.filter(is_active='t').order_by('nombre_proveedor')
+    #profile_data = Profile.objects.all()
+    paginator = Paginator(dirreciones_all, num_elemento)  
+    proveedor_list = paginator.get_page(page)
+    template_name = 'proveedor/proveedor_lista_activo.html'
+    return render(request,template_name,{'profiles':profiles,'proveedor_list':proveedor_list,'paginator':paginator,'page':page ,'search':search })
+"""
+
+
 
 @login_required    
 def proveedor_lista_activo(request,page=None,search=None):
