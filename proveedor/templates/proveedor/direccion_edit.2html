@@ -122,8 +122,8 @@
                     {% if profiles.group_id == 1 or profiles.group_id == 3%}
                             <th scope="row">
                             
-                                <a href="{% url 'direccion_edit' s.id s.proveedor_id %}">
-                                    Edita Dirección
+                                <a href="">
+                                    Edita Proveedor
                                 </a>
                             </th>
                                 

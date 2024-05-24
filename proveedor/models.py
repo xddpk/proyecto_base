@@ -62,26 +62,32 @@ class Comuna(models.Model):
     
     def __str__(self):
         return self.nombre_comuna
-    
-    
+
+
 class Direccion(models.Model):
-    numero_dirrecion = models.IntegerField( null=True, blank=True)
-    nombre_calle = models.CharField(max_length=100, null=True, blank=True)
-    departamento = models.IntegerField( null=True, blank=True)
-    piso = models.IntegerField( null=True, blank=True)
+    numero_direccion = models.IntegerField(null=True, blank=True, default=0)
+    nombre_calle = models.CharField(max_length=100, null=True, blank=True, default='')
+    departamento = models.IntegerField(null=True, blank=True, default=0)
+    piso = models.IntegerField(null=True, blank=True, default=0)
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE) 
-    #calle, numero, apartamento, 
-    def obtener_direccion (self):
-        direccion = self.nombre_calle + " " + self.numero_dirrecion
+
+    def obtener_direccion(self):
+        partes = [
+            self.nombre_calle,
+            str(self.numero_direccion) if self.numero_direccion else '',
+            f"Depto. {self.departamento}" if self.departamento else '',
+            f"Piso {self.piso}" if self.piso else ''
+        ]
+        direccion = ' '.join(partes).strip()
         return direccion
     
     class Meta:
         verbose_name = 'Direccion'
         verbose_name_plural = 'Direcciones'
-        ordering = ['numero_dirrecion']
+        ordering = ['numero_direccion']
     
     def __str__(self):
-        return self.numero_dirrecion
+        return str(self.numero_direccion or '')
     
     
     

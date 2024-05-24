@@ -16,11 +16,14 @@ proveedor_urlpatterns = [
     
     path('direccion_create/<proveedor_id>/',views.direccion_create, name='direccion_create'),   
     path('direccion_save/<proveedor_id>/',views.direccion_save, name='direccion_save'), 
+    path('direccion_delete/<direccion_id>/<proveedor_id>/',views.direccion_delete, name='direccion_delete'),
+    path('direccion_edit/<direccion_id>/<proveedor_id>/',views.direccion_edit, name='direccion_edit'),
     
     path('proveedor_block/<proveedor_id>/',views.proveedor_block, name='proveedor_block'),
     path('proveedor_activate/<proveedor_id>',views.proveedor_activate, name='proveedor_activate'),
     path('proveedor_delete/<proveedor_id>',views.proveedor_delete, name='proveedor_delete'),
     path('edit_proveedor/<proveedor_id>/',views.edit_proveedor, name='edit_proveedor'),
+    path('edit_proveedor/<groups>/<page>/',views.edit_proveedor, name='edit_proveedor'),  
     
     
     path('proveedor_lista_activo/',views.proveedor_lista_activo, name='proveedor_lista_activo'),     

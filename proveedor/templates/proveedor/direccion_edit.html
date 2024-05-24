@@ -1,0 +1,110 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+
+{% block content %}
+{% block extrahead %}
+<script type="text/javascript">
+    // Función para mostrar la alerta cuando se envía el formulario
+    function mostrarAlerta() {
+        alert("¡El Proveedor fue modificado con exito!");
+    }
+    
+
+    function confirmarCambio(event) {
+        // Mostrar la alerta de confirmación
+        var confirmacion = confirm("¿Estás seguro de que deseas realizar este cambio?");
+    
+        // Si el usuario no confirma, prevenir la acción por defecto
+        if (!confirmacion) {
+            event.preventDefault();
+            alert("Cambio cancelado.");
+        } else {
+            alert("Cambio realizado exitosamente.");
+        }
+    }
+    // Función para cargar las comunas basadas en la región seleccionada
+    function loadComunas(regionId, selectedComunaId) {
+        if (regionId) {
+            $.ajax({
+                url: "{% url 'load_comunas' %}",
+                data: {
+                    'region_id': regionId
+                },
+                success: function(data) {
+                    $('#comuna').empty();
+                    $('#comuna').append('<option value="">----------</option>');
+                    $.each(data, function(key, value) {
+                        $('#comuna').append('<option value="' + value.id + '"' + (value.id == selectedComunaId ? ' selected' : '') + '>' + value.nombre_comuna + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#comuna').empty();
+            $('#comuna').append('<option value="">----------</option>');
+        }
+    }
+
+    // Llamar la función al cargar la página para setear la comuna
+    $(document).ready(function() {
+        var regionId = $('#region').val();
+        var selectedComunaId = "{{ comuna.id }}";  // Valor de la comuna actual
+
+        loadComunas(regionId, selectedComunaId);
+
+        $('#region').change(function() {
+            var regionId = $(this).val();
+            loadComunas(regionId, null);
+        });
+    });
+</script>
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3">
+                <h3>Editar Direccion</h3> 
+                <form method="post" action="{% url 'direccion_edit' direccion_data.id proveedor_id %}" onsubmit="mostrarAlerta()">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ direccion_data.id }}" name="direccion_id" id="direccion_id">
+                    <div class="row">                       
+                        <select name="region" id="region" class="form-control border" required>
+                            <option value="">----------</option>
+                            {% for r in regiones %}
+                            <option value="{{r.id}}" {% if r.id == region.id %} selected {% endif %}>{{r.nombre_region}}
+
+                            {% endfor %}
+                        </select>
+                        <select name="comuna" id="comuna" class="form-control border" required>
+                            <option value="">----------</option>
+                        </select>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="text">Calle (*)</label>
+                            <input type="text" class="form-control border" id="calle" name="calle" value="{{ direccion_data.nombre_calle }}" maxlength="254" required/>
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="number">numero (*)</label>
+                            <input type="number" class="form-control border" id="numero" name="numero" value="{{ direccion_data.numero_direccion }}" autofocus maxlength= "254" required/>
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="text">Número Departamento (*)</label>
+                            <input type="text" class="form-control border" id="departamento" name="departamento" value="{{ direccion_data.departamento }}" autofocus maxlength="254" required/>
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="text">Piso (*)</label>
+                            <input type="text" class="form-control border" id="piso" name="piso" value="{{ direccion_data.piso }}" autofocus maxlength="254" required/>
+                        </div>
+                        
+                        <div class="row"> 
+                            <div class="col-12 col-sm-6 mb-3">
+                                <input type="submit" value="Editar Direccion" class="button form-control">
+                            </div>
+                            <div class="col-12 col-sm-6 mb-3">
+                                <a href="{% url 'edit_proveedor' proveedor_id %}" class="button button--gray form-control">Volver</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </main>
+{% endblock %}

@@ -54,7 +54,28 @@ def new_user(request):
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
+    if page == None:
+        page = request.GET.get('page')
+    else:
+        page = page
+    if request.GET.get('page') == None:
+        page = page
+    else:
+        page = request.GET.get('page')
+    #logica que permite recibir la cadena de búsqueda y propoga a través del paginador
+    if search == None:
+        search = request.GET.get('search')
+    else:
+        search = search
+    if request.GET.get('search') == None:
+        search = search
+    else:
+        search = request.GET.get('search') 
     if request.method == 'POST':
+        search = request.POST.get('search') 
+        page = None
+    if request.method == 'POST':
+        
         validar=True
 
         grupo = request.POST.get('grupo')
@@ -197,26 +218,7 @@ def list_user_active2(request,page=None,search=None):
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
-    if page == None:
-        page = request.GET.get('page')
-    else:
-        page = page
-    if request.GET.get('page') == None:
-        page = page
-    else:
-        page = request.GET.get('page')
-    #logica que permite recibir la cadena de búsqueda y propoga a través del paginador
-    if search == None:
-        search = request.GET.get('search')
-    else:
-        search = search
-    if request.GET.get('search') == None:
-        search = search
-    else:
-        search = request.GET.get('search') 
-    if request.method == 'POST':
-        search = request.POST.get('search') 
-        page = None
+    
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
     print("search> ",search)
     user_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no

@@ -12,7 +12,6 @@
                 <form method="post" action="{% url 'direccion_save' id %}">
                     {% csrf_token %}
                     <div class="row">                       
-                        
                         <select name="region" id="region" class="form-control border" required>
                             <option value="">----------</option>
                             {% for r in regiones %}
