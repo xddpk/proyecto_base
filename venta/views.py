@@ -32,3 +32,18 @@ def venta_main(request):
     template_name = 'venta/venta_main.html'
     return render(request,template_name,{'profiles':profiles})
 
+"""
+
+def crear_venta(request):
+    if request.method == 'POST':
+        form = TuModeloForm(request.POST)
+        if form.is_valid():
+            nueva_venta = form.save(commit=False)
+            nueva_venta.save()
+            # Redirige o realiza otras acciones necesarias
+    else:
+        form = TuModeloForm()
+    
+    return render(request, 'tu_template.html', {'form': form})
+
+"""
