@@ -1,6 +1,8 @@
 import re
 def validar_soloString(dato):
     regex = r'[a-zA-Z]{3,}'
+    if dato=="":
+        return False
     if re.match(regex,dato):
         return True
     else:
@@ -16,10 +18,16 @@ def validar_numCelular(numero):
 
 def validar_int(dato):
     try:
-        int(dato)
-        return True
-    except(ValueError):
+        valor = int(dato)
+        if valor=="":
+            return False
+        if valor >= 0:
+            return True
+        else:
+            return False
+    except ValueError:
         return False
+
 
 def validar_rut(rut):
     regex = r'^[1-9]\d*\-(\d|k|K)$' #debe llevar guion
@@ -39,3 +47,9 @@ def validar_email(email):
     else:
         return False
 
+def validar_depto(departamento):
+    if departamento=="":
+        return False
+    else:
+
+        return False

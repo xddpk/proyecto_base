@@ -115,7 +115,7 @@ def producto_create3(request,producto_id):
         descripcion_producto = request.POST.get('descripcion_producto')
         producto_data_count = Producto.objects.filter(pk=producto_id).count()
         producto_data = Producto.objects.get(pk=producto_id)
-    
+
     producto_data = Producto.objects.get(pk=producto_id)
     print("nomre: "+producto_data.nombre_producto)
     category_data = Category.objects.get(producto_id=producto_id)
@@ -142,22 +142,27 @@ def producto_save(request):
         descripcion_producto = request.POST.get('descripcion_producto')
         validar=True
         Produc_exist = Producto.objects.filter(nombre_producto=nombre_producto).count()
+
         if Produc_exist == 1:
             validar = False
             messages.add_message(request, messages.INFO, 'Este producto ya a sido creado anteriormente')
-        if int(precio_producto) < 0:
-            messages.add_message(request, messages.INFO, 'El precio del producto no puede ser negativo')
+            
+        if validacion.validar_soloString(nombre_producto) ==False:
+            messages.add_message(request, messages.INFO, 'El nombre del producto no puede estar vacio')
             validar=False
-        if int(stock_producto) <0:
-            messages.add_message(request, messages.INFO, 'El stock del producto no puede ser negativo')
+        if validacion.validar_int(precio_producto) ==False:
+            messages.add_message(request, messages.INFO, 'El precio del producto no puede ser negativo ni nulo')
             validar=False
-        if int(stock_minimo_producto) < 0:
+        if validacion.validar_int(stock_producto) ==False:
+            messages.add_message(request, messages.INFO, 'El stock del producto no puede ser negativo ni nulo (si el stock es 0, entonces digitelo)')
+            validar=False
+        if validacion.validar_int(stock_minimo_producto) ==False:
             messages.add_message(request, messages.INFO, 'El stock minimo del producto no puede ser negativo')
             validar=False    
-        if int(stock_maximo_producto) < 0:
+        if validacion.validar_int(stock_maximo_producto) ==False:
             messages.add_message(request, messages.INFO, 'El stock maximo del producto no puede ser negativo')
             validar=False   
-        if int(stock_minimo_producto) > int(stock_maximo_producto):
+        if stock_minimo_producto > stock_maximo_producto:
             messages.add_message(request, messages.INFO, 'El stock minimo no puede ser maxor al stock maximo del producto')
             validar=False
         if validar == True:
@@ -207,21 +212,23 @@ def producto_edit(request,producto_id):
                     #que es page
                     messages.add_message(request, messages.INFO, 'El correo '+str(nombre_producto)+' ya existe en nuestros registros asociado a otro usuario, por favor utilice otro ')
                     validar=False
-        
-        if int(precio_producto) < 0:
-            messages.add_message(request, messages.INFO, 'El precio del producto no puede ser negativo')
+        if validacion.validar_soloString(nombre_producto)==False:
+            messages.add_message(request, messages.INFO, 'El nombre del producto no puede ser nulo')
             validar=False
-        if int(stock_producto) <0:
+        if validacion.validar_int(precio_producto) == False:
+            messages.add_message(request, messages.INFO, 'El precio del producto no puede ser negativo ni nulo')
+            validar=False
+        if validacion.validar_int(stock_producto) == False:
             messages.add_message(request, messages.INFO, 'El stock del producto no puede ser negativo')
             validar=False
-        if int(stock_minimo_producto) < 0:
+        if validacion.validar_int(stock_minimo_producto) == False:
             messages.add_message(request, messages.INFO, 'El stock minimo del producto no puede ser negativo')
             validar=False    
-        if int(stock_maximo_producto) < 0:
+        if validacion.validar_int(stock_maximo_producto) == False:
             messages.add_message(request, messages.INFO, 'El stock maximo del producto no puede ser negativo')
             validar=False   
         if int(stock_minimo_producto) > int(stock_maximo_producto):
-            messages.add_message(request, messages.INFO, 'El stock minimo no puede ser maxor al stock maximo del producto')
+            messages.add_message(request, messages.INFO, 'El stock minimo no puede ser mayor al stock maximo del producto')
             validar=False
         if validar == True:
             Producto.objects.filter(pk = producto_id).update(nombre_producto = nombre_producto)
@@ -287,12 +294,9 @@ def categories_save(request):
         if categories_exist==1:
             validar=False
             messages.add_message(request,messages.INFO,'Solo puede haber un tipo de categoria')
-        if name=='':
-            messages.add_message(request,messages.INFO,'Debe ingresar un nombre para la categoria')
-            return('categories_create')   
         if validacion.validar_soloString(name)==False:
             validar=False
-            messages.add_message(request,messages.INFO,'El nombre solo debe contener letras')
+            messages.add_message(request,messages.INFO,'El nombre solo debe contener letras, y el campo no debe estar vacio')
         
         if validar==True:
             categories_save=Category_group(
@@ -480,12 +484,9 @@ def categories_save(request):
         if categories_exist==1:
             validar=False
             messages.add_message(request,messages.INFO,'Solo puede haber un tipo de categoria')
-        if name=='':
-            messages.add_message(request,messages.INFO,'Debe ingresar un nombre para la categoria')
-            return('categories_create')   
         if validacion.validar_soloString(name)==False:
             validar=False
-            messages.add_message(request,messages.INFO,'El nombre solo debe contener letras')
+            messages.add_message(request,messages.INFO,'El nombre no debe contener solo numeros y no debe estar vacio')
         
         if validar==True:
             categories_save=Category_group(
@@ -574,9 +575,10 @@ def categories_edit(request,categories_id):
         return redirect('check_group_main')
     if request.method == 'POST':
         category_group_name = request.POST.get('nombre')
+        if validacion.validar_soloString(category_group_name)==False:
+             messages.add_message(request,messages.INFO,'El nombre de la categoria no debe estar vacio y no debe contener solo numeros')
         category_data_count = Category_group.objects.filter(pk=categories_id).count()
         category_data = Category_group.objects.get(pk=categories_id) 
-        print(category_data.category_group_name)
         if category_data_count == 1:
 
             Category_group.objects.filter(pk = categories_id).update(category_group_name = category_group_name)
