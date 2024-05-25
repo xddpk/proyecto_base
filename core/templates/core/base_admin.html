@@ -73,7 +73,7 @@
                     <p class='body--small'>Ejemplos</p>
                 </a>
                 <!--=== Fin Menú Ejemplos ===-->
-                  <!--=== Menu Ejemplos ===-->
+                  <!--=== Menu inventario ===-->
             {% if template_name == 'inventario/inventario_main.html' %}
                 <a href="{% url 'inventario_main' %}" class='item active'>
             {% else %}
@@ -84,7 +84,31 @@
                     </span>
                     <p class='body--small'>Inventario</p>
                 </a>
-                <!--=== Fin Menú Ejemplos ===-->    
+                <!--=== Fin Menú proveedor ===-->    
+                <!--=== Menu proveedor ===-->
+            {% if template_name == 'proveedor/proveedor_main.html' %}
+                <a href="{% url 'proveedor_main' %}" class='item active'>
+            {% else %}
+                <a href="{% url 'proveedor_main' %}" class='item'>
+            {% endif %}
+                    <span class="material-icons-outlined">
+                        library_books
+                    </span>
+                    <p class='body--small'>proveedor</p>
+                </a>
+                <!--=== Fin Menú proveedor ===--> 
+                <!--=== Menu venta ===-->
+                {% if template_name == 'venta/venta_main.html' %}
+                <a href="{% url 'venta_main' %}" class='item active'>
+            {% else %}
+                <a href="{% url 'venta_main' %}" class='item'>
+            {% endif %}
+                    <span class="material-icons-outlined">
+                        library_books
+                    </span>
+                    <p class='body--small'>venta</p>
+                </a>
+                <!--=== Fin Menú venta ===--> 
                 
         </div>
         <div class='side-bar-footer mb-5'>
