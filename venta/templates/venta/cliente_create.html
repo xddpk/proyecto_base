@@ -1,0 +1,48 @@
+% extends 'core/base_admin.html' %}
+{% load static %}
+
+{% block content %}
+{% block extrahead %}
+
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3">
+                <h3>Nuevo Cliente</h3> 
+                <form method="post" action="{% url 'cliente_save' %}">
+                    {% csrf_token %}
+                    <div class="row"> 
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="text">Nombre Cliente</label>
+                            <input type="text" name="nombre"  id = "nombre" placeholder="Roberto"/>
+                        </div>  
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="text">Primer Apellido Cliente</label>
+                            <input type="text" name="apellido"  id = "apellido" placeholder="Sanchez"/>
+                        </div>  
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="rut">Rut</label>
+                            <input type="text" name="rut"  required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border" placeholder="Rut (Ej: 17605812-2)"/>
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="mobile">Celular</label>
+                            <input type="number" class="form-control border" id="mobile" name="mobile"/>
+                        </div>
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="email">Correo ()</label>
+                            <input type="email" class="form-control border" placeholder="nombre@unab.cl" name="email"/>
+                        </div>
+                    </div>    
+                    <div class="row"> 
+                        <div class="col-12 col-sm-6 mb-3">
+                            <input type="submit" value="Crear Cliente" class="button form-control">
+                        </div>
+                        <div class="col-12 col-sm-6 mb-3">
+                            <a href="{% url 'venta_main' %}" class="button button--gray form-control">Volver</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}

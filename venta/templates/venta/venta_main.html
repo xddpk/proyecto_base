@@ -13,18 +13,14 @@
                     {% if profiles.group_id == 1 or profiles.group_id == 4 %}
                     <div class="col-12 col-sm-3 mb-3"  style="margin-bottom: 25px;">
                         <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <a href="" class="button form-control">Nuevo Cliente</a>
+                        <a href="{% url 'cliente_create' %}" class="button form-control">Nuevo Cliente</a>
                     </div> 
 
                     <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
                         
-                        <a href="" class="button form-control">Activos</a>
+                        <a href="{% url 'cliente_lista_principal' %}" class="button form-control">Listado</a>
                     </div>
 
-                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
-                        
-                        <a href="" class="button form-control">Bloqueados</a>
-                    </div>
                     
                     
                     {% endif %}

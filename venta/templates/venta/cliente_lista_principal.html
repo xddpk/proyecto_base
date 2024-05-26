@@ -1,0 +1,25 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}  { # se carga css, imagenes y js# }
+{% block content %}
+{% block extrahead %}
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3">
+                <h3 class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">Listado Clientes  </h3> 
+                <div class="row mt-4 mb-4">
+                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                        
+                        <a href="{% url 'cliente_lista_activo' %}" class="button form-control">Activos</a>
+                    </div>
+                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;" >
+                        <a href="{% url 'cliente_lista_bloqueado' %}" class="button form-control">Bloqueados</a>
+                    </div>
+                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                        <a href="{% url 'venta_main' %}" class="button button--gray form-control">Volver</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

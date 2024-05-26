@@ -133,7 +133,6 @@ def proveedor_save(request):
         if name=='':
             messages.add_message(request,messages.INFO,'Debe ingresar un nombre para el proveedor')
             return('proveedor_create')  
-         
         #es mejor k la validacion contemple todo, si esta vacio, si es el tipo de dato, etc
         """
         if validacion.validar_soloString(name)==False:
