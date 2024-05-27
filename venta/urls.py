@@ -19,6 +19,15 @@ venta_urlpatterns = [
     
     path('cliente_lista_activo/',views.cliente_lista_activo, name='cliente_lista_activo'),     
     path('cliente_lista_activo/<groups>/<page>/',views.cliente_lista_activo, name='cliente_lista_activo'),     
+    
+    
+    path('cliente_lista_venta/<cliente_id>/',views.cliente_lista_venta, name='cliente_lista_venta'),     
+    path('cliente_lista_venta/<cliente_id>/<groups>/<page>/',views.cliente_lista_venta, name='cliente_lista_venta'), 
+    
+    path('cliente_lista_venta_detalle/<venta_id>/',views.cliente_lista_venta_detalle, name='cliente_lista_venta_detalle'),     
+    path('cliente_lista_venta/<venta_id>/<groups>/<page>/',views.cliente_lista_venta_detalle, name='cliente_lista_venta_detalle'), 
+    
+    
     path('cliente_lista_bloqueado/',views.cliente_lista_bloqueado, name='cliente_lista_bloqueado'),     
     path('cliente_lista_bloqueado/<groups>/<page>/',views.cliente_lista_bloqueado, name='cliente_lista_bloqueado'), 
     

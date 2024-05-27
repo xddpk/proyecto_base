@@ -21,10 +21,10 @@
 <header class='mb-5'>
     <div class="row">
         <div class="col-12 col-sm-8 mb-3">
-            <h2 class='h2 medium text-blue'>Listado de Clientes activos </h2>
+            <h2 class='h2 medium text-blue'>Listado de ventas </h2>
         </div>
         <div class="col-12 col-sm-4 mb-3">
-            <a href="{% url 'cliente_lista_principal' %}" class="button button--gray form-control">Volver</a>
+            <a href="{% url 'cliente_lista_activo' %}" class="button button--gray form-control">Volver</a>
         </div>
     </div>
     <div class="d-flex flex-column flex-lg-row mt-2">
@@ -40,7 +40,7 @@
     </div>
     <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
         {% csrf_token %}
-        <input name="search" id="search" type="text" placeholder='Buscar por Rut, Primer Nombre'/>
+        <input name="search" id="search" type="text" placeholder= "Código, "/>
         <button type="submit" class="button button--gray">
             <span class="material-icons-outlined">
                 search
@@ -53,41 +53,27 @@
     <table class="table table-user">
         <thead>
             <tr>
-                <th width="20%" scope="col">Rut Cliente</th>
-                <th width="30%" scope="col">Nombre Completo</th>
-                <th width="30%" scope="col">Correo</th>
-                <th width="30%" scope="col">Número Telefónico</th>
-                {% if profiles.group_id == 1 or profiles.group_id == 3 %}
+                <th width="20%" scope="col">Código</th>
+                <th width="20%" scope="col">Fecha</th>
+                <th width="30%" scope="col">Total $</th>
+
+                {% if profiles.group_id == 1 or profiles.group_id == 4 %}
                     <th width="15%" scope="col">Funciones</th>
                 {% endif %}
             </tr>
         </thead>
         <tbody>
-            {% for s in cliente_list %}
+            {% for s in venta_list %}
                 <tr>
-                    <th scope="row">{{s.rut_cliente}}</th>
-                    <th scope="row">{{s.nombre_cliente}}</th>
-                    <th scope="row">{{s.correo_cliente}}</th>
-                    <th scope="row">{{s.telefono_cliente}}</th>      
+                    <th scope="row">{{s.codigo_venta}}</th>
+                    <th scope="row">{{s.creacion_venta}}</th>
+                    <th scope="row">{{s.total_venta}}</th>    
                     {% if profiles.group_id == 1 %}
                             <th scope="row">
                             
-                                <a href="{% url 'edit_cliente' s.id %}">
-                                    Edita Cliente
+                                <a href="{% url 'cliente_lista_venta_detalle' s.id %}">
+                                    Ver detalle
                                 </a>
-                            </th>
-                            <th scope="row">
-                            
-                                <a href="{% url 'cliente_lista_venta' s.id %}">
-                                    Historial ventas
-                                </a>
-                            </th>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <th scope="row">
-                                        <a href="{% url 'cliente_block' s.id %}" onclick="confirmarCambio(event);">
-                                            Bloquea Cliente
-                                        </a>
-                                    </th>
                             
                         </th>   
                     {% endif %}                            
@@ -100,9 +86,9 @@
             <div class="d-flex">
                 <nav aria-label="Page navigation example" class="ms-auto">
                     <ul class="pagination pagination-table">
-                        {% if cliente_list.has_previous %}
+                        {% if venta_list.has_previous %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ cliente_list.previous_page_number}}&search={{search}}" aria-label="Previous">
+                                <a class="page-link" href="?page={{ venta_list.previous_page_number}}&search={{search}}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
@@ -113,14 +99,14 @@
                         {% endif %}
                         {% for i in paginator.page_range %}
                             {% if i >= page|sub:2  and i < page|add:3  %}
-                                <li class="page-item {% if cliente_list.number == i %}active{% endif %}">
+                                <li class="page-item {% if venta_list.number == i %}active{% endif %}">
                                     <a class="page-link" href="?page={{ i }}&search={{search}}">{{ i }}</a>
                                 </li>                        
                             {% endif %}
                         {% endfor %}
-                        {% if cliente_list.has_next %}
+                        {% if venta_list.has_next %}
                             <li class="page-item ">
-                                <a class="page-link" href="?page={{ cliente_list.next_page_number }}&search={{search}}">&raquo;</a>
+                                <a class="page-link" href="?page={{ venta_list.next_page_number }}&search={{search}}">&raquo;</a>
                             </li>
                         {% else %}
                             <li class="page-item disabled">

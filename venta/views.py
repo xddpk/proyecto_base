@@ -19,7 +19,7 @@ from extensiones import validacion
 # Create your views here.
 #numero de elementos para el listado
 global num_elemento 
-num_elemento = 1
+num_elemento = 30
 
 
 
@@ -307,11 +307,6 @@ def cliente_lista_bloqueado(request,page=None,search=None):
     return render(request,template_name,{'profiles':profiles,'cliente_list':cliente_list,'paginator':paginator,'page':page ,'search':search })
 
 
-
-
-
-
-
 @login_required
 def cliente_block(request,cliente_id):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -365,22 +360,6 @@ def cliente_delete(request,cliente_id):
         return redirect('cliente_lista_bloqueado')       
 
 
-"""
-
-def crear_venta(request):
-    if request.method == 'POST':
-        form = TuModeloForm(request.POST)
-        if form.is_valid():
-            nueva_venta = form.save(commit=False)
-            nueva_venta.save()
-            # Redirige o realiza otras acciones necesarias
-    else:
-        form = TuModeloForm()
-    
-    return render(request, 'tu_template.html', {'form': form})
-
-"""
-
 def finalizar_venta(request):
     if request.method == 'POST':
         carrito = request.session.get('carrito', {})
@@ -418,7 +397,7 @@ def finalizar_venta(request):
                 #precio_unitario=producto.precio_producto,
                 #total=total_producto
             )
-        detalle_venta.save()
+            detalle_venta.save()
         # Crear una nueva instancia de Venta
         Venta.objects.filter(id=venta.id).update(total_venta=total_venta)
 
@@ -465,35 +444,101 @@ def cliente_lista_venta(request,cliente_id,page=None,search=None):
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
     print("search> ",search)
-    cliente = Cliente.objects.get(pk = cliente_id)
-    venta = Venta.objects.filter(cliente_id = cliente_id)
+
     venta_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search == "None":# si la cadena de búsqueda viene vacia
         #usuario_count = cliente.objects.filter(estado_cliente='t').count()
-        cliente_array = Cliente.objects.filter(estado_cliente='t').order_by('nombre_cliente')
-        venta_array = VentaProducto.objects.filter(venta_id = venta.id)
+        venta_array =  Venta.objects.filter(cliente_id = cliente_id).order_by('formatted_codigo_venta')
         
         for cl in venta_array:
             #se guarda la información de la venta
-        
-            venta_all.append({'id':cl.id,'rut_cliente':cl.rut_cliente,'nombre_cliente':cl.nombre_completo(),'correo_cliente':cl.correo_cliente,'telefono_cliente':cl.telefono_cliente})
+            venta_all.append({'id':cl.id,'creacion_venta':cl.creacion_venta,'total_venta':cl.total_venta,'codigo_venta':cl.formatted_codigo_venta})
         paginator = Paginator(venta_all, num_elemento)  
-        cliente_list = paginator.get_page(page)
-        template_name = 'venta/cliente_lista_activo.html'
-        return render(request,template_name,{'profiles':profiles,'cliente_list':cliente_list,'paginator':paginator,'page':page,'search':search })
+        venta_list = paginator.get_page(page)
+        template_name = 'venta/cliente_lista_venta.html'
+        return render(request,template_name,{'profiles':profiles,'venta_list':venta_list,'paginator':paginator,'page':page,'search':search })
             
     else:#si la cadena de búsqueda trae datos
         #h_count = cliente.objects.filter(estado_cliente='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
-        venta_array =  Cliente.objects.filter(Q(nombre_cliente__icontains=search)|Q(rut_cliente__icontains=search)).filter(estado_cliente='t').order_by('nombre_cliente')#Ascendente
+        venta_array =  Venta.objects.filter(Q(formatted_codigo_venta__icontains=search)).filter(cliente_id = cliente_id).order_by('formatted_codigo_venta')#Ascendente
         
         for cl in venta_array:
             #se guarda la información del cluario
         
-            venta_all.append({'id':cl.id,'rut_cliente': cl.rut_cliente,'nombre_cliente':cl.nombre_completo(),'correo_cliente':cl.correo_cliente,'telefono_cliente':cl.telefono_cliente})
+            venta_all.append({'id':cl.id,'creacion_venta': cl.creacion_venta,'total_venta':cl.total_venta,'codigo_venta':cl.formatted_codigo_venta})
         paginator = Paginator(venta_all, num_elemento)            
 
     paginator = Paginator(venta_all, num_elemento)  
-    cliente_list = paginator.get_page(page)
-    template_name = 'venta/cliente_lista_activo.html'
-    return render(request,template_name,{'profiles':profiles,'cliente_list':cliente_list,'paginator':paginator,'page':page ,'search':search })
+    venta_list = paginator.get_page(page)
+    template_name = 'venta/cliente_lista_venta.html'
+    return render(request,template_name,{'profiles':profiles,'venta_list':venta_list,'paginator':paginator,'page':page ,'search':search })
+
+@login_required    
+def cliente_lista_venta_detalle(request,venta_id,page=None,search=None):
+    
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 4:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    if page == None:
+        page = request.GET.get('page')
+    else:
+        page = page
+    if request.GET.get('page') == None:
+        page = page
+    else:
+        page = request.GET.get('page')
+    #logica que permite recibir la cadena de búsqueda y propoga a través del paginador
+    if search == None:
+        search = request.GET.get('search')
+    else:
+        search = search
+    if request.GET.get('search') == None:
+        search = search
+    else:
+        search = request.GET.get('search') 
+    if request.method == 'POST':
+        search = request.POST.get('search') 
+        page = None
+    #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
+    print("search> ",search)
+    ventaC =  Venta.objects.get(pk = venta_id)
+    
+    clientes = Cliente.objects.filter(pk = ventaC.cliente_id)
+    for c in clientes:
+        cliente_id = c.id
+    venta_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
+    if search == None or search == "None":# si la cadena de búsqueda viene vacia
+        #usuario_count = cliente.objects.filter(estado_cliente='t').count()
+        venta_array =  VentaProducto.objects.filter(venta_id = venta_id).order_by('venta_id')
+        
+        for cl in venta_array:
+            #se guarda la información de la venta
+            nombre_producto = Producto.objects.get(pk = cl.producto_id).nombre_producto
+            venta_all.append({'nombre':nombre_producto,'cantidad':cl.cantidad,'precio_unitario':cl.precio_unitario, 'precio_total':cl.precio_total})
+        paginator = Paginator(venta_all, num_elemento)  
+        venta_detalle_list = paginator.get_page(page)
+        template_name = 'venta/cliente_lista_venta_detalle.html'
+        return render(request,template_name,{'profiles':profiles,'venta_detalle_list':venta_detalle_list,'cliente':cliente_id,'paginator':paginator,'page':page,'search':search })
+            
+    else:#si la cadena de búsqueda trae datos
+        #h_count = cliente.objects.filter(estado_cliente='t').filter(nombre__icontains=search).count()
+        #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
+        venta_array =  VentaProducto.objects.filter(venta_id = venta_id).order_by('venta_id')
+        
+        for cl in venta_array:
+            #se guarda la información de la venta
+            nombre_producto = Producto.objects.get(pk = cl.producto_id).nombre_producto
+            venta_all.append({'nombre':nombre_producto,'cantidad':cl.cantidad,'precio_unitario':cl.precio_unitario, 'precio_total':cl.precio_total})
+        paginator = Paginator(venta_all, num_elemento)            
+
+    paginator = Paginator(venta_all, num_elemento)  
+    venta_detalle_list = paginator.get_page(page)
+    template_name = 'venta/cliente_lista_venta_detalle.html'
+    return render(request,template_name,{'profiles':profiles,'venta_detalle_list':venta_detalle_list,'cliente':cliente_id,'paginator':paginator,'page':page ,'search':search })
+
+
+
+
+
