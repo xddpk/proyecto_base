@@ -339,24 +339,22 @@ def cliente_activate(request,cliente_id):
     else:
         messages.add_message(request, messages.INFO, f"Hubo un error al Activar al Cliente {cliente_data.nombre_completo()} ")
         return redirect('cliente_lista_bloqueado')           
-"""
+    
 @login_required
-def user_delete(request,user_id):
+def cliente_delete(request,cliente_id):
     profiles = Profile.objects.get(user_id = request.user.id)
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
 
-    user_data_count = User.objects.filter(pk=user_id).count()
-    user_data = User.objects.get(pk=user_id)
-    profile_data = Profile.objects.get(user_id=user_id)       
-    if user_data_count == 1:
-        #Profile.objects.filter(user_id=user_id).delete()
-        Profile.objects.filter(user_id=user_id).delete()
-        User.objects.filter(pk=user_id).delete()
-        messages.add_message(request, messages.INFO, 'Usuario '+user_data.first_name +' '+user_data.last_name+' eliminado con éxito')
-        return redirect('list_user_block2')        
+    cliente_data_count = Cliente.objects.filter(pk=cliente_id).count()
+    cliente_data = Cliente.objects.get(pk=cliente_id)
+    if cliente_data_count == 1:
+        #Profile.objects.filter(cliente_id=cliente_id).delete()
+
+        Cliente.objects.filter(pk=cliente_id).delete()
+        messages.add_message(request, messages.INFO, f"Cliente{cliente_data.nombre_completo()} Eliminado con éxito")
+        return redirect('cliente_lista_bloqueado')        
     else:
-        messages.add_message(request, messages.INFO, 'Hubo un error al eliminar el Usuario '+user_data.first_name +' '+user_data.last_name)
-        return redirect('list_user_block2')        
-"""
+        messages.add_message(request, messages.INFO, f"Hubo un error al Eliminar al Cliente {cliente_data.nombre_completo()} ")
+        return redirect('cliente_lista_bloqueado')        

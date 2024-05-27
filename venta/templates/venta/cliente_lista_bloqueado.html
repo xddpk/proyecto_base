@@ -57,7 +57,7 @@
                 <th width="30%" scope="col">Nombre Completo</th>
                 <th width="30%" scope="col">Correo</th>
                 <th width="30%" scope="col">Número Telefónico</th>
-                {% if profiles.group_id == 1 or profiles.group_id == 3 %}
+                {% if profiles.group_id == 1 or profiles.group_id == 4 %}
                     <th width="15%" scope="col">Funciones</th>
                 {% endif %}
             </tr>
@@ -69,7 +69,7 @@
                     <th scope="row">{{s.nombre_cliente}}</th>
                     <th scope="row">{{s.correo_cliente}}</th>
                     <th scope="row">{{s.telefono_cliente}}</th>      
-                    {% if profiles.group_id == 1 or profiles.group_id == 3%}
+                    {% if profiles.group_id == 1 or profiles.group_id == 4%}
                             <th scope="row">
                             
                             <a href="{% url 'cliente_activate' s.id %}" onclick="confirmarCambio(event);">
@@ -79,7 +79,7 @@
                                 
                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                     <th scope="row">
-                                        <a href="" onclick="confirmarCambio(event);">
+                                        <a href="{% url 'cliente_delete' s.id %}" onclick="confirmarCambio(event);">
                                             Elimina Cliente
                                         </a>
                                     </th>
