@@ -83,15 +83,22 @@ class Venta(models.Model):
 class VentaProducto(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE) 
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)  
-    
-    
+    cantidad = models.IntegerField(null=True, blank=True)
+    precio_unitario = models.IntegerField(null=True, blank=True)  
+    precio_total = models.IntegerField(null=True, blank=True)
+
     class Meta:
         verbose_name = 'VentaProducto'
         verbose_name_plural = 'VentaProductos'
         ordering = ['venta']
 
-            
-    def __str__(self):
-        #retorna la relacion entre venta y producto
-        return f'Venta: {self.venta.formatted_codigo_venta} - Producto: {self.producto.nombre_producto}'
+    def save(self, *args, **kwargs):
+        # Calcular el precio unitario al guardar el objeto
+        if not self.pk:  # Si es una nueva instancia (no tiene clave primaria)
+            self.precio_unitario = self.producto.precio_producto
+            self.precio_total = self.precio_unitario * self.cantidad
+        super().save(*args, **kwargs)
 
+    def __str__(self):
+        # Retorna la relación entre venta y producto
+        return f'Venta: {self.venta.formatted_codigo_venta} - Producto: {self.producto.nombre_producto}'
