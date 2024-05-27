@@ -102,7 +102,7 @@ def producto_create(request):
 @login_required
 def producto_create3(request,producto_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
+    if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
@@ -129,7 +129,7 @@ def producto_create3(request,producto_id):
 @login_required
 def producto_save(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
+    if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
@@ -190,7 +190,7 @@ def producto_save(request):
 @login_required
 def producto_edit(request,producto_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
+    if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
@@ -254,7 +254,7 @@ def producto_edit(request,producto_id):
 @login_required
 def producto_delete(request,producto_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
+    if profiles.group_id != 1 and profiles.group_id !=2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
 
@@ -332,7 +332,7 @@ def categories_delete(request):
 @login_required
 def carga_masiva2(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
+    if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'inventario/carga_masiva2.html' #administrado/administrador_carga_masiva
@@ -342,7 +342,7 @@ def carga_masiva2(request):
 #se descarga el archivo el archivo
 def import_inventario(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
+    if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     response = HttpResponse(content_type='application/ms-excel') #bajo un archivo
@@ -382,7 +382,7 @@ def import_inventario(request):
 @login_required
 def carga_masiva_save2(request):
     profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id != 1:
+    if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
 
@@ -501,7 +501,7 @@ def categories_save(request):
 @login_required
 def categories_delete(request,categories_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
+    if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
 
@@ -570,7 +570,7 @@ def list_categories(request,page=None,search=None):
 
 def categories_edit(request,categories_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
+    if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
@@ -613,7 +613,7 @@ def categories_save_edit(request, categories_id):
 
 def categories_save_edit(request, categories_id):
     profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id != 1:
+    if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'inventario/categories_edit.html' 
