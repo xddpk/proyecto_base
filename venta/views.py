@@ -357,4 +357,94 @@ def cliente_delete(request,cliente_id):
         return redirect('cliente_lista_bloqueado')        
     else:
         messages.add_message(request, messages.INFO, f"Hubo un error al Eliminar al Cliente {cliente_data.nombre_completo()} ")
-        return redirect('cliente_lista_bloqueado')        
+        return redirect('cliente_lista_bloqueado')       
+
+
+"""
+
+def crear_venta(request):
+    if request.method == 'POST':
+        form = TuModeloForm(request.POST)
+        if form.is_valid():
+            nueva_venta = form.save(commit=False)
+            nueva_venta.save()
+            # Redirige o realiza otras acciones necesarias
+    else:
+        form = TuModeloForm()
+    
+    return render(request, 'tu_template.html', {'form': form})
+
+"""
+
+
+
+@login_required
+def venta_create(request):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 4:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    template_name = 'venta/venta_create.html'
+    category_group_data = Category_group.objects.all()
+    return render(request,template_name,{'category_groups':category_group_data})
+
+@login_required
+def venta_save(request):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 4:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+
+    if request.method == 'POST':
+        
+        validar=True
+        rut = request.POST.get('rut')
+        nombre = request.POST.get('nombre')
+        apellido = request.POST.get('apellido')
+        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+        rut_exist = Cliente.objects.filter(rut_cliente=rut).count()
+        mail_exist = Cliente.objects.filter(correo_cliente=email).count()
+        #cambie toda la estructura pero no me gusta tanto (ineficiente)
+
+        if validacion.validar_soloString(nombre)==False: #<- de validaciones Strings
+            validar=False
+            messages.add_message(request, messages.INFO, 'Error en Nombre: invalido')  
+        if validacion.validar_soloString(apellido)==False: #<- de validaciones Strings
+            validar=False
+            messages.add_message(request, messages.INFO, 'Error en Apellido: invalido')
+
+        if validacion.validar_numCelular(mobile)==False:
+            validar=False
+            messages.add_message(request, messages.INFO, 'Error en numero de telefono: Ingrese un numero telefonico valido')#Buscar regeex numero chilenos
+        #Posiblemente unificar los if con "&", PERO CAMBIAR LOS MENSAJES ELSE/ O QUIZAS CREAR UNA NUEVA FUNCION.<-----
+        if validacion.validar_rut(rut)==False: #<- de validaciones saca validar_rut
+                    messages.add_message(request, messages.INFO, 'Rut invalido')  
+                    validar=False
+
+        if validacion.validar_email(email)==False: #<- de validaciones saca validar_email
+                    messages.add_message(request, messages.INFO, 'Email invalido')  
+                    validar=False
+        if rut_exist==1:
+                messages.add_message(request, messages.INFO, 'Rut ya esta registrado')
+                validar=False
+
+        if mail_exist==1:
+                messages.add_message(request, messages.INFO, 'Este correo ya esta registrado')  
+                validar=False
+        if validar == True:
+                    cliente = Cliente(
+                        rut_cliente= rut,
+                        nombre_cliente=nombre.capitalize(),#hace que el primero sea mayuscula (.capitalize())
+                        apellido_cliente=apellido.capitalize(),#hace que el primero sea mayuscula (.capitalize())
+                        correo_cliente=email,
+                        telefono_cliente = mobile,
+                        estado_cliente = 't',
+                    
+                        )
+                    cliente.save()
+                    messages.add_message(request, messages.INFO, 'Cliente creado con exito')                             
+
+        #el metodo no contempla validacioens deberá realizarlas
+    
+    return redirect('venta_main')

@@ -75,6 +75,7 @@ class Venta(models.Model):
     def __str__(self):
         return self.formatted_codigo_venta
     
+    
 
 
 
