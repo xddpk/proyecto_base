@@ -84,6 +84,7 @@ class VentaProducto(models.Model):
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE) 
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)  
     
+    
     class Meta:
         verbose_name = 'VentaProducto'
         verbose_name_plural = 'VentaProductos'

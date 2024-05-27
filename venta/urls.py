@@ -24,7 +24,10 @@ venta_urlpatterns = [
     
     path('cliente_block/<cliente_id>/',views.cliente_block, name='cliente_block'),
     path('cliente_activate/<cliente_id>',views.cliente_activate, name='cliente_activate'),
-    path('cliente_delete/<cliente_id>',views.cliente_delete, name='cliente_delete')
+    path('cliente_delete/<cliente_id>',views.cliente_delete, name='cliente_delete'),
+    
+    path('finalizar_venta/',views.finalizar_venta, name='finalizar_venta'), 
+
     
     
     #path('venta_create/',views.venta_create, name='venta_create'),

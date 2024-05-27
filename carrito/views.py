@@ -25,10 +25,12 @@ from carrito.Carrito import *
 def tienda(request):
     template_name = 'carrito/tienda.html'
     productos = Producto.objects.all()
+    clientes = Cliente.objects.filter(estado_cliente = 't')
+    pagos = Pago.objects.all()
     # Asegurarse de que el carrito esté inicializado en la sesión
     if 'carrito' not in request.session:
         request.session['carrito'] = {}
-    return render(request, template_name, {'productos': productos})
+    return render(request, template_name, {'productos': productos, 'clientes':clientes, 'pagos':pagos})
 
 
 def agregar_producto(request, producto_id):

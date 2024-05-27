@@ -376,6 +376,60 @@ def crear_venta(request):
 
 """
 
+def finalizar_venta(request):
+    if request.method == 'POST':
+        carrito = request.session.get('carrito', {})
+        cliente_id = request.POST.get('cliente_id')  # Obtener el ID del cliente del formulario
+        pago_id = request.POST.get('pago_id')  # Obtener el ID del método de pago del formulario
+
+        # Verificar si el cliente y el método de pago existen
+        try:
+            cliente = Cliente.objects.get(id=cliente_id)
+            pago = Pago.objects.get(id=pago_id)
+        except (Cliente.DoesNotExist, Pago.DoesNotExist):
+            messages.error(request, 'Cliente o método de pago no válido.')
+            return redirect('pagina_de_error')
+
+        # Procesar los productos del carrito y calcular el total de la venta
+        total_venta = 0
+        venta = Venta(
+            cliente=cliente,
+            pago=pago,
+            total_venta=total_venta, 
+        )
+        venta.save()
+        for producto_id, detalle in carrito.items():
+            producto = Producto.objects.get(id=detalle['producto_id'])
+            cantidad = detalle['cantidad']
+            total_producto = detalle['acumulado']
+            total_venta += total_producto
+
+            # Guardar los detalles de la venta en la base de datos
+            detalle_venta = VentaProducto.objects.create(
+                producto_id=producto.id,
+                venta_id = venta.id
+                #cantidad=cantidad,
+                #precio_unitario=producto.precio_producto,
+                #total=total_producto
+            )
+
+        # Crear una nueva instancia de Venta
+        Venta.objects.filter(id=venta.id).update(total_venta=total_venta)
+
+        # Asociar los productos vendidos a la venta
+        #venta.venta_producto.set(VentaProducto.objects.all())
+
+        # Limpiar el carrito después de procesar la venta
+        request.session['carrito'] = {}
+
+        # Redirigir a la página de confirmación con un mensaje
+        messages.success(request, 'La venta se ha procesado correctamente.')
+        return redirect('tienda')
+    else:
+        messages.success(request, 'ha ocurrido un problema')
+        return redirect('tienda')
+
+
 
 
 @login_required
