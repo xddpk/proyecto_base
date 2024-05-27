@@ -10,7 +10,12 @@ from carrito import views
 
 carrito_urlpatterns = [
     path('tienda/',views.tienda, name='tienda'),  
-    #path('venta_create/',views.venta_create, name='venta_create'),
-    #path('venta_save/',views.venta_save, name='venta_save'),     
-    
+    path('agregar/<producto_id>/',views.agregar_producto, name='Add'),     
+    path('eliminar/<producto_id>/',views.eliminar_producto, name='Del'),     
+    path('restar/<producto_id>/',views.restar_producto, name='Sub'),     
+    path('limpiar/',views.limpiar_carrito, name='CLS'),     
     ]
+
+
+if settings.DEBUG:
+    carrito_urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
