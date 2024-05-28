@@ -1,6 +1,7 @@
 from django.db import models
 from inventario.models import *
 # Create your models here.
+from django import forms
 
 class Proveedor(models.Model):
     
@@ -102,12 +103,12 @@ class ProveedorDireccion(models.Model):
         ordering = ['proveedor']
 
 class OrdenProducto(models.Model):
-    #producto = models.OneToOneField(Producto, on_delete=models.CASCADE, null=True)
+    nombre_producto = models.CharField(max_length=100, null=True, blank=True)
     cantidad_producto = models.IntegerField(null=True, blank=True)
-    precio_producto = models.IntegerField(null=True, blank=True)
+    precio_producto = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     orden = models.ForeignKey(Orden, on_delete=models.CASCADE) 
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE) 
-    
+
     def calcular_total(self):
         total = self.precio_producto * self.cantidad_producto
         return total
@@ -116,3 +117,8 @@ class OrdenProducto(models.Model):
         verbose_name = 'OrdenProducto'
         verbose_name_plural = 'OrdenProductos'  
         ordering = ['cantidad_producto']
+
+class OrdenProductoForm(forms.ModelForm):
+    class Meta:
+        model = OrdenProducto
+        fields = ['nombre_producto', 'cantidad_producto', 'precio_producto']
