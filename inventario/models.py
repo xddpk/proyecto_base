@@ -1,6 +1,7 @@
 
 from django.db import models #importa los metodos necesarios para trabajar con modellos
 # Create your models here.
+from django import forms
 
 
 
@@ -34,7 +35,12 @@ class Producto(models.Model):
     def __str__(self):
         return self.stock_producto
 
-
+class ProductoForm(forms.ModelForm):
+    class Meta:
+        model = Producto
+        fields = ['nombre_producto', 'stock_producto', 'precio_producto']
+        
+        
 class Category_group(models.Model):
     category_group_name = models.CharField(max_length=100, null=True, blank=True)
     

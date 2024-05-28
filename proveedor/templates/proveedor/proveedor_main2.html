@@ -1,0 +1,42 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block content %}
+{% block extrahead %}
+
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3">
+                <h3>Gestión De proveedores </h3> 
+                <div class="col-12" style="margin-bottom: 15px;"></div>               
+                <div class="row mt-4 mb-4">
+                    {% if profiles.group_id == 1 or profiles.group_id == 3 %}
+                    <div class="col-12 col-sm-3 mb-3"  style="margin-bottom: 25px;">
+                        <div class="col-12" style="margin-bottom: 25px;"></div>
+                        <a href="{% url 'proveedor_create' %}" class="button form-control">Nuevo Proveedor</a>
+                    </div> 
+
+                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                        
+                        <a href="{% url 'proveedor_lista_activo' %}" class="button form-control">Activos</a>
+                    </div>
+
+                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                        
+                        <a href="{% url 'proveedor_lista_bloqueado' %}" class="button form-control">Bloqueados</a>
+                    </div>
+                    
+                    
+                    {% endif %}
+                    
+
+                    
+                        <a href="{% url 'admin_main' %}" class="button button--gray form-control">Volver</a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
