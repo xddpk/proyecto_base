@@ -1,5 +1,5 @@
-
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -51,9 +51,9 @@
         <div class='menu'>
             <!--=== Menu Administrador ===-->
             {% if template_name == 'admin_main.html' %}
-            <a href="{% url 'admin_main' %}" class='item active'>
+            <a href="{% url 'users_main' %}" class='item active'>
             {% else %}
-                <a href="{% url 'admin_main' %}" class='item'>
+                <a href="{% url 'users_main' %}" class='item'>   
             {% endif %}
                 <span class="material-icons-outlined">
                     admin_panel_settings
