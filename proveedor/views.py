@@ -73,7 +73,24 @@ def direccion_save(request, proveedor_id):
         piso= request.POST.get('piso')
         state=True
         validar = True
-        
+        if validacion.validar_soloString(region)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_soloString(comuna)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_soloString(calle)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_int(numero)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_depto(departamento)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_int(piso)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
         if validar==True:
 
             direccion_save = Direccion (
@@ -130,9 +147,33 @@ def proveedor_save(request):
         if rut_exist==1:
                 messages.add_message(request, messages.INFO, 'Rut ya esta registrado')
                 validar=False
-        if name=='':
-            messages.add_message(request,messages.INFO,'Debe ingresar un nombre para el proveedor')
-            return('proveedor_create')  
+        if validacion.validar_rut(rut)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_soloString(name)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_soloString(comuna)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_soloString(calle)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_int(numero)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_numCelular(mobile)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_email(correo)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_depto(departamento)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_int(piso)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
         #es mejor k la validacion contemple todo, si esta vacio, si es el tipo de dato, etc
         """
         if validacion.validar_soloString(name)==False:
@@ -226,14 +267,18 @@ def edit_proveedor(request,proveedor_id,page=None,search=None):
         proveedor_data_count = Proveedor.objects.filter(pk=proveedor_id).count()
         proveedor_data = Proveedor.objects.get(pk=proveedor_id)
         if proveedor_data_count == 1:
-            if name is None:
-                validar = False
-            if rut is None:
-                validar = False
-            if mobile is None:
-                validar = False
-            if name is None:
-                correo = False
+            if validacion.validar_soloString(name)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+            if validacion.validar_rut(rut)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+            if validacion.validar_numCelular(mobile)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+            if validacion.validar_email(correo)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
             if validar == True:
                 Proveedor.objects.filter(pk = proveedor_id).update(nombre_proveedor = name.capitalize())
                 Proveedor.objects.filter(pk = proveedor_id).update(correo_proveedor = correo)  
@@ -532,7 +577,24 @@ def direccion_edit(request,direccion_id,proveedor_id):
         validar = True
         direccion_data_count = Direccion.objects.filter(pk=direccion_id).count()
         direccion_data = Direccion.objects.get(pk=direccion_id)
-        
+        if validacion.validar_soloString(region)==False:
+            messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+            validar=False
+        if validacion.validar_soloString(comuna)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_soloString(calle)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_int(numero)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_depto(departamento)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
+        if validacion.validar_int(piso)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                validar=False
         if direccion_data_count == 1:
             if validar==True:
 
