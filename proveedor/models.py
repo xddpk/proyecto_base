@@ -102,6 +102,7 @@ class ProveedorDireccion(models.Model):
         verbose_name_plural = 'ProveedorDirecciones'  
         ordering = ['proveedor']
 
+
 class OrdenProducto(models.Model):
     nombre_producto = models.CharField(max_length=100, null=True, blank=True)
     cantidad_producto = models.IntegerField(null=True, blank=True)
@@ -113,12 +114,19 @@ class OrdenProducto(models.Model):
         total = self.precio_producto * self.cantidad_producto
         return total
 
+    def __str__(self):
+        return f"{self.nombre_producto} - {self.orden}"  # Aquí puedes personalizar cómo quieres representar el objeto OrdenProducto
+
     class Meta:
         verbose_name = 'OrdenProducto'
         verbose_name_plural = 'OrdenProductos'  
         ordering = ['cantidad_producto']
 
+    def __str__(self):
+        return str(self.numero_direccion or '')
 class OrdenProductoForm(forms.ModelForm):
     class Meta:
         model = OrdenProducto
-        fields = ['nombre_producto', 'cantidad_producto', 'precio_producto']
+        fields = ['nombre_producto', 'cantidad_producto', 'precio_producto','orden','producto']
+    def __str__(self):
+        return str(self.numero_direccion or '')

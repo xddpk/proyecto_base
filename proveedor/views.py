@@ -125,21 +125,28 @@ def agregar_productos(request):
             nombre = request.POST.getlist('nombre[]')[i]
             cantidad = request.POST.getlist('cantidad[]')[i]
             precio = request.POST.getlist('precio[]')[i]
+            producto = Producto.objects.get(nombre_producto=nombre) 
 
             # Creamos una instancia de ProductoForm con los datos del formulario
-            form = ProductoForm({'nombre_producto': nombre, 'stock_producto': cantidad, 'precio_producto': precio})
+            """form = OrdenProductoForm({'nombre_producto': nombre, 'cantidad_producto': cantidad, 'precio_producto': precio, 'orden_id': orden, 'producto_id': producto})
 
             # Verificamos si el formulario es válido
             if form.is_valid():
                 # Guardamos el producto en la base de datos
                 producto = form.save()
-                # Añadimos el producto creado a la lista de productos creados
+                # Añaidimos el producto creado a la lista de productos creados
                 productos_creados.append(producto)
             else:
                 # Si el formulario no es válido, podrías manejarlo de alguna manera, como mostrar un mensaje de error
-                pass
-
-        # Redireccionamos a alguna página después de agregar los productos
+                pass"""
+            OrdenProducto.objects.create(
+                    nombre_producto=nombre,
+                    cantidad_producto=cantidad,
+                    precio_producto=precio,
+                    orden=orden,
+                    producto=producto,
+                )
+                # Redireccionamos a alguna página después de agregar los productos
         return redirect('proveedor_main')
 
     else:
