@@ -24,7 +24,10 @@
                             <a href="{% url 'inventario_listado' %}" class="button form-control">Listado</a>
                         </div>
                         <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <a href="{% url 'list_categories' %}" class="button">Listado Categoria</a>
+                        <a href="{% url 'list_categories_active' %}" class="button">Listado Categoria activas</a>
+                        <div class="col-12" style="margin-bottom: 25px;"></div>
+                        <div class="col-12" style="margin-bottom: 25px;"></div>
+                        <a href="{% url 'list_categories_deactivate' %}" class="button">Listado Categoria Bloqueadas</a>
                         <div class="col-12" style="margin-bottom: 25px;"></div>
                         <div class="col-12 col-sm-3 mb-3">
                             <div class="col-12" style="margin-bottom: 25px;"></div>
@@ -42,6 +45,7 @@
                         <div class="col-12" style="margin-bottom: 25px;"></div>
                         <a href="{% url 'inventario_dashboard' %}" class="button">Dashboard</a>
                         <div class="col-12" style="margin-bottom: 25px;"></div>
+                        
 
                     <!-- 
                     <div class="col-12 col-sm-3 mb-3">
