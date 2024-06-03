@@ -8,23 +8,24 @@
     <title>TU PANEL</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Round" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Sharp" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Two+Tone" rel="stylesheet">
-
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
-    
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
     <link href="{% static 'css/index.css' %}" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
+    <div style="display: flex; flex-direction: column;align-items: flex-end;">
+        <div class="avatar-normal-container">
+            <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="avatar"style="width: 80px; height: auto;" >
+        </div>
+    </div>
     <nav id="sidebar" class='side-bar to-left'>
         <header class='my-xxl-4 my-1 mb-5'>
             <div id="expand-side-bar" class="float-button">
@@ -46,14 +47,9 @@
             <a href="">
                 <img class="logo my-2" src="{% static 'assets/svg/logos.svg' %}" alt="logos" />
             </a>
-            <div style="display: flex; flex-direction: column;align-items: center;">
-                <div class="avatar-normal-container">
-                    <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="avatar">
-                </div>
-            </div>
+            
         </header>
         <div class='menu'>
-            <!--=== Menu Administrador ===-->
             {% if template_name == 'admin_main.html' %}
             <a href="{% url 'users_main' %}" class='item active'>
             {% else %}
@@ -64,20 +60,6 @@
                 </span>
                 <p class='body--small'>Administrador</p>
                 </a>
-                <!--=== Fin Menú Admin ===-->
-                <!--=== Menu Ejemplos ===-->
-            {% if template_name == 'ejemplos/ejemplos_main.html' or template_name == 'ejemplos/ejemplos_add.html' or template_name == 'ejemplos/ejemplos_habilidad_ver.html' or template_name == 'ejemplos/ejemplos_list_habilidades.html' or template_name == 'ejemplos/ejemplos_carga_masiva.html'%}
-                <a href="{% url 'ejemplos_main' %}" class='item active'>
-            {% else %}
-                <a href="{% url 'ejemplos_main' %}" class='item'>
-            {% endif %}
-                    <span class="material-icons-outlined">
-                        library_books
-                    </span>
-                    <p class='body--small'>Ejemplos</p>
-                </a>
-                <!--=== Fin Menú Ejemplos ===-->
-                  <!--=== Menu inventario ===-->
             {% if template_name == 'inventario/inventario_main.html' %}
                 <a href="{% url 'inventario_main' %}" class='item active'>
             {% else %}
@@ -88,8 +70,6 @@
                     </span>
                     <p class='body--small'>Inventario</p>
                 </a>
-                <!--=== Fin Menú proveedor ===-->    
-                <!--=== Menu proveedor ===-->
             {% if template_name == 'proveedor/proveedor_main.html' %}
                 <a href="{% url 'proveedor_main' %}" class='item active'>
             {% else %}
@@ -100,9 +80,7 @@
                     </span>
                     <p class='body--small'>proveedor</p>
                 </a>
-                <!--=== Fin Menú proveedor ===--> 
-                <!--=== Menu venta ===-->
-                {% if template_name == 'venta/venta_main.html' %}
+            {% if template_name == 'venta/venta_main.html' %}
                 <a href="{% url 'venta_main' %}" class='item active'>
             {% else %}
                 <a href="{% url 'venta_main' %}" class='item'>
@@ -112,8 +90,6 @@
                     </span>
                     <p class='body--small'>venta</p>
                 </a>
-                <!--=== Fin Menú venta ===--> 
-                
         </div>
         <div class='side-bar-footer mb-5'>
             <form method="post" action="{% url 'logout' %}">
@@ -124,22 +100,16 @@
                 <button class='button' type="submit">Cerrar Sesión</button>
             </form>
         </div>
-
     </nav>
     <div class='dashboard-container'>
-        <!-- Messages -->
         {% if messages %}
         <div class="alert alert-danger mt-3">
             {% for message in messages %}
             {{ message }}
-            <h1>
-                -
-            <h1/>
-
+            <h1> - <h1/>
             {% endfor %}
         </div>
         {% endif %}
-        <!-- End messages -->
         {% block content %}{% endblock %}
     </div>
     <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>

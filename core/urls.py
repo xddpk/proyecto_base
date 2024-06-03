@@ -13,5 +13,4 @@ core_urlpatterns= [
     path('', views.home, name='home'),    
     path('check_profile', views.check_profile, name='check_profile'),         
     path('pre_check_profile', views.pre_check_profile, name='pre_check_profile'),           
-
     ]
