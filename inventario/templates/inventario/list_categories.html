@@ -51,6 +51,9 @@
                 <tr>
                     <th scope="row"> {{ category.category_group_name }}</th>
                     <th scope="row">
+                        <a href="{% url 'categories_delete' category.id %}">
+                            eliminar categoria
+                        </a>
                         <a href="{% url 'categories_edit' category.id %}">
                             Editar categoria
                         </a>
