@@ -711,7 +711,7 @@ def categories_edit(request,categories_id):
     if request.method == 'POST':
         category_group_name = request.POST.get('nombre')
         if validacion.validar_soloString(category_group_name)==False:
-             messages.add_message(request,messages.INFO,'El nombre de la categoria no debe estar vacio y no debe contener solo numeros')
+            messages.add_message(request,messages.INFO,'El nombre de la categoria no debe estar vacio y no debe contener solo numeros')
         category_data_count = Category_group.objects.filter(pk=categories_id).count()
         category_data = Category_group.objects.get(pk=categories_id) 
         if category_data_count == 1:

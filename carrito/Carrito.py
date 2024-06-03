@@ -15,6 +15,7 @@ class Carrito:
                 "producto_id": producto.id,
                 "nombre" : producto.nombre_producto,
                 "acumulado": producto.precio_producto,
+                "stock" : producto.stock_producto,
                 "cantidad":1,
             }
         else:
@@ -42,3 +43,11 @@ class Carrito:
     def limpiar (self):
         self.session["carrito"] = {}
         self.session.modified = True
+        
+    def get_cantidad(self, producto_id):
+        id = str(producto_id)
+        if id in self.carrito:
+            return self.carrito[id]["cantidad"]
+        return 0
+    def esta_vacio(self):
+        return not bool(self.carrito)
