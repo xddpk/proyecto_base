@@ -1,0 +1,85 @@
+{% extends 'core/base_admin.html' %}
+
+{% load static %}
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a la Tienda</title>
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'css/index.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 align-self-center">
+                <h1> Tienda</h1>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <form method="post" action="{% url 'finalizar_venta' %}">
+                {% csrf_token %}
+                <label for="text">Cliente</label>
+                <select name="cliente_id" id="cliente_id" class="form-control border" required>
+                    <option value="">----------</option>
+                    {% for c in clientes %}
+                    <option value="{{c.id}}">{{c.nombre_cliente}} {{c.apellido_cliente}}, Rut:{{c.rut_cliente}}
+                    </option>
+                    {% endfor %}
+                </select>
+                <label for="text">Tipo de pago</label>
+                <select name="pago_id" id="pago_id" class="form-control border" required>
+                    <option value="">----------</option>
+                    {% for p in pagos %}
+                    <option value="{{p.id}}">{{p.nombre_pago}}</option>
+                    {% endfor %}
+                </select>
+
+            <br>
+            <br><a href="{% url 'cliente_create' %}" class="button button--gray form-control">Crear cliente</a>
+            <div class="col-8">
+                <div class="row" style="padding: 10px 0;">
+                    <div class="col-12">
+                        <div class="row">
+                            productos
+                            {% for pro in productos %}
+                            <div class="col-6">
+                                <div class="card" style="height: 10rem;width: 23rem;margin: 5px 0PX;">
+                                    <div class="card-body">
+                                        <h5 class="card-tittle"> {{pro.nombre_producto}} </h5>
+                                        <p class="card-text"> {{pro.precio_producto}} </p>
+                                        <a href="{% url 'Add' pro.id %}" class="btn btn-primary">agregar al carrito</a>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-4">
+                {% include "carrito/carrito.html" %}
+            </div>
+            <div class="col-12 col-sm-6 mb-3">
+                <input type="submit" value="Finalizar Venta" class="button form-control">
+            </div>
+        </form>
+        </div>
+    </div>
+    
+    <br><a href="{% url 'venta_main' %}" class="button button--gray form-control">Volver</a>
+
+    <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>
