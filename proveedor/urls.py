@@ -28,6 +28,8 @@ proveedor_urlpatterns = [
     path('proveedor_activate/<proveedor_id>',views.proveedor_activate, name='proveedor_activate'),
     path('proveedor_delete/<proveedor_id>',views.proveedor_delete, name='proveedor_delete'),
     path('edit_proveedor/<proveedor_id>/',views.edit_proveedor, name='edit_proveedor'),
+    
+    path('ver_proveedor/<proveedor_id>/',views.ver_proveedor, name='ver_proveedor'),
     path('edit_proveedor/<groups>/<page>/',views.edit_proveedor, name='edit_proveedor'),  
     
     

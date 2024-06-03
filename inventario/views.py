@@ -244,12 +244,26 @@ def producto_edit(request,producto_id):
             messages.add_message(request, messages.INFO, 'Hubo un error al editar el Producto: '+producto_data.nombre_producto )
             return redirect('inventario_listado')    
     producto_data = Producto.objects.get(pk=producto_id)
-    print("nomre: "+producto_data.nombre_producto)
     category_data = Category.objects.get(producto_id=producto_id)
     category_datas = Category_group.objects.get(pk=category_data.category_group_id) 
     category_groups = Category_group.objects.all().exclude(pk=0).order_by('category_group_name')    
     template_name = 'inventario/producto_edit.html'
     return render(request,template_name,{'producto_data':producto_data,'category_data':category_data,'category_datas':category_datas,'category_groups':category_groups})
+
+@login_required
+def producto_ver(request, producto_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 2:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    producto_data = Producto.objects.get(pk=producto_id)
+    category_data = Category.objects.get(producto_id=producto_id)
+    category_datas = Category_group.objects.get(pk=category_data.category_group_id) 
+    category_groups = Category_group.objects.all().exclude(pk=0).order_by('category_group_name')    
+    template_name = 'inventario/producto_ver.html'
+    return render(request,template_name,{'producto_data':producto_data,'category_data':category_data,'category_datas':category_datas,'category_groups':category_groups})
+
+
 
 @login_required
 def producto_delete(request,producto_id):
@@ -755,6 +769,17 @@ def categories_save_edit(request, categories_id):
     name = request.POST.get('name')
     Category_group.objects.filter(pk=categories_id).update(category_group_name=name)
     return render(request, template_name, {'template_name': template_name, 'profiles': profiles, 'categories_id': categories_id})
+
+def categories_ver(request, categories_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 2:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    template_name = 'inventario/categories_ver.html' 
+    Category_group.objects.filter(pk=categories_id)
+    category_data = Category_group.objects.get(pk=categories_id) 
+    return render(request, template_name, {'template_name': template_name, 'profiles': profiles, 'categories_id': categories_id,'category_data':category_data})
+
 @login_required    
 def list_categories_deactivate(request,page=None,search=None):
     

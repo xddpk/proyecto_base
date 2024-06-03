@@ -70,6 +70,12 @@
                     <th scope="row">{{s.mail}}</th>
                     <th scope="row">{{s.profile}}</th>      
                     {% if profiles.group_id == 1 %}
+                        <th scope="row">
+                        {% if s.id != request.user.id %}
+                            <a href="{% url 'user_ver' s.id %}">
+                                Ver Usuario
+                            </a>
+                        </th>
                             <th scope="row">
                             {% if s.id != request.user.id %}
                                 <a href="{% url 'edit_user' s.id %}">
@@ -83,6 +89,7 @@
                                             Bloquea Usuario
                                         </a>
                                     </th>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         </th>   

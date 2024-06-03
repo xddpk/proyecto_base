@@ -430,7 +430,9 @@ def edit_proveedor(request,proveedor_id,page=None,search=None):
         direccion_list = paginator.get_page(page)
         template_name = 'proveedor/edit_proveedor.html'
         return render(request,template_name,{'profiles':profiles,'direccion_list':direccion_list,'paginator':paginator,'page':page,'search':search, 'proveedor_data':proveedor_data })
-            
+
+
+  
     else:#si la cadena de búsqueda trae datos
 
         #se filtran todas las tablas ProveedorDireccion que contengan que su registro proveedor_id sea igual al proveedor_que se esta editando
@@ -467,6 +469,16 @@ def edit_proveedor(request,proveedor_id,page=None,search=None):
     direccion_list = paginator.get_page(page)
     template_name = 'proveedor/edit_proveedor.html'
     return render(request,template_name,{'profiles':profiles,'direccion_list':direccion_list,'paginator':paginator,'page':page,'search':search, 'proveedor_data':proveedor_data })
+            
+@login_required
+def ver_proveedor(request, proveedor_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 2:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main') 
+    template_name = 'inventario/ver_proveedor.html'
+    proveedor_data = Proveedor.objects.get(pk=proveedor_id)
+    return render(request,template_name,{'proveedor_data':proveedor_data})
 
 
 @login_required    

@@ -70,7 +70,12 @@
                     <th scope="row">{{s.correo_cliente}}</th>
                     <th scope="row">{{s.telefono_cliente}}</th>      
                     {% if profiles.group_id == 1 %}
-                            <th scope="row">
+                    <th scope="row">
+                        <a href="{% url 'ver_cliente' s.id %}" onclick="confirmarCambio(event);">
+                            Ver Cliente
+                        </a>
+                        </th>        
+                    <th scope="row">
                             
                                 <a href="{% url 'edit_cliente' s.id %}">
                                     Edita Cliente
