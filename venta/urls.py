@@ -37,7 +37,7 @@ venta_urlpatterns = [
     path('cliente_activate/<cliente_id>',views.cliente_activate, name='cliente_activate'),
     path('cliente_delete/<cliente_id>',views.cliente_delete, name='cliente_delete'),
     
-    path('finalizar_venta/',views.finalizar_venta, name='finalizar_venta'), 
+    path('finalizar_venta/<cliente_id>/',views.finalizar_venta, name='finalizar_venta'), 
 
     
     

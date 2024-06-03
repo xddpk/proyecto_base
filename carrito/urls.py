@@ -10,6 +10,7 @@ from carrito import views
 
 carrito_urlpatterns = [
     path('tienda/',views.tienda, name='tienda'),  
+    path('tienda/<groups>/<page>/',views.tienda, name='tienda'),  
     path('agregar/<producto_id>/',views.agregar_producto, name='Add'),     
     path('eliminar/<producto_id>/',views.eliminar_producto, name='Del'),     
     path('restar/<producto_id>/',views.restar_producto, name='Sub'),     

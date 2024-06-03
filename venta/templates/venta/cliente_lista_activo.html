@@ -6,7 +6,7 @@
 <script>
     function confirmarCambio(event) {
         // Mostrar la alerta de confirmación
-        var confirmacion = confirm("¿Estás seguro de que deseas realizar este cambio?");
+        var confirmacion = confirm("¿Estás seguro de que deseas realizar esta acción?");
     
         // Si el usuario no confirma, prevenir la acción por defecto
         if (!confirmacion) {
@@ -29,7 +29,7 @@
     </div>
     <div class="d-flex flex-column flex-lg-row mt-2">
         <p class='body--normal text-gray'>
-            {% lorem 2 b random %}
+
         </p>
     </div>
 
@@ -87,6 +87,14 @@
                                     Historial ventas
                                 </a>
                             </th>
+                            {% if request.session.carrito.items %}
+                            <th scope="row">
+                            
+                                <a href="{% url 'finalizar_venta' s.id %}" onclick="confirmarCambio(event);">
+                                    Finalizar venta
+                                </a>
+                            </th>
+                            {% endif %}
                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                     <th scope="row">
                                         <a href="{% url 'cliente_block' s.id %}" onclick="confirmarCambio(event);">

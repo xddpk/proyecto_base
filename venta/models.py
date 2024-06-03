@@ -29,21 +29,9 @@ class Cliente(models.Model):
         return self.nombre_cliente
 
 
-class Pago(models.Model):
-    nombre_pago = models.CharField(max_length = 100,null=True, blank=True) 
-
-    class Meta:
-        verbose_name = 'Pago'
-        verbose_name_plural = 'Pagos'
-        ordering = ['nombre_pago']
-    
-    def __str__(self):
-        return self.nombre_pago
-
 
 class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE) 
-    pago = models.ForeignKey(Pago, on_delete=models.CASCADE)  
     creacion_venta = models.DateTimeField(auto_now_add=True,verbose_name='Fecha Creación')
     total_venta = models.IntegerField(null=False, blank=False)  
     codigo_venta = models.IntegerField(unique=True, editable=False)  # Editable=False asegura que no sea modificado manualmente

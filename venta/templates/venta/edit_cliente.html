@@ -1,4 +1,4 @@
-% extends 'core/base_admin.html' %}
+{% extends 'core/base_admin.html' %}
 {% load static %}
 
 {% block content %}
@@ -44,7 +44,7 @@
                             <input type="submit" value="Editar Cliente" class="button form-control">
                         </div>
                         <div class="col-12 col-sm-6 mb-3">
-                            <a href="{% url 'venta_main' %}" class="button button--gray form-control">Volver</a>
+                            <a href="{% url 'cliente_lista_activo' %}" class="button button--gray form-control">Volver</a>
                         </div>
                     </div>
                 </form>
