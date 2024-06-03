@@ -27,66 +27,39 @@
 <body>
     <nav id="sidebar" class='side-bar to-left'>
         <header class='my-xxl-4 my-1 mb-5'>
-            <div id="expand-side-bar" class="float-button">
-                <div class="m-auto">
-                    <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="30px"
-                        viewBox="0 0 24 24" width="30px" fill="#1F2547">
-                        <g>
-                            <rect fill="none" height="24" width="24" />
-                        </g>
-                        <g>
-                            <g>
-                                <polygon points="15.5,5 11,5 16,12 11,19 15.5,19 20.5,12" />
-                                <polygon points="8.5,5 4,5 9,12 4,19 8.5,19 13.5,12" />
-                            </g>
-                        </g>
-                    </svg>
+            <div class="mb-3" style="background-color: #6E30E8; height: 65px; display: flex; align-items: center;">
+                <div style="border-radius: 20px; overflow: hidden; display: inline-block;">
+                    <img src="{% static 'assets/img/logo.jpg' %}" class="img" width="75" height="65">
                 </div>
-            </div>
-            <a href="">
-                <img class="logo my-2" src="{% static 'assets/svg/logos.svg' %}" alt="logos" />
-            </a>
-            <div style="display: flex; flex-direction: column;align-items: center;">
-                <div class="avatar-normal-container">
-                    <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="avatar">
-                </div>
+                <span style="color: rgb(255, 255, 255); font-size: 30px;">Computech</span>
             </div>
         </header>
-        <div class='menu'>
+        <div class='menu' style="background-color:#270F57; width: 13%;height: 100vh;">
             <!--=== Menu Administrador ===-->
             {% if template_name == 'admin_main.html' %}
-            <a href="{% url 'users_main' %}" class='item active'>
+            <a href="{% url 'users_main' %}" class='item active'style="margin-top: 10%;">
             {% else %}
                 <a href="{% url 'users_main' %}" class='item'>   
             {% endif %}
-                <span class="material-icons-outlined">
-                    admin_panel_settings
-                </span>
-                <p class='body--small'>Administrador</p>
+                    <div style="height: 3%;">
+
+                    </div>
+                     <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; align-items: center; font-size: 30px;">
+                        admin_panel_settings
+                        <p class='body--small'style="color: white; text-align: center; font-size: 30px;">Administrador</p>
+                    </span>
                 </a>
                 <!--=== Fin Menú Admin ===-->
-                <!--=== Menu Ejemplos ===-->
-            {% if template_name == 'ejemplos/ejemplos_main.html' or template_name == 'ejemplos/ejemplos_add.html' or template_name == 'ejemplos/ejemplos_habilidad_ver.html' or template_name == 'ejemplos/ejemplos_list_habilidades.html' or template_name == 'ejemplos/ejemplos_carga_masiva.html'%}
-                <a href="{% url 'ejemplos_main' %}" class='item active'>
-            {% else %}
-                <a href="{% url 'ejemplos_main' %}" class='item'>
-            {% endif %}
-                    <span class="material-icons-outlined">
-                        library_books
-                    </span>
-                    <p class='body--small'>Ejemplos</p>
-                </a>
-                <!--=== Fin Menú Ejemplos ===-->
                   <!--=== Menu inventario ===-->
             {% if template_name == 'inventario/inventario_main.html' %}
                 <a href="{% url 'inventario_main' %}" class='item active'>
             {% else %}
                 <a href="{% url 'inventario_main' %}" class='item'>
             {% endif %}
-                    <span class="material-icons-outlined">
+                      <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 53px;font-size: 30px;margin-top: 10%; ">
                         library_books
-                    </span>
-                    <p class='body--small'>Inventario</p>
+                        <p class='body--small'style="color: white; text-align: center;font-size: 30px;">Inventario</p>
+                     </span>   
                 </a>
                 <!--=== Fin Menú proveedor ===-->    
                 <!--=== Menu proveedor ===-->
@@ -95,10 +68,11 @@
             {% else %}
                 <a href="{% url 'proveedor_main' %}" class='item'>
             {% endif %}
-                    <span class="material-icons-outlined">
+                     <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 53px; font-size: 30px;margin-top: 10%;">
                         library_books
+                        <p class='body--small'style="color: white; text-align: center;font-size: 30px;">proveedor</p>
                     </span>
-                    <p class='body--small'>proveedor</p>
+                    
                 </a>
                 <!--=== Fin Menú proveedor ===--> 
                 <!--=== Menu venta ===-->
@@ -107,25 +81,24 @@
             {% else %}
                 <a href="{% url 'venta_main' %}" class='item'>
             {% endif %}
-                    <span class="material-icons-outlined">
+                     <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 116px; font-size: 30px;margin-top: 10%;">
                         library_books
+                        <p class='body--small' style="color: white; text-align: center;font-size: 30px;">venta</p>
                     </span>
-                    <p class='body--small'>venta</p>
                 </a>
                 <!--=== Fin Menú venta ===--> 
-                
+                <div class='side-bar-footer mb-5'style="color: white; display: flex; justify-content: center; align-items: center; font-size: 30px;margin-top: 60%;>
+                    <form method="post action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                        {% endif %}
+                        <button  class='button' type="submit">Cerrar Sesión</button>
+                    </form>
+                </div>
         </div>
-        <div class='side-bar-footer mb-5'>
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                {% if redirect_field_value %}
-                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                {% endif %}
-                <button class='button' type="submit">Cerrar Sesión</button>
-            </form>
-        </div>
-
     </nav>
+    
     <div class='dashboard-container'>
         <!-- Messages -->
         {% if messages %}
@@ -134,7 +107,7 @@
             {{ message }}
             <h1>
                 -
-            <h1/>
+            </h1>
 
             {% endfor %}
         </div>
