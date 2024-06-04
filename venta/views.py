@@ -189,7 +189,15 @@ def edit_cliente(request,cliente_id):
     cliente_data = Cliente.objects.get(pk=cliente_id) 
     template_name = 'venta/edit_cliente.html'
     return render(request,template_name,{'cliente_data':cliente_data})
-
+@login_required
+def ver_cliente(request, cliente_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 2:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main') 
+    template_name = 'inventario/ver_cliente.html'
+    cliente_data = Cliente.objects.get(pk=cliente_id)
+    return render(request,template_name,{'cliente_data':cliente_data})
 
 @login_required    
 def cliente_lista_activo(request,page=None,search=None):

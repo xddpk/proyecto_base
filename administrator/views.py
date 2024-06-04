@@ -193,6 +193,20 @@ def edit_user(request,user_id):
     template_name = 'administrator/edit_user.html'
     return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list})
 
+def user_ver(request, user_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 2:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    user_data = User.objects.get(pk=user_id)
+    profile_data = Profile.objects.get(user_id=user_id)
+    groups = Group.objects.get(pk=profile_data.group_id) 
+
+    profile_list = Group.objects.all().exclude(pk=0).order_by('name')    
+    template_name = 'administrator/user_ver.html'
+    return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list})
+
+
 @login_required    
 def list_user_active2(request,page=None,search=None):
     profiles = Profile.objects.get(user_id = request.user.id)

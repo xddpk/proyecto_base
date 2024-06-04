@@ -84,6 +84,13 @@
                                 Elimina Usuario
                             </a>
                             </th>
+                        </th>
+                        <th scope="row">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href="{% url 'user_ver' s.id  %}" onclick="confirmarCambio(event);">
+                            Ver Usuario
+                        </a>
+                        </th>
                         {% endif %} 
                 {% endif %}                            
                 </tr>

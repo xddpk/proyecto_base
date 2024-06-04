@@ -71,12 +71,15 @@
                     <th scope="row">{{s.telefono_cliente}}</th>      
                     {% if profiles.group_id == 1 or profiles.group_id == 4%}
                             <th scope="row">
-                            
+                            <a href="{% url 'ver_cliente' s.id %}" onclick="confirmarCambio(event);">
+                                Ver Cliente
+                            </a>
+                            </th>
+                            <th scope="row">
                             <a href="{% url 'cliente_activate' s.id %}" onclick="confirmarCambio(event);">
                                 Activa Cliente
                             </a>
-                            </th>
-                                
+                            </th>  
                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                     <th scope="row">
                                         <a href="{% url 'cliente_delete' s.id %}" onclick="confirmarCambio(event);">
