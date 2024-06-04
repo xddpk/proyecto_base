@@ -9,6 +9,8 @@ from django.db.models import Avg, Count, Q
 from registration.models import Profile
 from django.urls import reverse_lazy
 from extensiones import validacion
+from django.db.models import F
+
 # Create your views here.
 import xlwt
 import pandas as pd
@@ -84,7 +86,14 @@ def proveedor_main(request):
         return redirect('check_group_main')
     template_name = 'proveedor/proveedor_main.html'
     return render(request,template_name,{'profiles':profiles})
-
+@login_required
+def proveedor_main4(request):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 3:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    template_name = 'proveedor/proveedor_main4.html'
+    return render(request,template_name,{'profiles':profiles})
 @login_required
 def proveedor_main2(request):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -93,6 +102,7 @@ def proveedor_main2(request):
         return redirect('check_group_main')
     template_name = 'proveedor/proveedor_main2.html'
     return render(request,template_name,{'profiles':profiles})
+
 
 @login_required
 def proveedor_main3(request, producto_id=None):
@@ -130,6 +140,8 @@ def agregar_productos(request):
             cantidad = request.POST.getlist('cantidad[]')[i]
             precio = request.POST.getlist('precio[]')[i]
             producto = Producto.objects.get(nombre_producto=nombre) 
+            Producto.objects.filter(id=producto.id).update(stock_producto=F('stock_producto') + cantidad)
+
 
             # Creamos una instancia de ProductoForm con los datos del formulario
             """form = OrdenProductoForm({'nombre_producto': nombre, 'cantidad_producto': cantidad, 'precio_producto': precio, 'orden_id': orden, 'producto_id': producto})
@@ -149,6 +161,8 @@ def agregar_productos(request):
                     precio_producto=precio,
                     orden=orden,
                     producto=producto,
+                    
+
                 )
                 # Redireccionamos a alguna página después de agregar los productos
         return redirect('proveedor_main')
@@ -350,7 +364,47 @@ def proveedor_lista_main(request):
     template_name = 'proveedor/proveedor_lista_main.html'
     return render(request,template_name,{'profiles':profiles})
 
+@login_required
+def editar_orden(request, orden_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    validar = True
+    
+    if profiles.group_id != 1 and profiles.group_id != 3:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
+        return redirect('check_group_main')
 
+    if request.method == 'POST':
+        form = OrdenForm(request.POST)
+        orden=Orden
+        if form.is_valid():
+            orden = form.save(commit=False)
+            orden_id = request.POST.get('orden_id')
+            numero_orden = request.POST.get('numero_orden')
+            direccion_orden = request.POST.get('direccion_orden')
+            telefono_orden = request.POST.get('telefono_orden')
+            estado_orden = request.POST.get('estado_orden')
+            descuento = request.POST.get('descuento')
+            tasa = request.POST.get('tasa')
+            total_impuesto = request.POST.get('total_impuesto')
+            total_compra = request.POST.get('total_compra')
+            nota_orden = request.POST.get('nota_orden')
+
+            orden.orden_id = orden_id
+            Orden.objects.filter(pk = orden_id).update(numero_orden=numero_orden) 
+            Orden.objects.filter(pk = orden_id).update(direccion_orden=direccion_orden)
+            Orden.objects.filter(pk = orden_id).update(telefono_orden=telefono_orden)
+            Orden.objects.filter(pk = orden_id).update(numero_orden=numero_orden)
+            Orden.objects.filter(pk = orden_id).update(nota_orden=nota_orden)
+            
+            messages.success(request, 'Orden de compra editada exitosamente.')
+            return redirect('orden_compra_activo')
+        else:
+            messages.error(request, 'Hubo un error al editar la orden de compra. Por favor, revise los datos ingresados.')
+    else:
+        orden = Orden.objects.get(pk=orden_id)
+        form = OrdenForm(instance=orden)
+    
+    return render(request, 'proveedor/editar_orden.html', {'profiles': profiles, 'form': form, 'orden_id': orden_id , 'orden': orden})
 
 @login_required
 def edit_proveedor(request,proveedor_id,page=None,search=None):
@@ -488,8 +542,89 @@ def ver_proveedor(request, proveedor_id):
     template_name = 'proveedor/ver_proveedor.html'
     proveedor_data = Proveedor.objects.get(pk=proveedor_id)
     return render(request,template_name,{'proveedor_data':proveedor_data})
+@login_required
+def ver_orden(request, orden_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    
+    if profiles.group_id != 1 and profiles.group_id != 2:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        return redirect('check_group_main')
+    
+    orden = Orden.objects.get(pk=orden_id)
+    template_name = 'proveedor/ver_orden.html'
+    
+    return render(request, template_name, {'orden': orden})
+
+@login_required
+def orden_block(request, orden_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 3:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        return redirect('check_group_main')
+
+    order_data_count = Orden.objects.filter(pk=orden_id).count()
+    order_data = Orden.objects.get(pk=orden_id)     
+    if order_data_count == 1:
+        Orden.objects.filter(pk=orden_id).update(estado_orden='f')
+        messages.add_message(request, messages.INFO, ' Orden ha llegado con éxito')
+        return redirect('orden_compra_activo')        
+    else:
+        messages.add_message(request, messages.INFO, 'Hubo un error con la orden ' )
+        return redirect('orden_compra_activo')    
+    
+@login_required
+def orden_delete(request,orden_id):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 3:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+
+    orden_data_count = Orden.objects.filter(pk=orden_id).count()
+    orden_data = OrdenProducto.objects.get(pk=orden_id)
+    
+    if orden_data_count == 1:
+        try:
+            #Profile.objects.filter(orden_id=orden_id).delete()
+            Proveedor.objects.filter(pk=orden_id).delete()
+            ProveedorDireccion.objects.filter(orden_id=orden_id).delete
+            messages.add_message(request, messages.INFO, 'Orden  eliminado con éxito')
+        except:
+            return redirect('proveedor_lista_bloqueado')       
+    else:
+        messages.add_message(request, messages.INFO, 'Hubo un error al eliminar la Orden ')
+        return redirect('proveedor_lista_bloqueado')      
+
+@login_required
+def orden_activate(request, orden_id):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 3:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    order_data_count = Orden.objects.filter(pk=orden_id).count()
+    order_data = Orden.objects.get(pk=orden_id)     
+    if order_data_count == 1:
+        Orden.objects.filter(pk=orden_id).update(estado_orden='t')
+        messages.add_message(request, messages.INFO, 'Orden '+order_data.formatted_numero_orden +' activado con éxito')
+        return redirect('proveedor_lista_bloqueado')        
+    else:
+        messages.add_message(request, messages.INFO, 'Hubo un error al activar el Proveedor '+order_data.formatted_numero_orden +'activado')
+        return redirect('proveedor_lista_bloqueado')        
 
 
+@login_required
+def orden_delete(request, orden_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 3:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        return redirect('check_group_main')
+
+    orden_data = Orden.objects.filter(pk=orden_id).first()
+    if orden_data:
+        orden_data.delete()
+        messages.add_message(request, messages.INFO, 'Orden  eliminada con éxito')
+    else:
+        messages.add_message(request, messages.INFO, 'Hubo un error al eliminar la Orden')
+    return redirect('proveedor_lista_bloqueado')  
 @login_required    
 def proveedor_lista_activo(request,page=None,search=None):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -557,7 +692,163 @@ def proveedor_lista_activo(request,page=None,search=None):
     proveedor_list = paginator.get_page(page)
     template_name = 'proveedor/proveedor_lista_activo.html'
     return render(request,template_name,{'profiles':profiles,'proveedor_list':proveedor_list,'paginator':paginator,'page':page ,'search':search })
+    
 
+@login_required    
+def orden_compra_activo(request, page=None, search=None):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    
+    if profiles.group_id not in [1, 3]:  # Verificar permisos
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
+        return redirect('check_group_main')
+    
+    if page is None:
+        page = request.GET.get('page')
+    else:
+        page = page
+        
+    if request.GET.get('page') is None:
+        page = page
+    else:
+        page = request.GET.get('page')
+        
+    # Lógica para recibir la cadena de búsqueda y propagarla a través del paginador
+    if search is None:
+        search = request.GET.get('search')
+    else:
+        search = search
+        
+    if request.GET.get('search') is None:
+        search = search
+    else:
+        search = request.GET.get('search')
+        
+    if request.method == 'POST':
+        search = request.POST.get('search') 
+        page = None
+    
+    # Lógica para construir la lista de órdenes de compra activas
+    orden_all = [] 
+    
+    if search is None or search.lower() == "none": # Si la cadena de búsqueda está vacía
+        orden_array = Orden.objects.filter(estado_orden='t').order_by('numero_orden')
+        
+        for orden in orden_array:
+            orden_all.append({
+                'numero_orden': orden.formatted_numero_orden,
+                'direccion_orden': orden.direccion_orden,
+                'telefono_orden': orden.telefono_orden,
+                'estado_orden': orden.estado_orden,
+                'proveedor': orden.proveedor,
+                'id': orden.id  # Aquí añadimos el id de la orden al contexto
+            })
+        
+        paginator = Paginator(orden_all, 20)  
+        orden_list = paginator.get_page(page)
+        template_name = 'proveedor/orden_compra_activo.html'
+        
+        return render(request, template_name, {
+            'profiles': profiles,
+            'orden_list': orden_list,
+            'paginator': paginator,
+            'page': page,
+            'search': search
+        })
+            
+    else: # Si la cadena de búsqueda trae datos
+        orden_array = Orden.objects.filter(numero_orden__icontains=search).filter(estado_orden='t').order_by('numero_orden')
+        
+        for orden in orden_array:
+            orden_all.append({
+                'numero_orden': orden.numero_orden,
+                'direccion_orden': orden.direccion_orden,
+                'telefono_orden': orden.telefono_orden,
+                'estado_orden': orden.estado_orden,
+                'proveedor': orden.proveedor,
+                'id': orden.id  # Aquí añadimos el id de la orden al contexto
+            })
+            
+    paginator = Paginator(orden_all, num_elemento)  
+    orden_list = paginator.get_page(page)
+    template_name = 'proveedor/orden_compra_activo.html'
+    
+    return render(request, template_name, {
+        'profiles': profiles,
+        'orden_list': orden_list,
+        'paginator': paginator,
+        'page': page,
+        'search': search
+    })
+@login_required    
+def orden_lista_bloqueada(request, page=None, search=None):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id not in [1, 3]:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    
+    if page is None:
+        page = request.GET.get('page')
+    else:
+        page = page
+    if request.GET.get('page') is None:
+        page = page
+    else:
+        page = request.GET.get('page')
+    
+    if search is None:
+        search = request.GET.get('search')
+    else:
+        search = search
+    if request.GET.get('search') is None:
+        search = search
+    else:
+        search = request.GET.get('search') 
+    
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        page = None
+    
+    print("search> ", search)
+    orden_all = []  # lista vacía para agregar la salida de la lista ya sea con la cadena de búsqueda o no
+    
+    if search is None or search == "None":  # si la cadena de búsqueda viene vacía
+        orden_array = Orden.objects.filter(estado_orden='f').order_by('numero_orden')
+        
+        for orden in orden_array:
+            orden_all.append({
+                'id': orden.id,
+                'numero_orden': orden.formatted_numero_orden,
+                'direccion_orden': orden.direccion_orden,
+                'telefono_orden': orden.telefono_orden,
+                'estado_orden': orden.estado_orden,
+                'proveedor': orden.proveedor.nombre_proveedor if orden.proveedor else ''
+            })
+        
+        paginator = Paginator(orden_all, 20)  
+        orden_list = paginator.get_page(page)
+        template_name = 'proveedor/orden_lista_bloqueada.html'
+        return render(request, template_name, {'profiles': profiles, 'orden_list': orden_list, 'paginator': paginator, 'page': page, 'search': search })
+    
+    else:  # si la cadena de búsqueda trae datos
+        orden_array = Orden.objects.filter(
+            Q(formatted_numero_orden__icontains=search) | 
+            Q(direccion_orden__icontains=search)
+        ).filter(estado_orden='f').order_by('numero_orden')  # Ascendente
+        
+        for orden in orden_array:
+            orden_all.append({
+                'id': orden.id,
+                'numero_orden': orden.formatted_numero_orden,
+                'direccion_orden': orden.direccion_orden,
+                'telefono_orden': orden.telefono_orden,
+                'estado_orden': orden.estado_orden,
+                'proveedor': orden.proveedor.nombre_proveedor if orden.proveedor else ''
+            })
+    
+    paginator = Paginator(orden_all, num_elemento)  
+    orden_list = paginator.get_page(page)
+    template_name = 'orden/orden_lista_bloqueada.html'
+    return render(request, template_name, {'profiles': profiles, 'orden_list': orden_list, 'paginator': paginator, 'page': page, 'search': search })
 @login_required    
 def proveedor_lista_bloqueado(request,page=None,search=None):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -617,7 +908,6 @@ def proveedor_lista_bloqueado(request,page=None,search=None):
     return render(request,template_name,{'profiles':profiles,'proveedor_list':proveedor_list,'paginator':paginator,'page':page ,'search':search })
 
 
-
 @login_required
 def proveedor_block(request,proveedor_id):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -625,9 +915,9 @@ def proveedor_block(request,proveedor_id):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
 
-    proveedor_data_count = Proveedor.objects.filter(pk=proveedor_id).count()
+    order_data_count = Proveedor.objects.filter(pk=proveedor_id).count()
     proveedor_data = Proveedor.objects.get(pk=proveedor_id)     
-    if proveedor_data_count == 1:
+    if order_data_count == 1:
         Proveedor.objects.filter(pk=proveedor_id).update(estado_proveedor='f')
         messages.add_message(request, messages.INFO, 'Proveedor '+proveedor_data.nombre_proveedor +' bloqueado con éxito')
         return redirect('proveedor_lista_activo')        

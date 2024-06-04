@@ -135,3 +135,8 @@ class OrdenProductoForm(forms.ModelForm):
     class Meta:
         model = OrdenProducto
         fields = ['nombre_producto', 'cantidad_producto', 'precio_producto']
+        
+class OrdenForm(forms.ModelForm):
+    class Meta:
+        model = Orden
+        fields = ['numero_orden', 'direccion_orden', 'telefono_orden', 'estado_orden', 'descuento', 'tasa', 'total_impuesto', 'total_compra', 'proveedor', 'nota_orden']
