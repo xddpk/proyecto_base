@@ -111,19 +111,25 @@
 
     <form method="POST" action="{% url 'agregar_productos' %}">
         <div>
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" required>
+            <label for="proveedor">Nombre Proveedor:</label>
+            <select name="proveedor" id="proveedor" required>
+                <option value="">Selecciona un proveedor</option>
+                {% for proveedor in proveedores %}
+                    <option value="{{ proveedor.id }}">{{ proveedor.nombre_proveedor }}</option>
+                {% endfor %}
+            </select>
+        
         </div>
         <div>
-            <label for="fecha">Fecha:</label>
+            <label for="fecha">Fecha de llegada:</label>
             <input type="date" id="fecha" name="fecha" required>
         </div>
         <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
+            <label for="email">Telefono Proveedor:</label>
+            <input type="phone" id="email" name="email" required>
         </div>
         <div>
-            <label for="numero">Número:</label>
+            <label for="numero">Observaciones de Orden:</label>
             <input type="tel" id="numero" name="numero" required>
         </div>
         {% csrf_token %}
