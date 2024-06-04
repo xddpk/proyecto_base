@@ -11,44 +11,55 @@
 {% endblock %}
     <main role="main">
         <div class="container col-12 mt-3">
-            <div class="col-12  mt-3">
-                <h3>Nuevo Usuario</h3> 
+            <div class="row"class="col-md-11"style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
+                <div class="col-12  mt-3">
+                    <h3 class='h2 medium text-blue'>Información de Usuario</h3>
+                </div>
+            </div> 
                 <form action="" method="post" onsubmit="mostrarAlerta()">
                     {% csrf_token %}
                     <input type="hidden" value="{{ user_data.id }}" name="user_id" id="user_id">
                     <input type="hidden" value="{{ groups.id }}" name="grupo" id="grupo">
-                    <div class="row"> 
-                        <div class="col-12 col-sm-8 mb-3">
-                            <label for="rut">Rut</label>
-                            <input type="text" name="rut" id="id_rut"  value="{{user_data.username}}" class="form-control border border-danger" readonly/>
+                    <div class="row">
+                        <div class="row"class="col-md-11"style="position: absolute; top: 20%; left: 15%; width: 20%; height: 10%;">
+                            <div class="col-12 col-sm-8 mb-3">
+                                <label for="rut">Rut: </label>
+                                <input type="text" name="rut" id="id_rut"  value="{{user_data.username}}" class="form-control border border-danger" readonly/>
+                            </div>
                         </div>  
- 
-                        <div class="col-12 col-sm-4 mb-3">
-                            <label for="email">Perfil</label>
-                            <input type="text" name="group" id="group" class="form-control border border-danger" value="{% for p in profile_list %}{% if p.id == groups.id %}{{p.name}}{% endif %}{% endfor %}" readonly>
-                            <input type="hidden" name="group_id" value="{{ groups.id }}">
-                            
+                        <div class="row"class="col-md-11"style="position: absolute; top: 20%; left: 30%; width: 20%; height: 10%;">
+                            <div class="col-12 col-sm-4 mb-3">
+                                <label for="email">Perfil: </label>
+                                <input type="text" name="group" id="group" class="form-control border border-danger" value="{% for p in profile_list %}{% if p.id == groups.id %}{{p.name}}{% endif %}{% endfor %}" readonly>
+                                <input type="hidden" name="group_id" value="{{ groups.id }}">
+                            </div>
                         </div>  
                     </div>    
-                    <div class="row">                       
-                        <div class="col-12 col-sm-4 mb-3">
-                            <label for="name">Nombre (*)</label>
-                            <input type="text"  id="name" name="name" value="{{user_data.first_name}}" class="form-control border border-danger" required readonly/>
+                    <div class="row">
+                        <div class="row"class="col-md-11"style="position: absolute; top: 30%; left: 15%; width: 20%; height: 10%;">                 
+                            <div class="col-12 col-sm-4 mb-3">
+                                <label for="name">Nombre: </label>
+                                <input type="text"  id="name" name="name" value="{{user_data.first_name}}" class="form-control border border-danger" required readonly/>
+                            </div>
                         </div>
-                        <div class="col-12 col-sm-4 mb-3">
-                            <label for="last_name">Apellidos</label>
-                            <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" class="form-control border border-danger" required readonly/>
+                        <div class="row"class="col-md-11"style="position: absolute; top: 30%; left: 30%; width: 20%; height: 10%;">
+                            <div class="col-12 col-sm-4 mb-3">
+                                <label for="last_name">Apellidos: </label>
+                                <input type="text" id="last_name1" name="last_name1" value="{{user_data.last_name}}" class="form-control border border-danger" required readonly/>
+                            </div>
                         </div>                        
                     </div>
                     <div class="row"> 
-                        <div class="col-12 col-sm-8 mb-3">
-                            <label for="email">Correo (*)</label>
-                            <input type="email" id="email" name="email" value="{{user_data.email}}" class="form-control border border-danger" required readonly/>
+                        <div class="row"class="col-md-11"style="position: absolute; top: 40%; left: 15%; width: 20%; height: 10%;">
+                            <div class="col-12 col-sm-8 mb-3">
+                                <label for="email">Correo: </label>
+                                <input type="email" id="email" name="email" value="{{user_data.email}}" class="form-control border border-danger" required readonly/>
+                            </div>
                         </div>
                     </div>
-                    <div class="row"> 
+                    <div class="row"class="col-md-11"style="position: absolute; top: 94%; left: 15%; width: 20%; height: 10%;">
                         <div class="col-12 col-sm-6 mb-3">
-                            <a href="{% url 'list_user_active2' %}" class="btn btn-danger form-control">Volver</a>
+                            <a href="{% url 'list_user_active2' %}" class="button button--gray form-control">Volver</a>
                         </div>
                     </div>
                 </form>
