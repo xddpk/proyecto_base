@@ -50,29 +50,29 @@
                     <div style="height: 3%;">
 
                     </div>
-                     <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; align-items: center; font-size: 30px;">
+                    <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; align-items: center; font-size: 30px;">
                         admin_panel_settings
                         <p class='body--small'style="color: white; text-align: center; font-size: 30px;">Administrador</p>
                     </span>
                 </a>
                 <!--=== Fin Menú Admin ===-->
-                  <!--=== Menu inventario ===-->
+                <!--=== Menu inventario ===-->
             {% if template_name == 'inventario/inventario_main.html' %}
                 <a href="{% url 'inventario_main' %}" class='item active'>
             {% else %}
                 <a href="{% url 'inventario_main' %}" class='item'>
             {% endif %}
-                      <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 53px;font-size: 30px;margin-top: 10%; ">
+                    <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 53px;font-size: 30px;margin-top: 10%; ">
                         library_books
                         <p class='body--small'style="color: white; text-align: center;font-size: 30px;">Inventario</p>
-                     </span>   
+                    </span>   
                 </a>
             {% if template_name == 'proveedor/proveedor_main.html' %}
                 <a href="{% url 'proveedor_main' %}" class='item active'>
             {% else %}
                 <a href="{% url 'proveedor_main' %}" class='item'>
             {% endif %}
-                     <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 53px; font-size: 30px;margin-top: 10%;">
+                    <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 53px; font-size: 30px;margin-top: 10%;">
                         library_books
                         <p class='body--small'style="color: white; text-align: center;font-size: 30px;">proveedor</p>
                     </span>
@@ -83,14 +83,14 @@
             {% else %}
                 <a href="{% url 'venta_main' %}" class='item'>
             {% endif %}
-                     <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 116px; font-size: 30px;margin-top: 10%;">
+                    <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 116px; font-size: 30px;margin-top: 10%;">
                         library_books
                         <p class='body--small' style="color: white; text-align: center;font-size: 30px;">venta</p>
                     </span>
                 </a>
                 <!--=== Fin Menú venta ===--> 
-                <div class='side-bar-footer mb-5'style="color: white; display: flex; justify-content: center; align-items: center; font-size: 30px;margin-top: 60%;>
-                    <form method="post action="{% url 'logout' %}">
+                <div class='side-bar-footer mb-5' style="color: white; display: flex; justify-content: center; align-items: center; font-size: 30px;margin-top: 60%;">
+                    <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
                         {% if redirect_field_value %}
                         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />

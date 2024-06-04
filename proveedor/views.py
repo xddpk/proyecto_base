@@ -107,6 +107,7 @@ def proveedor_main3(request, producto_id=None):
     
     return render(request, template_name, {'profiles': profiles, 'productos': productos})
 
+
 @login_required
 def agregar_productos(request):
     if request.method == 'POST':
@@ -597,9 +598,6 @@ def proveedor_lista_bloqueado(request,page=None,search=None):
 
 
 
-
-
-
 @login_required
 def proveedor_block(request,proveedor_id):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -728,4 +726,7 @@ def direccion_edit(request,direccion_id,proveedor_id):
 
     template_name = 'proveedor/direccion_edit.html'
     return render(request,template_name,{'direccion_data':direccion_data,'profiles':profiles, 'comuna':comuna,'region':region,'regiones':regiones,'proveedor_id':proveedor_id })
+    
+    
+    
     
