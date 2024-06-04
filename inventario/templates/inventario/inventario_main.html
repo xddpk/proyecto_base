@@ -5,67 +5,15 @@
 
 {% endblock %}
     <main role="main">
-        <div class="container col-12 mt-3">
-            <div class="col-12  mt-3">
-                <h3>Gestión De Inventario </h3> 
-                <div class="col-12" style="margin-bottom: 15px;"></div>               
-                <div class="row mt-4 mb-4">
-                    {% if profiles.group_id == 2%}
-                    <!-- 
-                        <div class="col-12 col-sm-3 mb-3">
-                            <a href="{% url 'new_user' %}" class="button form-control">Nuevo Producto</a>
-                            <div class="col-12" style="margin-bottom: 30px;"></div> 
-                        </div>
-                        -->
-                    {% endif %}
-                    
-                        <div class="col-12 col-sm-3 mb-3">
+                        <div class="col-md-11"style="position: absolute; top: 35%; left: 15%; width: 50%; height: 70%;">
                             <div class="col-12" style="margin-bottom: 25px;"></div>
                             <a href="{% url 'inventario_listado' %}" class="button form-control">Listado de productos</a>
                         </div>
-                        
-                        <div class="col-12 col-sm-3 mb-3">
-                            <div class="col-12" style="margin-bottom: 25px;"></div>
-                            <a href="{% url 'inventario_listado_deactivate' %}" class="button form-control">Listado de productos</a>
+                        <div class="col-md-11" style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); width: 50%; height: 5%; text-align: center;">
+                            <i style="font-size: 250px; margin: auto;" class="fa-solid fa-bars-staggered"></i>
+                            <div style="font-size: 100px;">Dashboard</div>
                         </div>
-                        <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <a href="{% url 'list_categories_active' %}" class="button">Listado Categoria activas</a>
-                        <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <a href="{% url 'list_categories_deactivate' %}" class="button">Listado Categoria Bloqueadas</a>
-                        <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <div class="col-12 col-sm-3 mb-3">
-                            <div class="col-12" style="margin-bottom: 25px;"></div>
-                            <a href="{% url 'categories_create' %}" class="button form-control">Nueva Categoria</a>
-                        </div>  
-                        <div class="col-12 col-sm-3 mb-3">
-                            <div class="col-12" style="margin-bottom: 25px;"></div>
-                            <a href="{% url 'producto_create' %}" class="button form-control">Nuevo Producto</a>
-                        </div> 
-                        <div class="col-12 col-sm-3 mb-3">
-                            <div class="col-12" style="margin-bottom: 25px;"></div>
-                            <a href="{% url 'carga_masiva2' %}" class="button form-control">Carga Masiva</a>
                         
-                        </div>
-                        <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <a href="{% url 'inventario_dashboard' %}" class="button">Dashboard</a>
-                        <div class="col-12" style="margin-bottom: 25px;"></div>
                         
-
-                    <!-- 
-                    <div class="col-12 col-sm-3 mb-3">
-                        <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <a href="{% url 'carga_masiva' %}" class="button">Carga Masiva</a>
-                        <div class="col-12" style="margin-bottom: 30px;"></div> 
-                        <a href="{% url 'admin_dashboard' %}" class="button">Dashboard</a>
-                        <div class="col-12" style="margin-bottom: 30px;"></div>
-                        -->
-                        <a href="{% url 'admin_main' %}" class="button button--gray form-control">Volver</a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
     </main>
 {% endblock %}
