@@ -21,11 +21,7 @@
 </head>
 
 <body>
-    <div style="display: flex; flex-direction: column;align-items: flex-end;">
-        <div class="avatar-normal-container">
-            <img src="{% static 'assets/img/no-avatar.jpg' %}" alt="avatar"style="width: 80px; height: auto;" >
-        </div>
-    </div>
+
     <nav id="sidebar" class='side-bar to-left'>
         <header class='my-xxl-4 my-1 mb-5'>
             <div class="mb-3" style="background-color: #6E30E8; height: 65px; display: flex; align-items: center;">
@@ -35,9 +31,7 @@
                 <span style="color: rgb(255, 255, 255); font-size: 30px;">Computech</span>
             </div>
             </div>
-            <a href="">
-                <img class="logo my-2" src="{% static 'assets/svg/logos.svg' %}" alt="logos" />
-            </a>
+            
             
         </header>
         <div class='menu' style="background-color:#270F57; width: 13%;height: 100vh;">
@@ -89,7 +83,7 @@
                     </span>
                 </a>
                 <!--=== Fin Menú venta ===--> 
-                <div class='side-bar-footer mb-5' style="color: white; display: flex; justify-content: center; align-items: center; font-size: 30px;margin-top: 60%;">
+                <div class='side-bar-footer mb-5' style="color: white; display: flex; justify-content: center; align-items: center; font-size: 30px;margin-top: 220%;">
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
                         {% if redirect_field_value %}
