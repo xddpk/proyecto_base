@@ -57,7 +57,7 @@ def inventario_listado(request,page=None,search=None):
     producto_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search == "None":# si la cadena de búsqueda viene vacia
         #usuario_count = Producto.objects.filter(is_active='t').count()
-        producto_array = Producto.objects.all().order_by('stock_producto')
+        producto_array = Producto.objects.filter(producto_state ='Activa').order_by('stock_producto')
         
         for iv in producto_array:
             categoria_data = Category.objects.get(producto_id=iv.id)
@@ -69,7 +69,7 @@ def inventario_listado(request,page=None,search=None):
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
-        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).order_by('-stock_producto')#Ascendente
+        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).filter(producto_state ='Activa').order_by('-stock_producto')#Ascendente
         for iv in producto_array:
             categoria_data = Category.objects.get(producto_id=iv.id)
             categoria_group = categoria_data.category_group
@@ -318,7 +318,7 @@ def inventario_listado_deactivate(request,page=None,search=None):
     producto_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search == "None":# si la cadena de búsqueda viene vacia
         #usuario_count = Producto.objects.filter(is_active='t').count()
-        producto_array = Producto.objects.all().order_by('stock_producto')
+        producto_array = Producto.objects.filter(producto_state ='Deactivate').order_by('stock_producto')
         
         for iv in producto_array:
             categoria_data = Category.objects.get(producto_id=iv.id)
@@ -330,7 +330,7 @@ def inventario_listado_deactivate(request,page=None,search=None):
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
-        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).order_by('-stock_producto')#Ascendente
+        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).filter(producto_state ='Deactivate').order_by('-stock_producto')#Ascendente
         for iv in producto_array:
             categoria_data = Category.objects.get(producto_id=iv.id)
             categoria_group = categoria_data.category_group
@@ -671,7 +671,7 @@ def list_categories(request,page=None,search=None):
         template_name = 'inventario/list_categories.html'
         return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
     else:#si la cadena de búsqueda trae datos
-        categories_all =  Category_group.objects.filter(category_group_name=search).order_by('category_group_name')#Ascendente         
+        categories_all =  Category_group.objects.filter(category_group_name=search).filter(category_state='Activa').order_by('category_group_name')#Ascendente         
         paginator = Paginator(categories_all, 1)  
         categories_list = paginator.get_page(page)
         template_name = 'inventario/list_categories.html'

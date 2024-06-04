@@ -195,7 +195,7 @@ def ver_cliente(request, cliente_id):
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main') 
-    template_name = 'inventario/ver_cliente.html'
+    template_name = 'venta/ver_cliente.html'
     cliente_data = Cliente.objects.get(pk=cliente_id)
     return render(request,template_name,{'cliente_data':cliente_data})
 

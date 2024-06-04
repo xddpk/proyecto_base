@@ -73,27 +73,32 @@
                         {% else %}
                         <span>Medio</span>
                         {% endif %}
-                    </th>   
-                    <!-- acá debe ir logica y boton para el estado-->  
-                    {% if profiles.group_id == 2 or profiles.group_id == 1  %}
-                        <th scope="row">
-                            
-                            
-                                <a href="{% url 'producto_edit' p.id %}">
-                                    Edita Producto
-                                </a>
-                                <a href="{% url 'producto_deactivate' p.id %}">
-                                    Desactiva Producto
-                                </a>
-                                <a href="{% url 'producto_ver' p.id %}">
-                                    ver Producto
-                                </a>
-                                
-                                
-                            
-                        </th>   
-                    {% endif %}                            
-                </tr>
+                </th>
+                <!-- acá debe ir logica y boton para el estado-->
+                {% if profiles.group_id == 2 or profiles.group_id == 1 %}
+
+
+                <th scope="row">
+                    <a href="{% url 'producto_edit' p.id %}">
+                        Edita Producto
+                    </a>
+                </th>
+                <th scope="row">
+                    <a href="{% url 'producto_deactivate' p.id %}">
+                        Desactiva Producto
+                    </a>
+                </th>
+                <th scope="row">
+                    <a href="{% url 'producto_ver' p.id %}">
+                        ver Producto
+                    </a>
+                </th>
+
+
+
+                </th>
+                {% endif %}
+            </tr>
             {% endfor %}
         </tbody>
     </table>

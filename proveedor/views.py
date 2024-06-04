@@ -477,7 +477,7 @@ def ver_proveedor(request, proveedor_id):
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main') 
-    template_name = 'inventario/ver_proveedor.html'
+    template_name = 'proveedor/ver_proveedor.html'
     proveedor_data = Proveedor.objects.get(pk=proveedor_id)
     return render(request,template_name,{'proveedor_data':proveedor_data})
 
