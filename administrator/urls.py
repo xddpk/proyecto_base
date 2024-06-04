@@ -17,7 +17,8 @@ administrator_patterns = [
     path('user_delete/<user_id>',views.user_delete, name='user_delete'),
     
     path('edit_user/<user_id>/',views.edit_user, name='edit_user'),
-    
+    path('user_ver/<user_id>/',views.user_ver, name='user_ver'),
+
     path('list_main2/',views.list_main2, name='list_main2'),     
     
     path('list_user_active2/',views.list_user_active2, name='list_user_active2'),     

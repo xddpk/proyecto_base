@@ -29,11 +29,16 @@
 html {
     height: 100%;
 }
-
+@font-face {
+    font-family: 'Nunito';
+    src: url('fonts/Nunito-Regular.ttf') format('truetype');
+    /* Agrega más src para otros estilos de fuente si es necesario */
+}
 body {
     height: 100%;
     position: relative;
     background-color: var(--white) !important;
+    font-family: 'Nunito', sans-serif;
 }
 
 .body-small {
@@ -82,9 +87,21 @@ textarea {
     left: 0;
     height: 7px;
 }
+.custom-file-upload {
+    cursor: pointer;
+    padding: 10px 20px;
+    background-color: #270F57; /* Color del botón */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
 
+.custom-file-upload:hover {
+    background-color: #3b1958; /* Color del botón al pasar el ratón */
+}
 .button {
-    background-color: var(--blue);
+    background-color: #270F57; /* Cambia a morado */
     border: 2px solid var(--blue);
     padding: 12px 34px 12px 34px;
     color: white;
@@ -95,6 +112,7 @@ textarea {
     border-radius: 50rem;
     transition: 0.5s;
     cursor: pointer;
+    font-family: 'Nunito', sans-serif; /* Asegúrate de terminar la propiedad font-family */
 }
 
 .button:hover {
@@ -1032,4 +1050,38 @@ ol {
         width: 80% !important;
     }
 
+}
+
+.container {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.carrito {
+    width: 300px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    overflow-y: auto;
+    margin-bottom: 1em;
+}
+
+.btn-carrito-finalizar {
+    width: 100%; /* Para que el botón ocupe todo el ancho del contenedor */
+    margin-top: 1em;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mt-3 {
+    margin-top: 1em;
+}
+.icon-link {
+    margin-right: 40px; /* Ajusta el valor según la separación deseada */
 }

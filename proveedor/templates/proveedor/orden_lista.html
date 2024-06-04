@@ -21,15 +21,15 @@
 <header class='mb-5'>
     <div class="row">
         <div class="col-12 col-sm-8 mb-3">
-            <h2 class='h2 medium text-blue'>Listado de ventas </h2>
+            <h2 class='h2 medium text-blue'>Listado de Proveedores activos </h2>
         </div>
         <div class="col-12 col-sm-4 mb-3">
-            <a href="{% url 'cliente_lista_venta' cliente %}" class="button button--gray form-control">Volver</a>
+            <a href="{% url 'proveedor_main' %}" class="button button--gray form-control">Volver</a>
         </div>
     </div>
     <div class="d-flex flex-column flex-lg-row mt-2">
         <p class='body--normal text-gray'>
-
+            {% lorem 2 b random %}
         </p>
     </div>
 
@@ -40,7 +40,7 @@
     </div>
     <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
         {% csrf_token %}
-        <input name="search" id="search" type="text" placeholder= "Nombre producto">
+        <input name="search" id="search" type="text" placeholder='Buscar por Rut,  Nombre'/>
         <button type="submit" class="button button--gray">
             <span class="material-icons-outlined">
                 search
@@ -53,20 +53,39 @@
     <table class="table table-user">
         <thead>
             <tr>
-                <th width="20%" scope="col">Nombre</th>
-                <th width="20%" scope="col">Cantidad</th>
-                <th width="20%" scope="col">Precio unitario $</th>
-                <th width="20%" scope="col">Precio Total $</th>
-
+                <th width="20%" scope="col">Rut Proveedor</th>
+                <th width="20%" scope="col">Nombre Proveedor</th>
+                <th width="30%" scope="col">Correo Proveedor</th>
+                <th width="30%" scope="col">Telefono</th>
+                {% if profiles.group_id == 1 %}
+                    <th width="15%" scope="col">Funciones</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
-            {% for s in venta_detalle_list %}
+            {% for s in proveedor_list %}
                 <tr>
-                    <th scope="row">{{s.nombre}}</th>
-                    <th scope="row">{{s.cantidad}}</th>
-                    <th scope="row">{{s.precio_unitario}}</th>            
-                    <th scope="row">{{s.precio_total}}</th>                   
+                    <th scope="row">{{s.rut_proveedor}}</th>
+                    <th scope="row">{{s.nombre_proveedor}}</th>
+                    <th scope="row">{{s.correo_proveedor}}</th>
+                    <th scope="row">{{s.telefono_proveedor}}</th>      
+                    {% if profiles.group_id == 1 or profiles.group_id == 3%}
+                            <th scope="row">
+                            
+                                <a href="{% url 'edit_proveedor' s.id %}">
+                                    Editar 
+                                </a>
+                            </th>
+                                
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <th scope="row">
+                                        <a href="{% url 'proveedor_block' s.id %}" onclick="confirmarCambio(event);">
+                                            Bloquear
+                                        </a>
+                                    </th>
+                                
+                        </th>   
+                    {% endif %}                            
                 </tr>
             {% endfor %}
         </tbody>
@@ -76,9 +95,9 @@
             <div class="d-flex">
                 <nav aria-label="Page navigation example" class="ms-auto">
                     <ul class="pagination pagination-table">
-                        {% if venta_detalle_list.has_previous %}
+                        {% if proveedor_list.has_previous %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ venta_detalle_list.previous_page_number}}&search={{search}}" aria-label="Previous">
+                                <a class="page-link" href="?page={{ proveedor_list.previous_page_number}}&search={{search}}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
@@ -89,14 +108,14 @@
                         {% endif %}
                         {% for i in paginator.page_range %}
                             {% if i >= page|sub:2  and i < page|add:3  %}
-                                <li class="page-item {% if venta_detalle_list.number == i %}active{% endif %}">
+                                <li class="page-item {% if proveedor_list.number == i %}active{% endif %}">
                                     <a class="page-link" href="?page={{ i }}&search={{search}}">{{ i }}</a>
                                 </li>                        
                             {% endif %}
                         {% endfor %}
-                        {% if venta_detalle_list.has_next %}
+                        {% if proveedor_list.has_next %}
                             <li class="page-item ">
-                                <a class="page-link" href="?page={{ venta_detalle_list.next_page_number }}&search={{search}}">&raquo;</a>
+                                <a class="page-link" href="?page={{ proveedor_list.next_page_number }}&search={{search}}">&raquo;</a>
                             </li>
                         {% else %}
                             <li class="page-item disabled">

@@ -57,7 +57,7 @@ def inventario_listado(request,page=None,search=None):
     producto_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search == "None":# si la cadena de búsqueda viene vacia
         #usuario_count = Producto.objects.filter(is_active='t').count()
-        producto_array = Producto.objects.all().order_by('stock_producto')
+        producto_array = Producto.objects.filter(producto_state ='Activa').order_by('stock_producto')
         
         for iv in producto_array:
             categoria_data = Category.objects.get(producto_id=iv.id)
@@ -69,7 +69,7 @@ def inventario_listado(request,page=None,search=None):
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
-        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).order_by('-stock_producto')#Ascendente
+        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).filter(producto_state ='Activa').order_by('-stock_producto')#Ascendente
         for iv in producto_array:
             categoria_data = Category.objects.get(producto_id=iv.id)
             categoria_group = categoria_data.category_group
@@ -244,12 +244,27 @@ def producto_edit(request,producto_id):
             messages.add_message(request, messages.INFO, 'Hubo un error al editar el Producto: '+producto_data.nombre_producto )
             return redirect('inventario_listado')    
     producto_data = Producto.objects.get(pk=producto_id)
-    print("nomre: "+producto_data.nombre_producto)
     category_data = Category.objects.get(producto_id=producto_id)
     category_datas = Category_group.objects.get(pk=category_data.category_group_id) 
     category_groups = Category_group.objects.all().exclude(pk=0).order_by('category_group_name')    
     template_name = 'inventario/producto_edit.html'
     return render(request,template_name,{'producto_data':producto_data,'category_data':category_data,'category_datas':category_datas,'category_groups':category_groups})
+
+@login_required
+def producto_ver(request, producto_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 2:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    producto_data = Producto.objects.get(pk=producto_id)
+    category_data = Category.objects.get(producto_id=producto_id)
+    category_datas = Category_group.objects.get(pk=category_data.category_group_id) 
+    category_groups = Category_group.objects.all().exclude(pk=0).order_by('category_group_name')    
+    template_name = 'inventario/producto_ver.html'
+    return render(request,template_name,{'producto_data':producto_data,'category_data':category_data,'category_datas':category_datas,'category_groups':category_groups})
+
+
+
 
 @login_required
 def producto_delete(request,producto_id):
@@ -304,7 +319,7 @@ def inventario_listado_deactivate(request,page=None,search=None):
     producto_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search == "None":# si la cadena de búsqueda viene vacia
         #usuario_count = Producto.objects.filter(is_active='t').count()
-        producto_array = Producto.objects.all().order_by('stock_producto')
+        producto_array = Producto.objects.filter(producto_state ='Deactivate').order_by('stock_producto')
         
         for iv in producto_array:
             categoria_data = Category.objects.get(producto_id=iv.id)
@@ -316,7 +331,7 @@ def inventario_listado_deactivate(request,page=None,search=None):
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
-        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).order_by('-stock_producto')#Ascendente
+        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).filter(producto_state ='Deactivate').order_by('-stock_producto')#Ascendente
         for iv in producto_array:
             categoria_data = Category.objects.get(producto_id=iv.id)
             categoria_group = categoria_data.category_group
@@ -657,7 +672,7 @@ def list_categories(request,page=None,search=None):
         template_name = 'inventario/list_categories.html'
         return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
     else:#si la cadena de búsqueda trae datos
-        categories_all =  Category_group.objects.filter(category_group_name=search).order_by('category_group_name')#Ascendente         
+        categories_all =  Category_group.objects.filter(category_group_name=search).filter(category_state='Activa').order_by('category_group_name')#Ascendente         
         paginator = Paginator(categories_all, 1)  
         categories_list = paginator.get_page(page)
         template_name = 'inventario/list_categories.html'
@@ -711,7 +726,7 @@ def categories_edit(request,categories_id):
     if request.method == 'POST':
         category_group_name = request.POST.get('nombre')
         if validacion.validar_soloString(category_group_name)==False:
-             messages.add_message(request,messages.INFO,'El nombre de la categoria no debe estar vacio y no debe contener solo numeros')
+            messages.add_message(request,messages.INFO,'El nombre de la categoria no debe estar vacio y no debe contener solo numeros')
         category_data_count = Category_group.objects.filter(pk=categories_id).count()
         category_data = Category_group.objects.get(pk=categories_id) 
         if category_data_count == 1:
@@ -755,6 +770,17 @@ def categories_save_edit(request, categories_id):
     name = request.POST.get('name')
     Category_group.objects.filter(pk=categories_id).update(category_group_name=name)
     return render(request, template_name, {'template_name': template_name, 'profiles': profiles, 'categories_id': categories_id})
+
+def categories_ver(request, categories_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 2:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    template_name = 'inventario/categories_ver.html' 
+    Category_group.objects.filter(pk=categories_id)
+    category_data = Category_group.objects.get(pk=categories_id) 
+    return render(request, template_name, {'template_name': template_name, 'profiles': profiles, 'categories_id': categories_id,'category_data':category_data})
+
 @login_required    
 def list_categories_deactivate(request,page=None,search=None):
     

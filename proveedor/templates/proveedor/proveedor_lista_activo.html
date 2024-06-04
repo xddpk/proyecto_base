@@ -73,14 +73,21 @@
                             <th scope="row">
                             
                                 <a href="{% url 'edit_proveedor' s.id %}">
-                                    Edita Proveedor
+                                    Editar 
                                 </a>
                             </th>
+                            <th scope="row">
+                            
+                                <a href="{% url 'ver_proveedor' s.id %}">
+                                    Ver Proveedor
+                                </a>
+                            </th>
+                            
                                 
                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                     <th scope="row">
                                         <a href="{% url 'proveedor_block' s.id %}" onclick="confirmarCambio(event);">
-                                            Bloquea Proveedor
+                                            Bloquear
                                         </a>
                                     </th>
                                 

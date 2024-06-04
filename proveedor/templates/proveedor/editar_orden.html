@@ -1,0 +1,93 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+
+{% block content %}
+{% block extrahead %}
+<script>
+    // Función para mostrar la alerta cuando se envía el formulario
+    function mostrarAlerta() {
+        alert("¡La orden fue modificada con éxito!");
+    }
+    
+    function confirmarCambio(event) {
+        // Mostrar la alerta de confirmación
+        var confirmacion = confirm("¿Estás seguro de que deseas realizar este cambio?");
+    
+        // Si el usuario no confirma, prevenir la acción por defecto
+        if (!confirmacion) {
+            event.preventDefault();
+            alert("Cambio cancelado.");
+        } else {
+            alert("Cambio realizado exitosamente.");
+        }
+    }
+</script>
+{% endblock %}
+
+<main role="main">
+    <div class="container col-12 mt-3">
+        <div class="col-12  mt-3">
+            <h3>Editar Orden de Compra</h3> 
+            <form action="" method="post" onsubmit="mostrarAlerta()">
+                {% csrf_token %}
+                <input type="hidden" value="{{ orden_id }}" name="orden_id" id="orden_id">
+                <div class="row"> 
+                    <div class="col-12 col-sm-4 mb-3">
+                        <label for="numero_orden">Número de Orden (*)</label>
+                        <input type="number"  id="numero_orden" name="numero_orden" value="{{ orden.numero_orden }}" class="form-control border border-danger"/>
+                    </div>
+                    <div class="col-12 col-sm-8 mb-3">
+                        <label for="direccion_orden">Dirección de Entrega (*)</label>
+                        <input type="text" name="direccion_orden" id="direccion_orden"  value="{{ orden.direccion_orden }}" class="form-control border border-danger" />
+                    </div>  
+                </div>    
+                <div class="row">                       
+                    <div class="col-12 col-sm-4 mb-3">
+                        <label for="telefono_orden">Teléfono de Contacto</label>
+                        <input type="number" class="form-control border" value="{{ orden.telefono_orden }}" id="telefono_orden" name="telefono_orden" />
+                    </div>                        
+                </div>
+                <div class="row"> 
+                    <div class="col-12 col-sm-6 mb-3">
+                        <label for="estado_orden">Estado de la Orden</label>
+                        <input type="text" id="estado_orden" name="estado_orden" value="{{ orden.estado_orden }}" class="form-control border border-danger" />
+                    </div>
+                    <div class="col-12 col-sm-6 mb-3">
+                        <label for="descuento">Descuento</label>
+                        <input type="number" id="descuento" name="descuento" value="{{ orden.descuento }}" class="form-control border border-danger" />
+                    </div>
+                </div>
+                <div class="row"> 
+                    <div class="col-12 col-sm-6 mb-3">
+                        <label for="tasa">Tasa</label>
+                        <input type="number" id="tasa" name="tasa" value="{{ orden.tasa }}" class="form-control border border-danger" />
+                    </div>
+                    <div class="col-12 col-sm-6 mb-3">
+                        <label for="total_impuesto">Total de Impuesto</label>
+                        <input type="number" id="total_impuesto" name="total_impuesto" value="{{ orden.total_impuesto }}" class="form-control border border-danger" />
+                    </div>
+                </div>
+                <div class="row"> 
+                    <div class="col-12 col-sm-6 mb-3">
+                        <label for="total_compra">Total de Compra</label>
+                        <input type="number" id="total_compra" name="total_compra" value="{{ orden.total_compra }}" class="form-control border border-danger" />
+                    </div>
+                    <div class="col-12 col-sm-6 mb-3">
+                        <label for="nota_orden">Nota de la Orden (*)</label>
+                        <textarea id="nota_orden" name="nota_orden" class="form-control border border-danger" required readonly>{{ orden.nota_orden }}</textarea>
+                    </div>
+                </div>
+                <div class="row"> 
+                    <div class="col-12 col-sm-6 mb-3">
+                        <a href="{% url 'proveedor_lista_activo' %}" class="btn btn-danger form-control">Volver</a>
+                    </div>
+                    <div class="col-12 col-sm-6 mb-3">
+                        <button type="submit" class="btn btn-success form-control" onclick="confirmarCambio(event)">Guardar Cambios</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+{% endblock %}

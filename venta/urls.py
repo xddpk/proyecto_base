@@ -15,6 +15,8 @@ venta_urlpatterns = [
     path('cliente_save/',views.cliente_save, name='cliente_save'),   
     path('edit_cliente/<cliente_id>/',views.edit_cliente, name='edit_cliente'),   
     path('cliente_lista_principal/',views.cliente_lista_principal, name='cliente_lista_principal'),   
+
+    path('ver_cliente/<cliente_id>/',views.ver_cliente, name='ver_cliente'),   
     
     
     path('cliente_lista_activo/',views.cliente_lista_activo, name='cliente_lista_activo'),     
@@ -35,7 +37,7 @@ venta_urlpatterns = [
     path('cliente_activate/<cliente_id>',views.cliente_activate, name='cliente_activate'),
     path('cliente_delete/<cliente_id>',views.cliente_delete, name='cliente_delete'),
     
-    path('finalizar_venta/',views.finalizar_venta, name='finalizar_venta'), 
+    path('finalizar_venta/<cliente_id>/',views.finalizar_venta, name='finalizar_venta'), 
 
     
     
