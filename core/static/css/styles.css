@@ -1064,3 +1064,6 @@ ol {
 .mt-3 {
     margin-top: 1em;
 }
+.icon-link {
+    margin-right: 40px; /* Ajusta el valor según la separación deseada */
+}
