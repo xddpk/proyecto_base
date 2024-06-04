@@ -14,9 +14,10 @@
                         {% csrf_token %}
                         <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                             <div class="mb-0 col-md-12">
-                                <label for="category_name" class="form-label"><a href="{% url 'import_administrator' %}">Descarga archivo de importación</a></label>
-                                <input type="file" name="myfile" class="form-control" required>
-                                <div class="feedback body--small normal"></div>
+                                <label for="file-upload" class="custom-file-upload">
+                                    Seleccionar Archivo
+                                </label>
+                                <input id="file-upload" type="file" name="myfile" class="form-control" style="display: none;" required>
                             </div>
                             <div class="row">  
                                 <div class="col-12 col-sm-6">

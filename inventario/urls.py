@@ -20,7 +20,6 @@ inventario_urlpatterns = [
     path('producto_edit/<producto_id>/',views.producto_edit, name='producto_edit'),
     path('producto_ver/<producto_id>/',views.producto_ver, name='producto_ver'),
 
-
     path('producto_delete/<producto_id>',views.producto_delete, name='producto_delete'),
     path('producto_deactivate/<producto_id>/',views.producto_deactivate, name='producto_deactivate'),
     path('producto_activate/<producto_id>/',views.producto_activate, name='producto_activate'),

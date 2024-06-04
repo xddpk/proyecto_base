@@ -265,6 +265,7 @@ def producto_ver(request, producto_id):
 
 
 
+
 @login_required
 def producto_delete(request,producto_id):
     profiles = Profile.objects.get(user_id = request.user.id)
