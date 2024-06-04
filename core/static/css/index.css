@@ -4,7 +4,15 @@
     background-size: cover;
     position: relative;
 }
+.material-icons-outlined {
+    font-weight: 100; /* Ajusta el peso del texto según sea necesario */
+}
 
+/* Estilo para otros elementos, por ejemplo, las etiquetas <h2> */
+.h2.medium.text-blue {
+    font-family: 'Nunito', sans-serif; /* Cambia la fuente a Nunito */
+    font-weight: 600; /* Ajusta el peso del texto según sea necesario */
+}
 .nav-index::before {
     content: "";
     background: url("../assets/svg/circle-green.svg") no-repeat;

@@ -1,0 +1,34 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block content %}
+{% block extrahead %}
+
+{% endblock %}
+<main role="main">
+    <div class="container col-12 mt-3">
+        <div class="col-12  mt-3">
+            <h3>Gestión De Ordenes de compra </h3> 
+            <div class="col-12" style="margin-bottom: 15px;"></div>               
+            <div class="row mt-4 mb-4">
+                {% if profiles.group_id == 1 or profiles.group_id == 3 %}
+                <div class="col-12 col-sm-3 mb-3"  style="margin-bottom: 25px;">
+                    <a href="{% url 'proveedor_main3' %}" class="button button--gray form-control">Orden de compra</a>
+                </div>
+
+                <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                    <a href="{% url 'orden_compra_activo' %}" class="button form-control">Por Entregar</a>
+                </div>
+
+                <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">                     
+                    <a href="{% url 'orden_lista_bloqueada' %}" class="button form-control">Entregadas</a>
+                </div>
+                {% endif %}
+                    
+                <div class="col-12 col-sm-3 mb-3">
+                    <a href="{% url 'admin_main' %}" class="button button--gray form-control">Volver</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
