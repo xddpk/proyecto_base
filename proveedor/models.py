@@ -20,7 +20,7 @@ class Proveedor(models.Model):
         return self.nombre_proveedor
 
 class Orden(models.Model):
-    
+
     numero_orden = models.IntegerField(null=False, blank=False)  
     direccion_orden = models.CharField(max_length= 100, null=False, blank=False)
     telefono_orden = models.IntegerField(null=True, blank=True)
@@ -31,7 +31,11 @@ class Orden(models.Model):
     total_compra = models.FloatField(null=True, blank=True)
     creacion = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, null=True, blank=True)
+    nota_orden = models.CharField(max_length=100 , null=True, blank=False)
+    formatted_numero_orden = models.CharField(max_length=20, blank=True)  # Campo para almacenar el código formateado con prefijo NO y 0 iniciales
 
+    
     class Meta:
         verbose_name = 'Orden'
         verbose_name_plural = 'Ordenes'
@@ -39,7 +43,16 @@ class Orden(models.Model):
     
     def __str__(self):
         return self.numero_orden
-    
+    def save(self, *args, **kwargs):
+        if not self.numero_orden: # si no hay ningun registro 
+            last_record = Orden.objects.all().order_by('numero_orden').last() #busca el ultimo registro, obtiene el codigo de venta
+            if last_record:
+                self.numero_orden = last_record.numero_orden + 1 # lo incrementa en 1
+            else:
+                self.numero_orden = 1 # si no hay registro codigo de venta es 1
+        
+        self.formatted_numero_orden = f'NO-{str(self.numero_orden).zfill(5)}' #formatea formatted_codigo_venta con el prefijo CV- 00000codigo_venta
+        super().save(*args, **kwargs) # se guarda registro en la base de dato
     
 class Region(models.Model):
     nombre_region = models.CharField(max_length=100, null=True, blank=True)
