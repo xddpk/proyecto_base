@@ -80,7 +80,7 @@ def inventario_listado(request,page=None,search=None):
     #user_array = User.objects.filter(is_active='t').order_by('first_name')
     #categoria_data = Profile.objects.all()
     paginator = Paginator(producto_all, 30)  
-    
+    #a
     producto_list = paginator.get_page(page)
     print(producto_list)
     template_name = 'inventario/inventario_listado.html'
