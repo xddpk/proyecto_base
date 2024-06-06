@@ -117,16 +117,13 @@ def new_user(request):
                         )
                     profile_save.save()
                     messages.add_message(request, messages.INFO, 'Usuario creado con exito')                             
-
-        #el metodo no contempla validacioens deberá realizarlas
+    #se obtiene todos los grupos
     groups = Group.objects.all().exclude(pk=0).order_by('id')
     template_name = 'administrator/new_user.html'
     return render(request,template_name,{'groups':groups})
 
 def list_main2(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    #groups = Group.objects.all().exclude(pk=0).order_by('id')
-    
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
@@ -234,10 +231,8 @@ def list_user_active2(request,page=None,search=None):
         search = request.POST.get('search') 
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
-    print("search> ",search)
     user_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None":# si la cadena de búsqueda viene vacia
-        #usuario_count = User.objects.filter(is_active='t').count()
+    if search == None or search == "None" or search == "":# si la cadena de búsqueda viene vacia
         user_array = User.objects.filter(is_active='t').order_by('first_name')
         
         for us in user_array:
@@ -245,26 +240,36 @@ def list_user_active2(request,page=None,search=None):
             profile = profile_data.group
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
-            user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
+            user_all.append({'id':us.id,
+                             'user_name':us.username,
+                             'name':name,
+                             'mail':us.email,
+                            'profile':profile})
         paginator = Paginator(user_all, 20)  
         user_list = paginator.get_page(page)
         template_name = 'administrator/list_user_active2.html'
         return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
             
     else:#si la cadena de búsqueda trae datos
-        #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
         user_array =  User.objects.filter(Q(first_name__icontains=search)|Q(username__icontains=search)).filter(is_active='t').order_by('first_name')#Ascendente
         
         for us in user_array:
+            
+
             profile_data = Profile.objects.get(user_id=us.id)
             profile = profile_data.group
-            name = us.first_name+' '+us.last_name
-            #se guarda la información del usuario
-            user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})            
-    
-    #user_array = User.objects.filter(is_active='t').order_by('first_name')
-    #profile_data = Profile.objects.all()
+            
+            name = us.first_name + ' ' + us.last_name
+            # Guarda la información del usuario
+            user_all.append({
+                'id': us.id,
+                'user_name': us.username,
+                'name': name,
+                'mail': us.email,
+                'profile': profile_data.group.name
+            })
+           
     paginator = Paginator(user_all, 20)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active2.html'
