@@ -20,22 +20,18 @@
 
 {% endblock %}
 <header class='mb-5'>
-    <div class="row">
+    <div class="row"class="col-md-11"style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
         <div class="col-12 col-sm-8 mb-3">
-            <h2 class='h2 medium text-blue'>Listado de usuarios bloqueados </h2>
+            <h2 class='h2 medium text-blue'>Listado de Usuarios Bloqueados </h2>
         </div>
+    </div>
+    <div class="row"class="col-md-11"style="position: absolute; top: 94%; left: 15%; width: 20%; height: 10%;">
         <div class="col-12 col-sm-4 mb-3">
-            <a href="{% url 'list_main2' %}" class="button button--gray form-control">Volver</a>
+        <a href="{% url 'list_main2' %}" class="button button--gray form-control">Volver</a>
         </div>
     </div>
-    <div class="d-flex flex-column flex-lg-row mt-2">   
-        <p class='body--normal text-gray'>
-            {% lorem 2 b random %}
-        </p>
-    </div>
-
 </header>
-<div class="d-flex flex-column flex-lg-row my-5">
+<div class="d-flex flex-column flex-lg-row my-5"style="position: absolute; top: 20%; left: 15%; width: 50%; height: 70%;">
     <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
         <div class="feedback body--small normal"></div>
     </div>
@@ -50,9 +46,9 @@
         
     <form>       
 </div>
-<div class="table-container mt-5">
+<div class="col-md-11" style="position: absolute; top: 30%; left: 15%; width: 80%; height: 10%;">
     <table class="table table-user">
-        <thead>
+        <thead style="background-color: #3A1B78; color: #ffffff;">
             <tr>
                 <th width="20%" scope="col">Nombre Usuario</th>
                 <th width="30%" scope="col">Nombre Completo</th>
@@ -66,26 +62,27 @@
         <tbody>
             {% for s in user_list %}
                 <tr>
-                    <th scope="row">{{s.user_name}}</th>
-                    <th scope="row">{{s.name}}</th>
-                    <th scope="row">{{s.mail}}</th>
-                    <th scope="row">{{s.profile}}</th>
+                    <td style="background-color: lightgray;">{{ s.user_name }}</td>
+                    <td style="background-color: lightgray;">{{ s.name }}</td>
+                    <td style="background-color: lightgray;">{{ s.mail }}</td>
+                    <td style="background-color: lightgray;">{{ s.profile }}</td>
                     {% if profiles.group_id == 1 %}
-                    
-                        {% if s.id != request.user.id %}
-                            <th scope="row">
-                            <a href="{% url 'user_activate' s.id  %}" onclick="confirmarCambio(event);">
-                                Activa Usuario
-                            </a>
-                            </th>
-                            <th scope="row">
-                            &nbsp;&nbsp;&nbsp;&nbsp;
-                            <a href="{% url 'user_delete' s.id  %}" onclick="confirmarCambio(event);">
-                                Elimina Usuario
-                            </a>
-                            </th>
-                        {% endif %} 
-                {% endif %}                            
+                        <td style="background-color: lightgray; font-size:medium">
+                            {% if s.id != request.user.id %}
+                                <a href="{% url 'user_activate' s.id %}" title="Activar Usuario">
+                                    <i class="fa-solid fa-person"></i>
+                                </a>
+                                &nbsp;
+                                <a href="{% url 'user_delete' s.id %}" title="Borrar Usuario">
+                                    <i class="fas fa-ban"></i>
+                                </a>
+                                &nbsp;
+                                <a href="{% url 'user_ver' s.id %}" title="Ver Usuario">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                            {% endif %}
+                        </td>
+                    {% endif %}                            
                 </tr>
             {% endfor %}
         </tbody>

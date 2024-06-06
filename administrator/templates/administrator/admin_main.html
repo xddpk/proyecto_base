@@ -11,29 +11,7 @@
 </style>
 {% endblock %}
 <main role="main">
-    <div class="container col-12 mt-3">
-        <div class="col-12 mt-3">
-            <h3>Bienvenido {{request.user.first_name}} {{request.user.last_name}} </h3>
-            <div class="col-12" style="margin-bottom: 30px;"></div>
-            <div class="row mt-4 mb-4">
-                <div class="col-12 col-sm-3 mb-3">
-                    <a href="{% url 'users_main' %}" class="button">Gestión Usuarios</a>
-                </div>
-                <div class="col-12" style="margin-bottom: 30px;"></div>
-                <div class="col-12 col-sm-3 mb-3">
-                    <a href="{% url 'ejemplos_main' %}" class="button">Gestión Ejemplos</a>
-                </div>
-                <div class="col-12 col-sm-3 mb-3">
-                    <div class="col-12" style="margin-bottom: 25px;"></div>
-                    <a href="{% url 'inventario_main' %}" class="button">Gestión Inventario</a>
-                </div>
-                <div class="col-12 col-sm-3 mb-3">
-                    <div class="col-12" style="margin-bottom: 25px;"></div>
-                    <a href="{% url 'proveedor_main' %}" class="button">Gestión Proveedores</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </main>
-<a href="{% url 'update_hours' %}" class="button update-hours-button">Actualizar horas trabajadas</a>
+
 {% endblock %}

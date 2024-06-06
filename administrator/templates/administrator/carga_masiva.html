@@ -14,31 +14,42 @@
                         {% csrf_token %}
                         <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                             <div class="mb-0 col-md-12">
-                                <label for="category_name" class="form-label"><a href="{% url 'import_administrator' %}">Descarga archivo de importación</a></label>
-                                <input type="file" name="myfile" class="form-control" required>
-                                <div class="feedback body--small normal"></div>
+                                <label for="file-upload" class="custom-file-upload">
+                                    Seleccionar Archivo
+                                </label>
+                                <input id="file-upload" type="file" name="myfile" class="form-control" style="display: none;" required>
                             </div>
-                            <div class="row">  
-                                <div class="col-12 col-sm-6">
-                                    <br><button class="button form-control mt-2" type="submit">Cargar</button>
+                            <label for="file-upload" class="custom-file-upload">
+                                <div class="button" style="margin-top: 10%; color: white;">
+                                    Buscar archivo
+                                    <i class="fa fa-search" style="margin-left: 5px;"></i> <!-- Icono de búsqueda -->
                                 </div>
-                                <div class="col-12 col-sm-6">
-                                    <br><a href="{% url 'users_main' %}" class="button button--gray form-control mt-2">Volver</a>
-                                </div>
-                            </div>                        
+                            </label>
+                            <input id="file-upload" type="file" name="myfile" class="form-control" style="display: none;" required>
                         </div>
-                    </form>
-                </div>
+                        <div class="col-md-6" style="margin-top: 5%; margin-left: 10%;">
+                            <button class="button form-control mt-2" type="submit" style="width: 45%;">Cargar<i class="fa fa-upload" style="margin-left: 5px;"></i></button>
+                        </div>
+                        <div class="col-md-11"style="position: absolute; top: 640%; left: 4%; width: 50%; height: 10%;">
+                            <div class="col-12 col-sm-4 mb-3">
+                                <a href="{% url 'list_user_active2' %}" class="button button--gray form-control">Volver</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
     {% else %}
-        <div class="row">
-            <div class="col-12 col-sm-8 mb-3">
-                <p class='text-blue'>No cuenta con acceso a esta vista</p>
-            </div>
+    <div class="row">
+        <div class="col-12 col-sm-8 mb-3">
+            <p class='text-blue'>No cuenta con acceso a esta vista</p>
+        </div>
+        <div class="col-md-11"style="position: absolute; top: 90%; left: 40%; width: 50%; height: 70%;"></div>
             <div class="col-12 col-sm-4 mb-3">
-                <a href="{% url 'users_main'%}" class="button button--gray form-control">Volver</a>
+            <a href="{% url 'list_user_active2' %}" class="button button--gray form-control">Volver</a>
             </div>
         </div>
-    {% endif %}
+    </div>
+{% endif %}
 {% endblock %}

@@ -54,26 +54,7 @@ def new_user(request):
     if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
-    if page == None:
-        page = request.GET.get('page')
-    else:
-        page = page
-    if request.GET.get('page') == None:
-        page = page
-    else:
-        page = request.GET.get('page')
-    #logica que permite recibir la cadena de búsqueda y propoga a través del paginador
-    if search == None:
-        search = request.GET.get('search')
-    else:
-        search = search
-    if request.GET.get('search') == None:
-        search = search
-    else:
-        search = request.GET.get('search') 
-    if request.method == 'POST':
-        search = request.POST.get('search') 
-        page = None
+    
     if request.method == 'POST':
         
         validar=True
@@ -136,7 +117,7 @@ def new_user(request):
                         )
                     profile_save.save()
                     messages.add_message(request, messages.INFO, 'Usuario creado con exito')                             
- 
+
         #el metodo no contempla validacioens deberá realizarlas
     groups = Group.objects.all().exclude(pk=0).order_by('id')
     template_name = 'administrator/new_user.html'
@@ -212,13 +193,46 @@ def edit_user(request,user_id):
     template_name = 'administrator/edit_user.html'
     return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list})
 
+def user_ver(request, user_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 2:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    user_data = User.objects.get(pk=user_id)
+    profile_data = Profile.objects.get(user_id=user_id)
+    groups = Group.objects.get(pk=profile_data.group_id) 
+
+    profile_list = Group.objects.all().exclude(pk=0).order_by('name')    
+    template_name = 'administrator/user_ver.html'
+    return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list})
+
+
 @login_required    
 def list_user_active2(request,page=None,search=None):
     profiles = Profile.objects.get(user_id = request.user.id)
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
-    
+    if page == None:
+        page = request.GET.get('page')
+    else:
+        page = page
+    if request.GET.get('page') == None:
+        page = page
+    else:
+        page = request.GET.get('page')
+    #logica que permite recibir la cadena de búsqueda y propoga a través del paginador
+    if search == None:
+        search = request.GET.get('search')
+    else:
+        search = search
+    if request.GET.get('search') == None:
+        search = search
+    else:
+        search = request.GET.get('search') 
+    if request.method == 'POST':
+        search = request.POST.get('search') 
+        page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
     print("search> ",search)
     user_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
@@ -232,7 +246,7 @@ def list_user_active2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-        paginator = Paginator(user_all, num_elemento)  
+        paginator = Paginator(user_all, 20)  
         user_list = paginator.get_page(page)
         template_name = 'administrator/list_user_active2.html'
         return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
@@ -251,7 +265,7 @@ def list_user_active2(request,page=None,search=None):
     
     #user_array = User.objects.filter(is_active='t').order_by('first_name')
     #profile_data = Profile.objects.all()
-    paginator = Paginator(user_all, num_elemento)  
+    paginator = Paginator(user_all, 20)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active2.html'
     return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page ,'search':search })
@@ -295,7 +309,7 @@ def list_user_block2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-        paginator = Paginator(user_all, num_elemento)  
+        paginator = Paginator(user_all, 20)  
         user_list = paginator.get_page(page)
         template_name = 'administrator/list_user_block2.html'
         return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })

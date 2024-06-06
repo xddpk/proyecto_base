@@ -6,7 +6,7 @@
 
 {% endblock %}
     <main role="main">
-        <div class="container col-12 mt-3">
+        <div class="col-md-11"style="position: absolute; top: 30%; left: 15%; width: 85%; height: 60%;">
             <div class="col-12  mt-3">
                 <h3>Nuevo Producto</h3> 
                 <form method="post" action="{% url 'producto_edit' producto_data.id %}">
@@ -22,7 +22,7 @@
                             <select name="category_group_id" id="category_group_id" class="form-control border" required>
                                 <option value="">----------</option>
                                 {% for g in category_groups %}
-                                <option value="{{g.id}}" {% if g.id == category_datas.id %} selected {% endif %}>{{g.category_group_name}}</option>
+                                <option value="{{g.id}}" {% if g.id = category_datas.id %} selected {% endif %}>{{g.category_group_name}}</option>
                                 {% endfor %}
                             </select>
                         </div>  

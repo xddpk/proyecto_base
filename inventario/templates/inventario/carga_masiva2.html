@@ -3,42 +3,58 @@
 {% block content %}
 {% block extrahead %}
 {% endblock %}
-    <header class='mb-4'>
-        <h2 class='h2 medium text-blue'>Carga Masiva Habilidad</h2>
-    </header>
-    {%if profiles.group_id == 1 %}
-        <div class="col-md-11">
-            <div class="mb-3">
-                <div class="d-flex flex-column align-items-center align-items-lg-start">
-                    <form action="{% url 'carga_masiva_save2' %}" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                            <div class="mb-0 col-md-12">
-                                <label for="category_name" class="form-label"><a href="{% url 'import_inventario'  %}">Descarga archivo de importación</a></label>
-                                <input type="file" name="myfile" class="form-control" required>
-                                <div class="feedback body--small normal"></div>
-                            </div>
-                            <div class="row">  
-                                <div class="col-12 col-sm-6">
-                                    <button class="button form-control mt-2" type="submit">Cargar</button>
-                                </div>
-                                <div class="col-12 col-sm-4 mb-3">
-                                    <a href="{% url 'inventario_main' %}" class="button button--gray form-control">Volver</a>
-                                </div>
-                            </div>                        
+<header class='mb-4'>
+    <h2 class='h2 medium text-blue' style="position: absolute;
+     top: 18%;
+     left: 10%;
+     color:black;
+     display: flex;
+     justify-content:center;
+     margin-left: 10%;
+     align-items: center;">Importar</h2>
+</header>
+{% if profiles.group_id == 1 %}
+<div class="col-md-11"style="position: absolute; top: 30%; left: 13%; width: 50%; height: 70%;">
+    <div class="mb-3">
+        <div class="d-flex flex-column align-items-center align-items-lg-start">
+            <form action="{% url 'carga_masiva_save2' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5" style="margin-top: 30%;">
+                    <div class="mb-0 col-md-6" style="margin-left: 10%; width:40%; margin-top: 10%;">
+                        <div for="category_name" class="button">
+                            <a href="{% url 'import_inventario'  %}" style="color: white;">Descarga archivo de importación</a>
+                            <i class="fa fa-download" style="margin-left: 5px;"></i> <!-- Icono de descarga -->
                         </div>
-                    </form>
+                        <label for="file-upload" class="custom-file-upload">
+                            <div class="button" style="margin-top: 10%; color: white;">
+                                Buscar archivo
+                                <i class="fa fa-search" style="margin-left: 5px;"></i> <!-- Icono de búsqueda -->
+                            </div>
+                        </label>
+                        <input id="file-upload" type="file" name="myfile" class="form-control" style="display: none;" required>
+                    </div>
+                
+                    <div class="col-md-6" style="margin-top: 5%; margin-left: 10%;">
+                        <button class="button form-control mt-2" type="submit" style="width: 45%;">Cargar<i class="fa fa-upload" style="margin-left: 5px;"></i></button>
+                        <!-- Icono de carga -->
+                    </div>
                 </div>
-            </div>
+                
+                
+                
+            </form>
         </div>
-    {% else %}
-        <div class="row">
-            <div class="col-12 col-sm-8 mb-3">
-                <p class='text-blue'>No cuenta con acceso a esta vista</p>
-            </div>
-            <div class="col-12 col-sm-4 mb-3">
-                <a href="{% url 'inventario_main' %}" class="button button--gray form-control">Volver</a>
-            </div>
-        </div>
-    {% endif %}
+    </div>
+</div>
+{% else %}
+<div class="row">
+    <div class="col-12 col-sm-8 mb-3">
+        <p class='text-blue'>No cuenta con acceso a esta vista</p>
+    </div>
+    <div class="col-12 col-sm-4 mb-3">
+        <a href="{% url 'inventario_main' %}" class="button button--gray form-control">Volver</a>
+    </div>
+</div>
+{% endif %}
 {% endblock %}
+

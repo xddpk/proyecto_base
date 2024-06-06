@@ -1,0 +1,130 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block content %}
+{% block extrahead %}
+{% endblock %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a la Tienda</title>
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'css/index.css' %}" rel="stylesheet">
+</head>
+
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 align-self-center">
+                <h1> Tienda</h1>
+            </div>
+        </div>
+        <div class="d-flex flex-column flex-lg-row my-5">
+            <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
+                <div class="feedback body--small normal"></div>
+            </div>
+            <form method="post" action="" class=>
+                {% csrf_token %}
+                <input name="search" id="search" type="text" placeholder='Buscar por Nombre Producto' />
+                <button type="submit" class="button button--gray">
+                    <span class="material-icons-outlined">
+                        search
+                    </span>
+                </button>
+
+                <form>
+        </div>
+        <div class="row">
+            <form method="post" action="">
+
+                <div class="table-container mt-5">
+                    <table class="table table-user">
+                        <thead>
+                            <tr>
+                                <th scope="row" colspan="3" class="text-center">Productos</th>
+                            </tr>
+                            <tr>
+                                <th scope="col" >Nombre</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Stock disponible</th>
+                                <th scope="col">Categoría</th>
+                                <th scope="col">Función</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            </tr>
+                            {% for pro in producto_list %}
+                            <tr>
+                                <td>{{pro.nombre_producto}}</td>
+                                <td>{{pro.precio_producto}}</td>
+                                <td>{{pro.stock_producto}}</td>
+                                <td>{{pro.categoria_data}}</td>
+                                <td><a href="{% url 'Add' pro.id %}" class="btn btn-primary">agregar al
+                                        carrito</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+
+                </div>
+                <!-- Paginación -->
+                {% if paginator.num_pages > 1 %}
+                <div class="d-flex">
+                    <nav aria-label="Page navigation example" class="ms-auto">
+                        <ul class="pagination pagination-table">
+                            {% if producto_list.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link"
+                                    href="?page={{ producto_list.previous_page_number}}&search={{search}}"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+                            </li>
+                            {% endif %}
+                            {% for i in paginator.page_range %}
+                            {% if i >= page|sub:2 and i < page|add:3 %} <li
+                                class="page-item {% if producto_list.number == i %}active{% endif %}">
+                                <a class="page-link" href="?page={{ i }}&search={{search}}">{{ i }}</a>
+                                </li>
+                                {% endif %}
+                                {% endfor %}
+                                {% if producto_list.has_next %}
+                                <li class="page-item ">
+                                    <a class="page-link"
+                                        href="?page={{ producto_list.next_page_number }}&search={{search}}">&raquo;</a>
+                                </li>
+                                {% else %}
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">&raquo;</a>
+                                </li>
+                                {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+                <!-- Paginación -->
+                <div class="col-4">
+                    {% include "carrito/carrito.html" %}
+                </div>
+
+            </form>
+
+
+        </div>
+        <br><a href="{% url 'venta_main' %}" class="button button--gray form-control">Volver</a>
+
+        <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+
+
+{% endblock %}

@@ -8,6 +8,7 @@
 <header class='mb-5'>
     <div class="row">
         <div class="col-12 col-sm-8 mb-3">
+            
             <h2 class='h2 medium text-blue'>Listado de categorias</h2>
         </div>
         <div class="col-12 col-sm-4 mb-3">
@@ -19,6 +20,7 @@
             {% lorem 2 b random %}
         </p>
     </div>
+    
 
 </header>
 <div class="d-flex flex-column flex-lg-row my-5">
@@ -52,14 +54,22 @@
                     <th scope="row"> {{ category.category_group_name }}</th>
                     <th scope="row">
                         <a href="{% url 'categories_delete' category.id %}">
-                            eliminar categoria
+                            Eliminar 
                         </a>
                         <a href="{% url 'categories_edit' category.id %}">
-                            Editar categoria
+                            Editar 
                         </a>
+                        <a href="{% url 'categories_deactivate' category.id %}">
+                            desactivar categoria
+                        </a>
+                        
+                        <a href="{% url 'categories_ver' category.id %}">
+                            ver categoria
+                        </a>
+                    
                 </th> 
                     {% if profiles.group_id == 2 or profiles.group_id == 1  %}
-                      
+                
                 {% endif %}     
                 </tr>
             {% endfor %}

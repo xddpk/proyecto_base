@@ -1,0 +1,184 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block content %}
+{% block extrahead %}
+<script>
+    // Función para mostrar la alerta cuando se envía el formulario
+    function mostrarAlerta() {
+        alert("¡El Proveedor fue modificado con exito!");
+    }
+    
+
+    function confirmarCambio(event) {
+        // Mostrar la alerta de confirmación
+        var confirmacion = confirm("¿Estás seguro de que deseas realizar este cambio?");
+    
+        // Si el usuario no confirma, prevenir la acción por defecto
+        if (!confirmacion) {
+            event.preventDefault();
+            alert("Cambio cancelado.");
+        } else {
+            alert("Cambio realizado exitosamente.");
+        }
+    }
+</script>
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3">
+                <h3>Editar Proveedor</h3> 
+                <form action="" method="post" onsubmit="mostrarAlerta()">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ proveedor_data.id }}" name="proveedor_id" id="proveedor_id">
+                    <div class="row"> 
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="name">Nombre (*)</label>
+                            <input type="text"  id="name" name="name" value="{{proveedor_data.nombre_proveedor}}" class="form-control border border-danger" required/>
+                        </div>
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="rut">Rut</label>
+                            <input type="text" name="rut" id="id_rut"  value="{{proveedor_data.rut_proveedor}}" class="form-control border border-danger" readonly/>
+                        </div>  
+                    </div>    
+                    <div class="row">                       
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="mobile">Celular</label>
+                            <input type="number" class="form-control border" value="{{proveedor_data.telefono_proveedor}}" id="mobile" name="mobile"/>
+                        </div>                        
+                    </div>
+                    <div class="row"> 
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="email">Correo (*)</label>
+                            <input type="email" id="email" name="email" value="{{proveedor_data.correo_proveedor}}" class="form-control border border-danger" required/>
+                        </div>
+                    </div>
+                    <div class="row"> 
+                        <div class="col-12 col-sm-6 mb-3">
+                            <input type="submit" value="Editar Proveedor" class="btn btn-danger form-control">
+                        </div>
+                        <div class="col-12 col-sm-6 mb-3">
+                            <a href="{% url 'proveedor_lista_activo' %}" class="btn btn-danger form-control">Volver</a>
+                        </div>
+
+                        <div class="col-12 col-sm-6 mb-3">
+                            <a href="{% url 'direccion_create' proveedor_data.id %}" class="btn btn-danger form-control">Crear Nueva Dirreción</a>
+                        </div>
+                    </div>
+                </form>
+
+                    <!-- Campo de búsqueda y botón de búsqueda -->
+    <div class="container col-12 mt-3">
+        <div class="d-flex flex-column flex-lg-row my-5">
+            <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
+                <div class="feedback body--small normal"></div>
+            </div>
+            <form method="post" action="{% url 'edit_proveedor' proveedor_data.id %}" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+                {% csrf_token %}
+                <input name="search" id="search" type="text" placeholder='Buscar en proceso'/>
+                <button type="submit" class="button button--gray">
+                    <span class="material-icons-outlined">
+                        search
+                    </span>
+                </button>
+            </form>
+        </div>
+    </div>
+<header class='mb-5'>
+    <div class="row">
+        <div class="col-12 col-sm-8 mb-3">
+            <h2 class='h2 medium text-blue'>Listado de Dirreciones </h2>
+        </div>
+        <div class="col-12 col-sm-4 mb-3">
+            <a href="{% url 'proveedor_main' %}" class="button button--gray form-control">Volver</a>
+        </div>
+    </div>
+    <div class="d-flex flex-column flex-lg-row mt-2">
+        <p class='body--normal text-gray'>
+            {% lorem 2 b random %}
+        </p>
+    </div>
+
+</header>
+
+<div class="table-container mt-5">
+    <table class="table table-user">
+        <thead>
+            <tr>
+                <th width="20%" scope="col">Región</th>
+                <th width="20%" scope="col">Comuna</th>
+                <th width="30%" scope="col">Dirreción</th>
+                {% if profiles.group_id == 1 %}
+                    <th width="15%" scope="col">Funciones</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in direccion_list %}
+                <tr>
+                    <th scope="row">{{s.region}}</th>
+                    <th scope="row">{{s.comuna}}</th>
+                    <th scope="row">{{s.direccion}}</th>
+                    {% if profiles.group_id == 1 or profiles.group_id == 3%}
+                            <th scope="row">
+                            
+                                <a href="{% url 'direccion_edit' s.id s.proveedor_id %}">
+                                    Edita Dirección
+                                </a>
+                            </th>
+                                
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <th scope="row">
+                                        <a href="{% url 'direccion_delete' s.id s.proveedor_id %}" onclick="confirmarCambio(event);">
+                                            Elimina Dirección
+                                        </a>
+                                    </th>
+                                
+                        </th>   
+                    {% endif %}                            
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- Paginación -->
+        {% if paginator.num_pages > 1 %}
+            <div class="d-flex">
+                <nav aria-label="Page navigation example" class="ms-auto">
+                    <ul class="pagination pagination-table">
+                        {% if direccion_list.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ direccion_list.previous_page_number}}&search={{search}}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+                            </li>                        
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            {% if i >= page|sub:2  and i < page|add:3  %}
+                                <li class="page-item {% if direccion_list.number == i %}active{% endif %}">
+                                    <a class="page-link" href="?page={{ i }}&search={{search}}">{{ i }}</a>
+                                </li>                        
+                            {% endif %}
+                        {% endfor %}
+                        {% if direccion_list.has_next %}
+                            <li class="page-item ">
+                                <a class="page-link" href="?page={{ direccion_list.next_page_number }}&search={{search}}">&raquo;</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">&raquo;</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        {% endif %}  
+    <!-- Paginación -->   
+
+            </div>
+        </div>
+    </main>
+{% endblock %}
