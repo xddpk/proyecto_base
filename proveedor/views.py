@@ -140,7 +140,6 @@ def agregar_productos(request):
             cantidad = request.POST.getlist('cantidad[]')[i]
             precio = request.POST.getlist('precio[]')[i]
             producto = Producto.objects.get(nombre_producto=nombre) 
-            Producto.objects.filter(id=producto.id).update(stock_producto=F('stock_producto') + cantidad)
 
 
             # Creamos una instancia de ProductoForm con los datos del formulario
@@ -161,7 +160,6 @@ def agregar_productos(request):
                     precio_producto=precio,
                     orden=orden,
                     producto=producto,
-                    
 
                 )
                 # Redireccionamos a alguna página después de agregar los productos
