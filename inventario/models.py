@@ -17,8 +17,7 @@ class Producto(models.Model):
     
     imagen_producto = models.CharField(max_length=240, null=True, blank=True)
     estado_producto = models.CharField(max_length=100, null=True, blank=True, default='medio')
-    producto_estado= models.CharField(max_length=100,null=True,blank=True,default="Activo")
-    producto_state= models.CharField(max_length=100,null=True,blank=True,default="Activa")
+    
     
 
 
