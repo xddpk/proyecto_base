@@ -23,7 +23,7 @@
         <div class="col-12 col-sm-8 mb-3" style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
             <h2 class='h2 medium text-blue'>Listado de Clientes activos </h2>
         </div>
-        <div class="col-12 col-sm-4 mb-3">
+        <div class="col-12 col-sm-4 mb-3" style="position: absolute; top: 20%; left: 15%;">
             <a href="{% url 'cliente_lista_principal' %}" class="button button--gray form-control">Volver</a>
         </div>
     </div>
@@ -38,7 +38,7 @@
     <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
         <div class="feedback body--small normal"></div>
     </div>
-    <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+    <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3' style="position: absolute; top: 25%; left: 15%; width: 65%; ">
         {% csrf_token %}
         <input name="search" id="search" type="text" placeholder='Buscar por Rut, Primer Nombre'/>
         <button type="submit" class="button button--gray">

@@ -19,7 +19,7 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="col-12 align-self-center">
+            <div class="col-12 align-self-center" style="position: absolute; top: 10%; left: 15%; width: 50%; height: 70%;">
                 <h1> Tienda</h1>
             </div>
         </div>
@@ -27,16 +27,16 @@
             <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
                 <div class="feedback body--small normal"></div>
             </div>
-            <form method="post" action="" class=>
+            <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3' style="position: absolute; top: 20%; left: 15%; width: 65%; ">
                 {% csrf_token %}
-                <input name="search" id="search" type="text" placeholder='Buscar por Nombre Producto' />
+                <input name="search" id="search" type="text" placeholder='Buscar por Nombre Producto'/>
                 <button type="submit" class="button button--gray">
                     <span class="material-icons-outlined">
                         search
                     </span>
                 </button>
-
-                <form>
+                
+            <form> 
         </div>
         <div class="row">
             <form method="post" action="">
