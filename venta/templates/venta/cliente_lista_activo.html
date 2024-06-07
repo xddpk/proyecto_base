@@ -19,8 +19,8 @@
 </script>
 {% endblock %}
 <header class='mb-5'>
-    <div class="row">
-        <div class="col-12 col-sm-8 mb-3">
+    <div class="row" >
+        <div class="col-12 col-sm-8 mb-3" style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
             <h2 class='h2 medium text-blue'>Listado de Clientes activos </h2>
         </div>
         <div class="col-12 col-sm-4 mb-3">
@@ -49,9 +49,9 @@
         
     <form>       
 </div>
-<div class="table-container mt-5">
+<div class="table-container mt-5" style="position: absolute; top: 30%; left: 15%; width: 80%; height: 1%;">
     <table class="table table-user">
-        <thead>
+        <thead  style="background-color: #3A1B78; color: #ffffff;">
             <tr>
                 <th width="20%" scope="col">Rut Cliente</th>
                 <th width="30%" scope="col">Nombre Completo</th>
@@ -71,7 +71,7 @@
                     <th scope="row">{{s.telefono_cliente}}</th>      
                     {% if profiles.group_id == 1 %}
                     <th scope="row">
-                        <a href="{% url 'ver_cliente' s.id %}" onclick="confirmarCambio(event);">
+                        <a href="{% url 'ver_cliente' s.id %}">
                             Ver Cliente
                         </a>
                         </th>        
