@@ -89,7 +89,7 @@ def tienda(request,page=None,search=None):
 
 
 
-
+@login_required
 def agregar_producto(request, producto_id):
     profiles = Profile.objects.get(user_id=request.user.id)
     carrito = Carrito(request)
@@ -106,12 +106,15 @@ def agregar_producto(request, producto_id):
         messages.add_message(request, messages.INFO, f'No hay stock disponible de {producto.nombre_producto}')
         return redirect('tienda')
 
+
+@login_required
 def eliminar_producto(request, producto_id):
     carrito = Carrito(request)
     producto = Producto.objects.get(id = producto_id)
     carrito.eliminar(producto)
     return redirect('tienda')
 
+@login_required
 def restar_producto(request, producto_id):
     carrito = Carrito(request)
     producto = Producto.objects.get(id = producto_id)
@@ -119,6 +122,7 @@ def restar_producto(request, producto_id):
     carrito.restar(producto)
     return redirect('tienda')
 
+@login_required
 def limpiar_carrito(request):
     carrito = Carrito(request)
     carrito.limpiar()

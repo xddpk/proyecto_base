@@ -305,7 +305,6 @@ def list_user_block2(request,page=None,search=None):
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
     user_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search == "None":# si la cadena de búsqueda viene vacia
-        #usuario_count = User.objects.filter(is_active='f').count()
         user_array = User.objects.filter(is_active='f').order_by('first_name')
         
         for us in user_array:
@@ -319,7 +318,6 @@ def list_user_block2(request,page=None,search=None):
         template_name = 'administrator/list_user_block2.html'
         return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
     else:#si la cadena de búsqueda trae datos
-        #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están inactivos y se ordena por primer nombre de forma ascendente
         user_array =  User.objects.filter(Q(first_name__icontains=search)|Q(username__icontains=search)).filter(is_active='f').order_by('first_name')#Ascendente
         
@@ -328,7 +326,11 @@ def list_user_block2(request,page=None,search=None):
             profile = profile_data.group
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
-            user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})            
+            user_all.append({'id':us.id,
+                             'user_name':us.username,
+                             'name':name,
+                             'mail':us.email,
+                             'profile':profile})            
     
     #profile_data = Profile.objects.all()
     paginator = Paginator(user_all, num_elemento)  
@@ -345,8 +347,7 @@ def user_block(request,user_id):
         return redirect('check_group_main')
 
     user_data_count = User.objects.filter(pk=user_id).count()
-    user_data = User.objects.get(pk=user_id)
-    profile_data = Profile.objects.get(user_id=user_id)       
+    user_data = User.objects.get(pk=user_id)     
     if user_data_count == 1:
         User.objects.filter(pk=user_id).update(is_active='f')
         messages.add_message(request, messages.INFO, 'Usuario '+user_data.first_name +' '+user_data.last_name+' bloqueado con éxito')
@@ -361,8 +362,7 @@ def user_activate(request,user_id):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     user_data_count = User.objects.filter(pk=user_id).count()
-    user_data = User.objects.get(pk=user_id)
-    profile_data = Profile.objects.get(user_id=user_id)       
+    user_data = User.objects.get(pk=user_id) 
     if user_data_count == 1:
         User.objects.filter(pk=user_id).update(is_active='t')
         messages.add_message(request, messages.INFO, 'Usuario '+user_data.first_name +' '+user_data.last_name+' activado con éxito')
@@ -380,9 +380,9 @@ def user_delete(request,user_id):
 
     user_data_count = User.objects.filter(pk=user_id).count()
     user_data = User.objects.get(pk=user_id)
-    profile_data = Profile.objects.get(user_id=user_id)       
+   
     if user_data_count == 1:
-        #Profile.objects.filter(user_id=user_id).delete()
+
         Profile.objects.filter(user_id=user_id).delete()
         User.objects.filter(pk=user_id).delete()
         messages.add_message(request, messages.INFO, 'Usuario '+user_data.first_name +' '+user_data.last_name+' eliminado con éxito')
@@ -392,6 +392,7 @@ def user_delete(request,user_id):
         return redirect('list_user_block2')        
 
 def ejemplo_query_set(request):
+
     #los query set que estan acontinuación retornan elementos iterables
     #para obtener todos los datos de un modelo
     user_array =  User.objects.all()
@@ -433,22 +434,6 @@ def ejemplo_query_set(request):
 
     print(user_data_count)
     return redirect('login')
-"""def update_hours(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    user_data = User.objects.get(pk=profiles.user_id)
-    User.objects.filter(pk=profiles.user_id).update(horas_trabajadas='55')
-    return redirect('login')"""
-"""def update_hours(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    user_data = User.objects.get(pk=profiles.user_id)
-    last_login=user_data.last_login
-    fecha_hora = timezone.datetime.strptime(str(last_login), "%Y-%m-%d %H:%M:%S.%f%z")
-    hora_exacta1 = int(fecha_hora.strftime("%H"))
-    hora_actual = datetime.now()
-    hora_exacta = int(hora_actual.strftime("%H"))
-    horas_trabajadas=abs(hora_exacta-hora_exacta1)
-    Profile.objects.filter(pk=profiles.user_id).update(horas_trabajadas=int(hora_exacta))
-    return redirect('login')    """
 
 def update_hours(request):
     chile_tz = pytz.timezone('Chile/Continental')
