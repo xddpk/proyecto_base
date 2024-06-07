@@ -3,21 +3,27 @@
 {% block content %}
 {% block extrahead %}
 {% endblock %}
-    <header class='mb-4'>
-        <h2 class='h2 medium text-blue'>Carga Masiva Habilidad</h2>
-    </header>
-    {%if profiles.group_id == 1 %}
-        <div class="col-md-11">
-            <div class="mb-3">
-                <div class="d-flex flex-column align-items-center align-items-lg-start">
-                    <form action="{% url 'carga_masiva_save' %}" method="post" enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
-                            <div class="mb-0 col-md-12">
-                                <label for="file-upload" class="custom-file-upload">
-                                    Seleccionar Archivo
-                                </label>
-                                <input id="file-upload" type="file" name="myfile" class="form-control" style="display: none;" required>
+<header class='mb-4'>
+    <h2 class='h2 medium text-blue' style="position: absolute;
+     top: 18%;
+     left: 10%;
+     color:black;
+     display: flex;
+     justify-content:center;
+     margin-left: 10%;
+     align-items: center;">Carga Masiva Administrador</h2>
+</header>
+{%if profiles.group_id == 1 %}
+    <div class="col-md-11"style="position: absolute; top: 30%; left: 13%; width: 50%; height: 10%;">
+        <div class="mb-3">
+            <div class="d-flex flex-column align-items-center align-items-lg-start">
+                <form action="{% url 'carga_masiva_save' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5" style="margin-top: 30%;">
+                        <div class="mb-0 col-md-6" style="margin-left: 10%; width:40%; margin-top: 10%;">
+                            <div for="category_name" class="button">
+                                <a href="{% url 'import_administrator'  %}" style="color: white;">Descarga archivo de importación</a>
+                                <i class="fa fa-download" style="margin-left: 5px;"></i> <!-- Icono de descarga -->
                             </div>
                             <label for="file-upload" class="custom-file-upload">
                                 <div class="button" style="margin-top: 10%; color: white;">
@@ -53,3 +59,4 @@
     </div>
 {% endif %}
 {% endblock %}
+
