@@ -1085,3 +1085,75 @@ ol {
 .icon-link {
     margin-right: 40px; /* Ajusta el valor según la separación deseada */
 }
+/* para tablas */
+.user-action {
+    display: inline-block;
+    margin-right: 10px; /* Espacio entre enlaces */
+    font-size: 20px; /* Tamaño de fuente */
+    color: #000; /* Color del texto */
+    text-decoration: none; /* Sin subrayado */
+    padding: 5px 10px; /* Espaciado interno */
+    background-color: lightgray; /* Fondo del enlace */
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+.user-action:hover {
+    background-color: #B3B3B3; /* Cambio de color al pasar el cursor */
+}
+
+.user-action i {
+    margin-right: 15px; /* Espacio entre el icono y el texto */
+}
+.table-user th {
+    font-size: 20px; /* Tamaño de la fuente para los encabezados */
+    font-weight:inherit; /* Grosor de la fuente para los encabezados */
+    text-align:center; /* Alineación del texto en los encabezados */
+    padding: 10px; /* Espaciado interno en los encabezados */
+}
+
+.table-user td {
+    font-size: 20px; /* Tamaño de la fuente para las celdas */
+    color: #333; /* Color del texto para las celdas */
+    padding: 10px; /* Espaciado interno en las celdas */
+    background-color: lightgray; /* Fondo de las celdas */
+    text-align:center;/* Alineación del texto */
+}
+
+.table-user .user-actions {
+    display:block; /* Usar flexbox para alinear los elementos */
+    gap: 5px; /* Espacio entre los enlaces */
+}
+
+.table-user .action-link {
+    display: inline-block; /* Mostrar como bloque en línea */
+    font-size: 20px; /* Tamaño de la fuente para los enlaces */
+    color: #000; /* Color del texto para los enlaces */
+    text-decoration: none; /* Sin subrayado en los enlaces */
+    padding: 5px 10px; /* Espaciado interno en los enlaces */
+    background-color: lightgray; /* Fondo de los enlaces */
+    border-radius: 5px; /* Bordes redondeados */
+}
+
+.table-user .action-link:hover {
+    background-color: #d0d0d0; /* Cambio de color al pasar el cursor */
+}
+
+/* botones */
+.custom-button {
+    font-size: 20px; /* Tamaño de la fuente */
+    font-family: Arial, sans-serif; /* Tipo de letra */
+    padding: 10px 30px; /* Espaciado interno */
+    background-color: #270F57; /* Fondo del botón */
+    border: none; /* Sin borde */
+    color: #ffff; /* Color del texto */
+    border-radius: 50px; /* Bordes redondeados */
+    display: inline-block; /* Mostrar como bloque en línea */
+    text-align: center; /* Alineación del texto */
+    text-decoration: none; /* Sin subrayado */
+    width: 100%; /* Ancho del botón */
+}
+
+.custom-button:hover {
+    background-color: lightgray; /* Cambio de color al pasar el cursor */
+    color:#000 /* Color del texto */
+}
