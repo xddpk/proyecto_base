@@ -27,7 +27,7 @@ num_elemento = 30
 @login_required
 def venta_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'venta/venta_main.html'
