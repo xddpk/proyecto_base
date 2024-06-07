@@ -31,9 +31,6 @@
                 </div>
                 <span style="color: rgb(255, 255, 255); font-size: 30px;">Computech</span>
             </div>
-            </div>
-            
-
             
         </header>
         <div class='menu' style="background-color:#270F57; width: 13%;height: 100vh;">
@@ -68,14 +65,9 @@
             {% else %}
                 <a href="{% url 'proveedor_main' %}" class='item'>
             {% endif %}
-
                      <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 53px; font-size: 30px;margin-top: 10%;">
                         <i class="fa-solid fa-person"></i>
                         <p class='body--small'style="color: white; text-align: center;font-size: 30px;">proveedor</p>
-
-                    
-                
-
                     </span>
                     
                 </a>
@@ -84,16 +76,13 @@
             {% else %}
                 <a href="{% url 'venta_main' %}" class='item'>
             {% endif %}
-
                      <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 116px; font-size: 30px;margin-top: 10%;">
                         <i class="fa-brands fa-bitcoin"></i>
                         <p class='body--small' style="color: white; text-align: center;font-size: 30px;">venta</p>
-                     
-
                     </span>
                 </a>
                 <!--=== Fin Menú venta ===--> 
-                <div class='side-bar-footer mb-5' style="color: white; display: flex; justify-content: center; align-items: center; font-size: 30px;margin-top: 190%;">
+                <div class='side-bar-footer mb-5' style="color: white; display: flex; justify-content: center; align-items: center; font-size: 30px;margin-top: 220%;">
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
                         {% if redirect_field_value %}

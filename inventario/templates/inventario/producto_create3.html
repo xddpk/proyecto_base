@@ -8,6 +8,7 @@
     <main role="main">
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
+                <h3>Nuevo Producto</h3> 
                 <form method="post" action="{% url 'producto_save'%}">
                     {% csrf_token %}
                     <input type="hidden" value="{{ producto_data.id }}" name="producto_id" id="producto_id">
