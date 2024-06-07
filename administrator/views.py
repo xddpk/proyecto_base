@@ -31,7 +31,7 @@ num_elemento = 2
 @login_required
 def admin_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
+    if not(profiles.group_id == 1 or profiles.group_id == 2 or profiles.group_id == 3 or profiles.group_id == 4)   :
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'administrator/admin_main.html'
