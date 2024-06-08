@@ -14,7 +14,10 @@
      align-items: center;">Carga Masiva Administrador</h2>
 </header>
 {%if profiles.group_id == 1 %}
-    <div class="col-md-11"style="position: absolute; top: 30%; left: 13%; width: 50%; height: 10%;">
+    <div style="position: absolute; top: 90%; left: 15%; width: 10%; height: 1%;">
+        <a href="{% url 'list_user_active2' %}" class="button button--gray form-control custom-button">Volver</a>
+    </div>
+    <div class="col-md-11"style="position: absolute; top: 20%; left: 13%; width: 50%; height: 10%;">
         <div class="mb-3">
             <div class="d-flex flex-column align-items-center align-items-lg-start">
                 <form action="{% url 'carga_masiva_save' %}" method="post" enctype="multipart/form-data">
@@ -25,21 +28,14 @@
                                 <a href="{% url 'import_administrator'  %}" style="color: white;">Descarga archivo de importación</a>
                                 <i class="fa fa-download" style="margin-left: 5px;"></i> <!-- Icono de descarga -->
                             </div>
-                            <label for="file-upload" class="custom-file-upload">
-                                <div class="button" style="margin-top: 10%; color: white;">
-                                    Buscar archivo
-                                    <i class="fa fa-search" style="margin-left: 5px;"></i> <!-- Icono de búsqueda -->
-                                </div>
+                            <label for="file-upload" class="custom-file-upload" style="border-radius: 90px;display: inline-block;width: 100%;margin-top: 10%;text-align: center">
+                                Seleccionar Archivo
+                                <i class="fa fa-search" style="margin-left: 5px;"></i> 
                             </label>
                             <input id="file-upload" type="file" name="myfile" class="form-control" style="display: none;" required>
                         </div>
                         <div class="col-md-6" style="margin-top: 5%; margin-left: 10%;">
                             <button class="button form-control mt-2" type="submit" style="width: 45%;">Cargar<i class="fa fa-upload" style="margin-left: 5px;"></i></button>
-                        </div>
-                        <div class="col-md-11"style="position: absolute; top: 640%; left: 4%; width: 50%; height: 10%;">
-                            <div class="col-12 col-sm-4 mb-3">
-                                <a href="{% url 'list_user_active2' %}" class="button button--gray form-control">Volver</a>
-                            </div>
                         </div>
                     </div>
                 </form>

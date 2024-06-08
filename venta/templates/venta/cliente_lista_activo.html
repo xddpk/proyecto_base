@@ -19,95 +19,86 @@
 </script>
 {% endblock %}
 <header class='mb-5'>
-    <div class="row" >
-        <div class="col-12 col-sm-8 mb-3" style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
+    <div class="row"class="col-md-11"style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
+        <div class="col-12 col-sm-8 mb-3">
             <h2 class='h2 medium text-blue'>Listado de Clientes activos </h2>
         </div>
-        <div class="col-12 col-sm-4 mb-3" style="position: absolute; top: 20%; left: 15%;">
-            <a href="{% url 'cliente_lista_principal' %}" class="button button--gray form-control">Volver</a>
-        </div>
     </div>
-    <div class="d-flex flex-column flex-lg-row mt-2">
-        <p class='body--normal text-gray'>
-
-        </p>
+    <div style="position: absolute; top: 22%; left: 78.7%; width: 11.5%; height: 1%;">
+        <a href="{% url 'cliente_create' %}" class="button button--gray form-control custom-button">Nuevo Cliente</a>
     </div>
-
+    <div style="position: absolute; top: 22%; left: 67%; width: 10%; height: 10%;">
+        <a href="{% url 'cliente_lista_bloqueado' %}" class="button button--gray form-control custom-button">Bloqueados</a>
+    </div>        
+    <div style="position: absolute; top: 90%; left: 15%; width: 10%; height: 1%;">
+        <a href="{% url 'venta_main' %}" class="button button--gray form-control custom-button">Volver</a>
+    </div>
 </header>
-<div class="d-flex flex-column flex-lg-row my-5">
+<div class="d-flex flex-column flex-lg-row my-5" style="position: absolute; top: 21%; left: 15%; width: 50%; height: 6%;">
     <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
         <div class="feedback body--small normal"></div>
     </div>
-    <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3' style="position: absolute; top: 25%; left: 15%; width: 65%; ">
+    <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
         {% csrf_token %}
         <input name="search" id="search" type="text" placeholder='Buscar por Rut, Primer Nombre'/>
         <button type="submit" class="button button--gray">
             <span class="material-icons-outlined">
                 search
             </span>
-        </button>
-        
+        </button>   
     <form>       
 </div>
-<div class="table-container mt-5" style="position: absolute; top: 30%; left: 15%; width: 80%; height: 1%;">
+
+<div class="col-md-11" style="position: absolute; top: 30%; left: 15%; width: 83%; height: 1%;">
     <table class="table table-user">
-        <thead  style="background-color: #3A1B78; color: #ffffff;">
+        <thead style="background-color: #3A1B78; color: #ffffff;">
             <tr>
-                <th width="20%" scope="col">Rut Cliente</th>
-                <th width="30%" scope="col">Nombre Completo</th>
-                <th width="30%" scope="col">Correo</th>
-                <th width="30%" scope="col">Número Telefónico</th>
-                {% if profiles.group_id == 1 or profiles.group_id == 3 %}
-                    <th width="15%" scope="col">Funciones</th>
+                <th width="1%" scope="col">Rut Cliente</th>
+                <th width="1%" scope="col">Nombre Completo</th>
+                <th width="1%" scope="col">Correo</th>
+                <th width="1%" scope="col">Número Telefónico</th>
+                {% if profiles.group_id == 1 %}
+                    <th width="5%" scope="col">Funciones</th>
                 {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for s in cliente_list %}
                 <tr>
-                    <th scope="row">{{s.rut_cliente}}</th>
-                    <th scope="row">{{s.nombre_cliente}}</th>
-                    <th scope="row">{{s.correo_cliente}}</th>
-                    <th scope="row">{{s.telefono_cliente}}</th>      
-                    {% if profiles.group_id == 1 %}
-                    <th scope="row">
-                        <a href="{% url 'ver_cliente' s.id %}">
-                            Ver Cliente
-                        </a>
-                        </th>        
-                    <th scope="row">
-                            
-                                <a href="{% url 'edit_cliente' s.id %}">
-                                    Edita Cliente
-                                </a>
-                            </th>
-                            <th scope="row">
-                            
-                                <a href="{% url 'cliente_lista_venta' s.id %}">
-                                    Historial ventas
-                                </a>
-                            </th>
+                    <td scope="row">{{s.rut_cliente}}</td>
+                    <td scope="row">{{s.nombre_cliente}}</td>
+                    <td scope="row">{{s.correo_cliente}}</td>
+                    <td scope="row">{{s.telefono_cliente}}</td>
+                    {% if profiles.group_id == 1 %}      
+                        <td style="background-color: lightgray; font-size: medium;">
+                            <a href="{% url 'ver_cliente' s.id %}" title="Ver Cliente" class="user-action">
+                                <i class="fa-solid fa-eye"></i> 
+                            </a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'edit_cliente' s.id %}" title="Editar Cliente" class="user-action">
+                                <i class="fas fa-edit"></i> 
+                            </a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'cliente_lista_venta' s.id %}" title="Historial Ventas" class="user-action">
+                                <i class="fa-solid fa-file"></i>
+                            </a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
                             {% if request.session.carrito.items %}
-                            <th scope="row">
-                            
-                                <a href="{% url 'finalizar_venta' s.id %}" onclick="confirmarCambio(event);">
-                                    Finalizar venta
+                                <a href="{% url 'finalizar_venta' s.id %}" title="Finalizar Venta" class="user-action" onclick="confirmarCambio(event);">
+                                    <i class="fa-regular fa-file"></i>
                                 </a>
-                            </th>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
                             {% endif %}
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <th scope="row">
-                                        <a href="{% url 'cliente_block' s.id %}" onclick="confirmarCambio(event);">
-                                            Bloquea Cliente
-                                        </a>
-                                    </th>
-                            
-                        </th>   
-                    {% endif %}                            
+                            <a href="{% url 'cliente_block' s.id %}" title="Bloquear Cliente" class="user-action">
+                                <i class="fas fa-ban"></i> 
+                            </a>
+                        </td>
+                    {% endif %}                           
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
     <!-- Paginación -->
         {% if paginator.num_pages > 1 %}
             <div class="d-flex">

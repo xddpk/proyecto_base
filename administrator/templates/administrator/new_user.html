@@ -11,78 +11,60 @@
 </script>
 {% endblock %}
     <main role="main">
-        <div class="col-md-11" style="position: absolute; top: 20%; left: 30%; width: 50%; height: 60%; background-color: #D9D9D9;border-radius: 60px;">
-            <div style="margin-left: 15%; margin-top: 15%;" class="col-12  mt-3">
-                <div class="container col-12 mt-3">
-                    <div class="row"class="col-md-11"style="position: absolute; top: 0%; left: 15%; width: 50%; height: 70%;">
-                        <div class="col-12  mt-3">
-                            <h3 class='h2 medium text-blue'>Nuevo Usuario</h3>
+        <div class="row"class="col-md-11"style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
+            <h3 class='h2 medium text-blue'>Nuevo Usuario</h3>
+        </div>  
+        <div class="col-md-11" style="position: absolute; top: 20%; left: 15%; width: 83%; height: 60%; background-color: #D9D9D9;border-radius: 50px;">
+                <form action="" method="post" onsubmit="mostrarAlerta()">
+                    {% csrf_token %}
+                        <div class="col-12 col-sm-8 mb-3"style="position: absolute; top: 15%; left: 5%; width: 20%; height: 70%;">
+                            <label for="rut" class="custom-label">Rut: </label>
                         </div>
+                        <div class="col-12 col-sm-8 mb-3"style="position: absolute; top: 13%; left: 17%; width: 15%; height: 70%;">
+                            <input type="text" name="rut" required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border custom-input" placeholder="Rut (Ej: 17605812-2)"/>
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3"style="position: absolute; top: 15%; left: 54%; width: 20%; height: 80%;">
+                            <label for="grupo" class="custom-label">Perfil: </label>
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3"style="position: absolute; top: 13%; left: 63%; width: 15%; height: 80%;">
+                            <select name="grupo" id="grupo" class="form-control border custom-input" required>
+                                <option value="">----------</option>
+                                {% for g in groups %}
+                                <option value="{{g.id}}">{{g.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="row col-md-11" style="position: absolute; top: 35%; left: 5%; width: 20%; height: 30%;">
+                            <label for="name" class="custom-label">Nombre: </label>
+                        </div>
+                        <div class="row col-md-11" style="position: absolute; top: 33%; left: 17%; width: 15%; height: 30%;">
+                            <input type="text" class="form-control border custom-input" id="name" name="name" autofocus maxlength="254" required/>
+                        </div>
+                        <div class="row col-md-11" style="position: absolute; top: 55%; left: 5%; width: 20%; height: 30%;">
+                            <label for="last_name" class="custom-label">Apellidos: </label>
+                        </div>
+                        <div class="row col-md-11" style="position: absolute; top: 53%; left: 17%; width: 15%; height: 30%;">
+                            <input type="text" class="form-control border custom-input" id="last_name1" name="last_name1" required/>
+                        </div>
+                        <div class="row col-md-11" style="position: absolute; top: 75%; left: 5%; width: 20%; height: 30%;">
+                            <label for="email" class="custom-label">Correo: </label>
+                        </div>
+                        <div class="row col-md-11" style="position: absolute; top: 73%; left: 17%; width: 15%; height: 30%;">
+                            <input type="email" class="form-control border custom-input" placeholder="nombre@autonoma.cl" name="email"/>
+                        </div>
+                        <div class="row col-md-11" style="position: absolute; top: 55%; left: 54%; width: 20%; height: 30%;">
+                            <label for="position" class="custom-label">Cargo: </label>
+                        </div>
+                        <div class="row col-md-11" style="position: absolute; top: 53%; left: 63%; width: 15%; height: 30%;">
+                            <input type="text" class="form-control border custom-input" placeholder="Cargo" name="position" required/>
+                        </div>
+                    <div class="col-12 col-sm-6 mb-3"style="position: absolute; top: 117%; left: 85%; width: 15%; height: 10%;">
+                        <input type="submit" value="Crear Usuario" class="button form-control">
                     </div> 
-                        <form action="" method="post" onsubmit="mostrarAlerta()">
-                            {% csrf_token %}
-                            <div class="row">
-                                <div class="row"class="col-md-11"style="position: absolute; top: 15%; left: 15%; width: 30%; height: 70%;">
-                                    <div class="col-12 col-sm-8 mb-3">
-                                        <label for="rut">Rut: </label>
-                                        <input type="text" name="rut"  required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border" placeholder="Rut (Ej: 17605812-2)"/>
-                                    </div>
-                                </div>
-                                <div class="row"class="col-md-11"style="position: absolute; top: 22%; left: 15%; width: 20%; height: 80%;">
-                                    <div class="col-12 col-sm-4 mb-3">
-                                        <label for="email">Perfil: </label>
-                                        <select name="grupo" id="grupo" class="form-control border" required>
-                                            <option value="">----------</option>
-                                            {% for g in groups %}
-                                            <option value="{{g.id}}">{{g.name}}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="row">
-                                <div class="row"class="col-md-11"style="position: absolute; top: 29%; left: 15%; width: 40%; height: 30%;">
-                                    <div class="col-12 col-sm-4 mb-3">
-                                        <label for="name">Nombre: </label>
-                                        <input type="text" class="form-control border" id="name" name="name" autofocus maxlength="254" required/>
-                                    </div>
-                                </div>
-                                <div class="row"class="col-md-11"style="position: absolute; top: 36%; left: 15%; width: 40%; height: 30%;">
-                                    <div class="col-12 col-sm-4 mb-3">
-                                        <label for="last_name">Apellidos: </label>
-                                        <input type="text" class="form-control border" id="last_name1" name="last_name1" required/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row"> 
-                                <div class="row"class="col-md-11"style="position: absolute; top: 44%; left: 15%; width: 40%; height: 30%;">
-                                    <div class="col-12 col-sm-8 mb-3">
-                                        <label for="email">Correo: </label>
-                                        <input type="email" class="form-control border" placeholder="nombre@autonoma.cl" name="email"/>
-                                    </div>
-                                </div>
-                                <div class="row"class="col-md-11"style="position: absolute; top: 51%; left: 15%; width: 40%; height: 30%;">
-                                    <div class="col-12 col-sm-4 mb-3">
-                                        <label for="position">Cargo: </label>
-                                        <input type="position" class="form-control border" placeholder="Cargo" name="position" required/>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="row"class="col-md-11"style="position: absolute; top: 70%; left: 40%; width: 1%; height: 1%;"> 
-                                    <div class="col-12 col-sm-6 mb-3">
-                                        <input type="submit" value="Crear Usuario" class="button form-control">
-                                    </div>
-                                </div> 
-                                <div class="row"class="col-md-11"style="position: absolute; top: 70%; left: 15%; width: 1%; height: 1%;">
-                                    <div class="col-12 col-sm-6 mb-3">
-                                        <a href="{% url 'list_user_active2' %}" class="button button--gray form-control">Volver</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                    <div style="position: absolute; top: 117%; left: 0%; width: 12%; height: 10%;">
+                        <a href="{% url 'list_user_active2' %}" class="button button--gray form-control custom-button">Volver</a>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </main>

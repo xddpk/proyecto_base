@@ -1114,7 +1114,7 @@ ol {
 .table-user td {
     font-size: 20px; /* Tamaño de la fuente para las celdas */
     color: #333; /* Color del texto para las celdas */
-    padding: 10px; /* Espaciado interno en las celdas */
+    padding: 5px; /* Espaciado interno en las celdas */
     background-color: lightgray; /* Fondo de las celdas */
     text-align:center;/* Alineación del texto */
 }
@@ -1129,7 +1129,7 @@ ol {
     font-size: 20px; /* Tamaño de la fuente para los enlaces */
     color: #000; /* Color del texto para los enlaces */
     text-decoration: none; /* Sin subrayado en los enlaces */
-    padding: 5px 10px; /* Espaciado interno en los enlaces */
+    padding: 1px 10px; /* Espaciado interno en los enlaces */
     background-color: lightgray; /* Fondo de los enlaces */
     border-radius: 5px; /* Bordes redondeados */
 }
@@ -1156,4 +1156,28 @@ ol {
 .custom-button:hover {
     background-color: lightgray; /* Cambio de color al pasar el cursor */
     color:#000 /* Color del texto */
+}
+
+/* Agregar cajas de texto*/
+.custom-label {
+    font-size: 22px; /* Tamaño de la fuente para las etiquetas */
+    font-family: 'Arial', sans-serif; /* Tipo de letra para las etiquetas */
+    color: #000; /* Color del texto para las etiquetas */
+}
+
+.custom-input {
+    font-size: 20px; /* Tamaño de la fuente para las cajas de texto */
+    font-family: 'Arial', sans-serif; /* Tipo de letra para las cajas de texto */
+    color: #333; /* Color del texto para las cajas de texto */
+    padding: 10px; /* Espaciado interno para las cajas de texto */
+    background-color: #f9f9f9; /* Fondo de las cajas de texto */
+    border: 1px solid #ccc; /* Borde de las cajas de texto */
+    border-radius: 10px; /* Bordes redondeados para las cajas de texto */
+    width: 100%; /* Ancho de las cajas de texto */
+}
+
+.custom-input:focus {
+    border-color: #3A1B78; /* Cambio de color del borde al enfocar */
+    box-shadow: 0 0 5px rgba(58, 27, 120, 0.5); /* Sombra al enfocar */
+    outline: none; /* Eliminar el contorno al enfocar */
 }

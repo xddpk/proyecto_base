@@ -5,42 +5,19 @@
 
 {% endblock %}
     <main role="main">
-        <div class="container col-12 mt-3">
-            <div class="col-12  mt-3">
-                <div class="col-12 col-sm-8 mb-3" style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
-                    <h2 class='h2 medium text-blue'>Gestion de ventas </h2>
-                </div>
-                <div class="col-12" style="margin-bottom: 15px;"></div>               
-                <div class="row mt-4 mb-4">
-                    {% if profiles.group_id == 1 or profiles.group_id == 4 %}
-                    <div class="col-12 col-sm-3 mb-3"  style="margin-bottom: 25px;">
-                        <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <a href="{% url 'cliente_create' %}" class="button form-control" style="position: absolute; top: 30%; left: 14%;">Nuevo Cliente</a>
-                    </div> 
-
-                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
-                        
-                        <a href="{% url 'cliente_lista_principal' %}" class="button form-control" style="position: absolute; top: 40%; left: 14%;"> Listado</a>
-                    </div>
-
-                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
-                        
-                        <a href="{% url 'tienda' %}" class="button form-control"style="position: absolute; top: 50%; left: 14%;">Crear Venta</a>
-                    </div>
-
-                    
-                    
-                    {% endif %}
-                    
-
-                    
-                        <a href="{% url 'admin_main' %}" class="button button--gray form-control" style="position: absolute; top: 20%; left: 14%;">Volver</a>
-                        
-                        
-                    </div>
-                    
-                </div>
-            </div>
+        <div class="row"class="col-md-11"style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
+            <h3 class='h2 medium text-blue'>Gestion de ventas</h3>
+        </div>
+        {% if profiles.group_id == 1 or profiles.group_id == 4 %}
+        <div style="position: absolute; top: 20%; left: 15%; width: 15%; height: 1%;">
+            <a href="{% url 'cliente_lista_activo' %}" class="button button--gray form-control custom-button">Lista de Clientes</a>
+        </div>
+        <div style="position: absolute; top: 30%; left: 15%; width: 15%; height: 1%;">
+            <a href="{% url 'tienda' %}" class="button button--gray form-control custom-button">Crear Venta</a>
+        </div>
+        {% endif %}
+        <div style="position: absolute; top: 90%; left: 15%; width: 10%; height: 1%;">
+            <a href="{% url 'list_user_active2' %}" class="button button--gray form-control custom-button">Volver</a>
         </div>
     </main>
 {% endblock %}
