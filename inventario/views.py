@@ -486,6 +486,8 @@ def import_inventario(request):
                 ws.write(row_num, col_num, 'nucleo' , font_style)
             if col_num == 4:                           
                 ws.write(row_num, col_num, 'bajo' , font_style)
+            if col_num == 5:                           
+                ws.write(row_num, col_num, 'Activa / Deactivate' , font_style)      
     wb.save(response)
     return response  
 
@@ -509,28 +511,43 @@ def carga_masiva_save2(request):
             return redirect('carga_masiva2')
 
         acc = 0
+        validar=True
         for item in data.itertuples():
             nombre_producto = str(item[1])
             precio_producto = int(item[2])
             stock_producto = int(item[3])
             descripcion_producto = str(item[4])
             estado_producto = str(item[5])
+            producto_state=str(item[6])
+            if validacion.validar_soloString(nombre_producto)==False:
+                validar=False
+            if validacion.validar_int(precio_producto)==False:
+                validar=False
+            if validacion.validar_int(stock_producto)==False:
+                validar=False
+            if validacion.validar_soloString(descripcion_producto)==False:
+                validar=False
+            if validacion.validar_estado(estado_producto)==False:
+                validar=False
+            if validacion.validar_state(producto_state)==False:
+                validar=False
+            if validar==True:
+                inventario_save = Producto(
+                    nombre_producto=nombre_producto,
+                    precio_producto=precio_producto,
+                    stock_producto=stock_producto,
+                    descripcion_producto=descripcion_producto,
+                    estado_producto=estado_producto,
+                    producto_state=producto_state,
+                )
+                inventario_save.save()
+                category_save = Category(
+                    producto_id = inventario_save.id,
+                )
+                category_save.save()
+                acc += 1
 
-            inventario_save = Producto(
-                nombre_producto=nombre_producto,
-                precio_producto=precio_producto,
-                stock_producto=stock_producto,
-                descripcion_producto=descripcion_producto,
-                estado_producto=estado_producto,
-            )
-            inventario_save.save()
-            category_save = Category(
-                producto_id = inventario_save.id,
-            )
-            category_save.save()
             
-
-            acc += 1
 
         messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
         return redirect('carga_masiva2')
@@ -783,7 +800,7 @@ def categories_ver(request, categories_id):
 
 @login_required    
 def list_categories_deactivate(request,page=None,search=None):
-    
+    prueba(request)
     profiles = Profile.objects.get(user_id = request.user.id)
     if profiles.group_id != 1 and profiles.group_id != 2:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
@@ -824,4 +841,15 @@ def list_categories_deactivate(request,page=None,search=None):
         categories_list = paginator.get_page(page)
         template_name = 'inventario/list_categories_deactivate.html'
         return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
+    
+
+def prueba(request):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 2:
+            messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+            return redirect('check_group_main')
+    template_name='inventario/popupvalidar.html'
+    return (request,template_name,{'profiles':profiles, })
+    
+
     

@@ -162,6 +162,8 @@ def edit_user(request,user_id):
                 validar=False
             if validacion.validar_soloString(last_name)== False:
                 validar=False
+            if validacion.validar_vacio(group)== False:
+                validar=False
             #si el correo existe
             if user_data.email != email:
                 user_mail_count_all = User.objects.filter(email=email).count()
@@ -539,14 +541,27 @@ def carga_masiva_save(request):
             messages.add_message(request, messages.INFO, 'Error al leer el archivo Excel: ' + str(e))
             return redirect('carga_masiva')
         acc = 0
+        validar=True
         for item in data.itertuples():
             username = str(item[1])
             first_name = str(item[2])
             last_name = str(item[3])
             email = str(item[4])
             rut_exist = User.objects.filter(username=username).count()
+
+            validar=True
+            if validacion.validar_rut(username)==False:
+                validar=False
+            if validacion.validar_soloString(first_name)==False:
+                validar=False
+            if validacion.validar_soloString(last_name)==False:
+                validar=False
+            if validacion.validar_soloString(email)==False:
+                validar=False
             
-            if rut_exist == 0:
+            if validar==False:
+                messages.add_message(request, messages.INFO, f'El usuario  {acc}  no pudo ser agregado correctamente ya que alguno de los campos no estaba correctamente ingresado')
+            if rut_exist == 0 and validar==True:
                 user_save = User.objects.create(
                 username=username,
                 first_name=first_name,
@@ -560,7 +575,7 @@ def carga_masiva_save(request):
                     token_app_session='No'
                 )
                 acc += 1
-            
+                
             
     
     
