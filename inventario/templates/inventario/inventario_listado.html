@@ -67,20 +67,16 @@
                     <th style="background-color: lightgray;"scope="row">{{ p.precio_producto }}</th> 
                     <th style="background-color: lightgray;"scope="row">{{ p.categoria_data }}</th> 
                     <th scope="row">
-                        {% if p.stock_producto < p.stock_minimo_producto %}
+                        {% if p.estado_producto == 'Bajo' %}
                             <div style="background-color: red;border-radius: 90px;">
                                 <a href="">
                                     Bajo
                                 </a>
                             </div>
-                        {% elif p.stock_maximo_producto < p.stock_producto  %}
+                        {% elif p.estado_producto == 'Bueno'  %}
                                 <div style="background-color: green; border-radius: 90px;">
-                                    Alto
+                                    Bueno
                                 </div>
-                        {% else %}
-                           <div style="background-color: yellow; border-radius: 90px;">
-                                 Medio
-                            </div>
                         {% endif %}
                     </th>   
                     <!-- acá debe ir logica y boton para el estado-->  

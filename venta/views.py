@@ -398,7 +398,7 @@ def finalizar_venta(request,cliente_id):
         if  cantidad <=  producto.stock_producto:
             producto_stock_update = producto.stock_producto - cantidad
             Producto.objects.filter(pk= producto_id).update(stock_producto = producto_stock_update)
-        
+            Producto.objects.get(pk = producto_id).save() 
             total_producto = detalle['acumulado']
             total_venta += total_producto
 
@@ -418,8 +418,6 @@ def finalizar_venta(request,cliente_id):
     # Crear una nueva instancia de Venta
     Venta.objects.filter(id=venta.id).update(total_venta=total_venta)
 
-    # Asociar los productos vendidos a la venta
-    #venta.venta_producto.set(VentaProducto.objects.all())
 
     # Limpiar el carrito después de procesar la venta
     request.session['carrito'] = {}
