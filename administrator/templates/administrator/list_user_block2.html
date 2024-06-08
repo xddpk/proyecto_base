@@ -20,7 +20,7 @@
 
 {% endblock %}
 <header class='mb-5'>
-    <div class="row"class="col-md-11"style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
+    <div class="row"class="col-md-11"style="position: absolute; top: 10%; left: 15%; width: 35%; height: 10%;">
         <div class="col-12 col-sm-8 mb-3">
             <h2 class='h2 medium text-blue'>Listado de Usuarios Bloqueados </h2>
         </div>
@@ -29,7 +29,7 @@
         <a href="{% url 'list_user_active2' %}" class="button button--gray form-control custom-button">Volver</a>
     </div>
 </header>
-<div class="d-flex flex-column flex-lg-row my-5"style="position: absolute; top: 20%; left: 15%; width: 50%; height: 70%;">
+<div class="d-flex flex-column flex-lg-row my-5"style="position: absolute; top: 21%; left: 15%; width: 50%; height: 70%;">
     <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
         <div class="feedback body--small normal"></div>
     </div>
@@ -44,7 +44,7 @@
         
     <form>       
 </div>
-<div class="col-md-11" style="position: absolute; top: 30%; left: 15%; width: 80%; height: 1%;">
+<div class="col-md-11" style="position: absolute; top: 30%; left: 15%; width: 83%; height: 1%;">
     <table class="table table-user">
         <thead style="background-color: #3A1B78; color: #ffffff;">
 
@@ -68,15 +68,16 @@
                     {% if profiles.group_id == 1 %}
                         <td style="background-color: lightgray; font-size: medium;">
                             {% if s.id != request.user.id %}
+                                <a href="{% url 'user_ver' s.id %}" title="Ver Usuario" class="user-action">
+                                    <i class="fa-solid fa-eye"></i>
+                                </a>
+                                &nbsp;
                                 <a href="{% url 'user_activate' s.id %}" title="Activar Usuario" class="user-action">
                                     <i class="fa-solid fa-person"></i>
                                 </a>
                                 &nbsp;
                                 <a href="{% url 'user_delete' s.id %}" title="Borrar Usuario" class="user-action">
                                     <i class="fas fa-ban"></i>
-                                &nbsp;
-                                <a href="{% url 'user_ver' s.id %}" title="Ver Usuario" class="user-action">
-                                    <i class="fa-solid fa-eye"></i>
                                 </a>
                             {% endif %}
                         </td>
