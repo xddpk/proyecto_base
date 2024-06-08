@@ -5,11 +5,8 @@ from turtle import home
 import pandas as pd
 from datetime import datetime, time, timedelta
 from django.utils import timezone
-from datetime import datetime
 import pytz
-
 import xlwt
-
 from django.http import HttpResponse
 from django import forms
 from django.contrib import messages
@@ -69,9 +66,6 @@ def new_user(request):
 
         rut_exist = User.objects.filter(username=rut).count()
         mail_exist = User.objects.filter(email=email).count()
-        print (mail_exist)
-        #cambie toda la estructura pero no me gusta tanto (ineficiente)
-
         if validacion.validar_soloString(first_name)==False: #<- de validaciones Strings
             validar=False
             messages.add_message(request, messages.INFO, 'Error en Nombre: invalido')  
@@ -188,7 +182,10 @@ def edit_user(request,user_id):
 
     profile_list = Group.objects.all().exclude(pk=0).order_by('name')    
     template_name = 'administrator/edit_user.html'
-    return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list})
+    return render(request,template_name,{'user_data':user_data,
+                                        'profile_data':profile_data,
+                                        'groups':groups,
+                                        'profile_list':profile_list})
 
 def user_ver(request, user_id):
     profiles = Profile.objects.get(user_id=request.user.id)
@@ -201,7 +198,10 @@ def user_ver(request, user_id):
 
     profile_list = Group.objects.all().exclude(pk=0).order_by('name')    
     template_name = 'administrator/user_ver.html'
-    return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list})
+    return render(request,template_name,{'user_data':user_data,
+                                        'profile_data':profile_data,
+                                        'groups':groups,
+                                        'profile_list':profile_list})
 
 
 @login_required    
@@ -241,14 +241,18 @@ def list_user_active2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,
-                             'user_name':us.username,
-                             'name':name,
-                             'mail':us.email,
+                            'user_name':us.username,
+                            'name':name,
+                            'mail':us.email,
                             'profile':profile})
         paginator = Paginator(user_all, 20)  
         user_list = paginator.get_page(page)
         template_name = 'administrator/list_user_active2.html'
-        return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
+        return render(request,template_name,{'profiles':profiles,
+                                            'user_list':user_list,
+                                            'paginator':paginator,
+                                            'page':page,
+                                            'search':search })
             
     else:#si la cadena de búsqueda trae datos
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
@@ -269,11 +273,15 @@ def list_user_active2(request,page=None,search=None):
                 'mail': us.email,
                 'profile': profile_data.group.name
             })
-           
+
     paginator = Paginator(user_all, 20)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page ,'search':search })
+    return render(request,template_name,{'profiles':profiles,
+                                        'user_list':user_list,
+                                        'paginator':paginator,
+                                        'page':page ,
+                                        'search':search })
 
 @login_required    
 def list_user_block2(request,page=None,search=None):
@@ -304,7 +312,7 @@ def list_user_block2(request,page=None,search=None):
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
     user_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None":# si la cadena de búsqueda viene vacia
+    if search == None or search == "None" or search == "" :# si la cadena de búsqueda viene vacia
         user_array = User.objects.filter(is_active='f').order_by('first_name')
         
         for us in user_array:
@@ -312,11 +320,19 @@ def list_user_block2(request,page=None,search=None):
             profile = profile_data.group
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
-            user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
+            user_all.append({'id':us.id,
+                            'user_name':us.username,
+                            'name':name,
+                            'mail':us.email,
+                            'profile':profile})
         paginator = Paginator(user_all, 20)  
         user_list = paginator.get_page(page)
         template_name = 'administrator/list_user_block2.html'
-        return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
+        return render(request,template_name,{'profiles':profiles,
+                                            'user_list':user_list,
+                                            'paginator':paginator,
+                                            'page':page,
+                                            'search':search })
     else:#si la cadena de búsqueda trae datos
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están inactivos y se ordena por primer nombre de forma ascendente
         user_array =  User.objects.filter(Q(first_name__icontains=search)|Q(username__icontains=search)).filter(is_active='f').order_by('first_name')#Ascendente
@@ -327,16 +343,20 @@ def list_user_block2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,
-                             'user_name':us.username,
-                             'name':name,
-                             'mail':us.email,
-                             'profile':profile})            
+                            'user_name':us.username,
+                            'name':name,
+                            'mail':us.email,
+                            'profile':profile})            
     
     #profile_data = Profile.objects.all()
     paginator = Paginator(user_all, num_elemento)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_block2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page ,'search':search})
+    return render(request,template_name,{'profiles':profiles,
+                                        'user_list':user_list,
+                                        'paginator':paginator,
+                                        'page':page ,
+                                        'search':search})
 
 
 @login_required
@@ -380,7 +400,6 @@ def user_delete(request,user_id):
 
     user_data_count = User.objects.filter(pk=user_id).count()
     user_data = User.objects.get(pk=user_id)
-   
     if user_data_count == 1:
 
         Profile.objects.filter(user_id=user_id).delete()
@@ -552,7 +571,6 @@ def carga_masiva_save(request):
                 acc += 1
             
             
-    
     
             
 

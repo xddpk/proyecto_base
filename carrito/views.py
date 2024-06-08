@@ -58,8 +58,8 @@ def tienda(request,page=None,search=None):
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
 
     producto_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None":# si la cadena de búsqueda viene vacia
-        producto_array = Producto.objects.all().order_by('stock_producto')
+    if search == None or search == "None" or search == "" :# si la cadena de búsqueda viene vacia
+        producto_array = Producto.objects.filter(producto_state = "Activa").order_by('stock_producto')
         
         for iv in producto_array:
             if iv.stock_producto >0:
@@ -67,23 +67,32 @@ def tienda(request,page=None,search=None):
                 categoria_group = categoria_data.category_group
                 
                 #se guarda la información del producto
-                producto_all.append({'id':iv.id,'nombre_producto':iv.nombre_producto,'precio_producto':iv.precio_producto,'stock_producto':iv.stock_producto, 'categoria_data':categoria_group})
+                producto_all.append({'id':iv.id,
+                                    'nombre_producto':iv.nombre_producto,
+                                    'precio_producto':iv.precio_producto,
+                                    'stock_producto':iv.stock_producto,
+                                    'categoria_data':categoria_group})
                 
     else:#si la cadena de búsqueda trae datos
-        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).order_by('-stock_producto')#Ascendente
+        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).filter(producto_state = "Activa").order_by('-stock_producto')#Ascendente
         for iv in producto_array:
             if iv.stock_producto >0:
                 categoria_data = Category.objects.get(producto_id=iv.id)
                 categoria_group = categoria_data.category_group
-                #profile = categoria_data.group
                 #se guarda la información del producto
-                producto_all.append({'id':iv.id,'nombre_producto':iv.nombre_producto,'precio_producto':iv.precio_producto,'stock_producto':iv.stock_producto, 'categoria_data':categoria_group})
-    #cliente = Cliente.objects.get(pk = cliente_id)
+                producto_all.append({'id':iv.id,
+                                    'nombre_producto':iv.nombre_producto,
+                                    'precio_producto':iv.precio_producto,
+                                    'stock_producto':iv.stock_producto,
+                                    'categoria_data':categoria_group})
     paginator = Paginator(producto_all, num_elemento)  
     producto_list = paginator.get_page(page)
     template_name = 'carrito/tienda.html'
-
-    return render(request,template_name,{'profiles':profiles,'producto_list':producto_list,'paginator':paginator,'page':page,'search':search })
+    return render(request,template_name,{'profiles':profiles,
+                                        'producto_list':producto_list,
+                                        'paginator':paginator,
+                                        'page':page,
+                                        'search':search })
 
 
 

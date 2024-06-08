@@ -66,21 +66,40 @@ def inventario_listado(request,page=None,search=None):
             categoria_group = categoria_data.category_group
             
             #se guarda la información del usuario
-            producto_all.append({'id':iv.id,'nombre_producto':iv.nombre_producto,'precio_producto':iv.precio_producto,'stock_producto':iv.stock_producto, 'stock_minimo_producto':iv.stock_minimo_producto,'stock_maximo_producto':iv.stock_maximo_producto,'descripcion_producto':iv.descripcion_producto,'categoria_data':categoria_group})
+            producto_all.append({'id':iv.id,
+                                'nombre_producto':iv.nombre_producto,
+                                'precio_producto':iv.precio_producto,
+                                'stock_producto':iv.stock_producto,
+                                'stock_minimo_producto':iv.stock_minimo_producto,
+                                'stock_maximo_producto':iv.stock_maximo_producto,
+                                'descripcion_producto':iv.descripcion_producto,
+                                'categoria_data':categoria_group,
+                                'estado_producto':iv.estado_producto}
+                                )
             
     else:#si la cadena de búsqueda trae datos
-        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).filter(producto_state ='Activa').order_by('-stock_producto')#Ascendente
+        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)|Q(codigo_producto = search)|Q(estado_producto = search)).filter(producto_state ='Activa').order_by('-stock_producto')#Ascendente
         for iv in producto_array:
             categoria_data = Category.objects.get(producto_id=iv.id)
             categoria_group = categoria_data.category_group
-           
-            producto_all.append({'id':iv.id,'nombre_producto':iv.nombre_producto,'precio_producto':iv.precio_producto,'stock_producto':iv.stock_producto, 'stock_minimo_producto':iv.stock_minimo_producto,'stock_maximo_producto':iv.stock_maximo_producto,'descripcion_producto':iv.descripcion_producto,'categoria_data':categoria_group})          
-    
-   
+            producto_all.append({'id':iv.id,
+                                'nombre_producto':iv.nombre_producto,
+                                'precio_producto':iv.precio_producto,
+                                'stock_producto':iv.stock_producto,
+                                'stock_minimo_producto':iv.stock_minimo_producto,
+                                'stock_maximo_producto':iv.stock_maximo_producto,
+                                'descripcion_producto':iv.descripcion_producto,
+                                'categoria_data':categoria_group,
+                                'estado_producto':iv.estado_producto})          
+
     paginator = Paginator(producto_all, num_elemento)  
     producto_list = paginator.get_page(page)
     template_name = 'inventario/inventario_listado.html'
-    return render(request,template_name,{'profiles':profiles,'producto_list':producto_list,'paginator':paginator,'page':page,'search':search })
+    return render(request,template_name,{'profiles':profiles,
+                                        'producto_list':producto_list,
+                                        'paginator':paginator,
+                                        'page':page,
+                                        'search':search })
 
 
 
@@ -208,7 +227,8 @@ def producto_edit(request,producto_id):
             Category.objects.filter(producto_id = producto_id).update(category_group_id = category_group_id)    
             Producto.objects.filter(pk = producto_id).update(stock_minimo_producto = stock_minimo_producto)
             Producto.objects.filter(pk = producto_id).update(stock_maximo_producto = stock_maximo_producto)  
-            Producto.objects.filter(pk = producto_id).update(descripcion_producto = descripcion_producto)  
+            Producto.objects.filter(pk = producto_id).update(descripcion_producto = descripcion_producto) 
+            Producto.objects.get(pk = producto_id).save() 
             messages.add_message(request, messages.INFO, 'Producto  '+producto_data.nombre_producto +' editado con éxito')                             
             return redirect('inventario_listado')
         else:
@@ -219,7 +239,10 @@ def producto_edit(request,producto_id):
     category_datas = Category_group.objects.get(pk=category_data.category_group_id) 
     category_groups = Category_group.objects.all().exclude(pk=0).order_by('category_group_name')    
     template_name = 'inventario/producto_edit.html'
-    return render(request,template_name,{'producto_data':producto_data,'category_data':category_data,'category_datas':category_datas,'category_groups':category_groups})
+    return render(request,template_name,{'producto_data':producto_data,
+                                        'category_data':category_data,
+                                        'category_datas':category_datas,
+                                        'category_groups':category_groups})
 
 @login_required
 def producto_ver(request, producto_id):
@@ -232,7 +255,10 @@ def producto_ver(request, producto_id):
     category_datas = Category_group.objects.get(pk=category_data.category_group_id) 
     category_groups = Category_group.objects.all().exclude(pk=0).order_by('category_group_name')    
     template_name = 'inventario/producto_ver.html'
-    return render(request,template_name,{'producto_data':producto_data,'category_data':category_data,'category_datas':category_datas,'category_groups':category_groups})
+    return render(request,template_name,{'producto_data':producto_data,
+                                        'category_data':category_data,
+                                        'category_datas':category_datas,
+                                        'category_groups':category_groups})
 
 
 
@@ -296,36 +322,40 @@ def inventario_listado_deactivate(request,page=None,search=None):
             
 
             producto_all.append({'id':iv.id,
-                                 'nombre_producto':iv.nombre_producto,
-                                 'precio_producto':iv.precio_producto,
-                                 'stock_producto':iv.stock_producto,
-                                   'stock_minimo_producto':iv.stock_minimo_producto,
-                                   'stock_maximo_producto':iv.stock_maximo_producto,
-                                   'descripcion_producto':iv.descripcion_producto,
-                                   'categoria_data':categoria_group})
+                                'nombre_producto':iv.nombre_producto,
+                                'precio_producto':iv.precio_producto,
+                                'stock_producto':iv.stock_producto,
+                                'stock_minimo_producto':iv.stock_minimo_producto,
+                                'stock_maximo_producto':iv.stock_maximo_producto,
+                                'descripcion_producto':iv.descripcion_producto,
+                                'categoria_data':categoria_group,
+                                'estado_producto':iv.estado_producto})
             
     else:#si la cadena de búsqueda trae datos
         producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).filter(producto_state ='Deactivate').order_by('-stock_producto')#Ascendente
         for iv in producto_array:
             categoria_data = Category.objects.get(producto_id=iv.id)
             categoria_group = categoria_data.category_group
-           
             producto_all.append({'id':iv.id,
-                                 'nombre_producto':iv.nombre_producto,
-                                 'precio_producto':iv.precio_producto,
-                                 'stock_producto':iv.stock_producto,
-                                   'stock_minimo_producto':iv.stock_minimo_producto,
-                                   'stock_maximo_producto':iv.stock_maximo_producto,
-                                   'descripcion_producto':iv.descripcion_producto,
-                                   'categoria_data':categoria_group})          
+                                'nombre_producto':iv.nombre_producto,
+                                'precio_producto':iv.precio_producto,
+                                'stock_producto':iv.stock_producto,
+                                'stock_minimo_producto':iv.stock_minimo_producto,
+                                'stock_maximo_producto':iv.stock_maximo_producto,
+                                'descripcion_producto':iv.descripcion_producto,
+                                'categoria_data':categoria_group,
+                                'estado_producto':iv.estado_producto})          
     
 
     paginator = Paginator(producto_all, num_elemento)  
     
     producto_list = paginator.get_page(page)
-    print(producto_list)
     template_name = 'inventario/inventario_listado_deactivate.html'
-    return render(request,template_name,{'profiles':profiles,'producto_list':producto_list,'paginator':paginator,'page':page,'search':search })
+    return render(request,template_name,{'profiles':profiles,
+                                        'producto_list':producto_list,
+                                        'paginator':paginator,
+                                        'page':page,
+                                        'search':search })
 
 
 @login_required
@@ -377,7 +407,6 @@ def categories_save(request):
     
     if request.method=='POST':
         name= request.POST.get('name')
-        state=True
         validar = True
         categories_exist = Category.objects.filter(category_group_name=name).count()
         if categories_exist==1:
@@ -639,7 +668,6 @@ def list_categories(request,page=None,search=None):
         search = request.POST.get('search') 
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
-    print("search> ",search)
     categories_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search == "None"or search == "":# si la cadena de búsqueda viene vacia
 
@@ -647,13 +675,21 @@ def list_categories(request,page=None,search=None):
         paginator = Paginator(categories_all, num_elemento)  
         categories_list = paginator.get_page(page)
         template_name = 'inventario/list_categories.html'
-        return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
+        return render(request,template_name,{'profiles':profiles,
+                                            'categories_list':categories_list,
+                                            'paginator':paginator,
+                                            'page':page,
+                                            'search':search })
     else:#si la cadena de búsqueda trae datos
         categories_all =  Category_group.objects.filter(category_group_name=search).filter(category_state='Activa').order_by('category_group_name')#Ascendente         
         paginator = Paginator(categories_all, num_elemento)  
         categories_list = paginator.get_page(page)
         template_name = 'inventario/list_categories.html'
-        return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
+        return render(request,template_name,{'profiles':profiles,
+                                            'categories_list':categories_list,
+                                            'paginator':paginator,
+                                            'page':page,
+                                            'search':search })
 @login_required
 def categories_deactivate(request,categories_id):
     profiles= Profile.objects.get(user_id = request.user.id)
@@ -740,7 +776,10 @@ def categories_ver(request, categories_id):
     template_name = 'inventario/categories_ver.html' 
     Category_group.objects.filter(pk=categories_id)
     category_data = Category_group.objects.get(pk=categories_id) 
-    return render(request, template_name, {'template_name': template_name, 'profiles': profiles, 'categories_id': categories_id,'category_data':category_data})
+    return render(request, template_name, {'template_name': template_name,
+                                        'profiles': profiles,
+                                        'categories_id': categories_id,
+                                        'category_data':category_data})
 
 @login_required    
 def list_categories_deactivate(request,page=None,search=None):
@@ -770,7 +809,6 @@ def list_categories_deactivate(request,page=None,search=None):
         search = request.POST.get('search') 
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
-    print("search> ",search)
     categories_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search == "None" or search == "":# si la cadena de búsqueda viene vacia
 
@@ -778,11 +816,19 @@ def list_categories_deactivate(request,page=None,search=None):
         paginator = Paginator(categories_all, num_elemento)  
         categories_list = paginator.get_page(page)
         template_name = 'inventario/list_categories_deactivate.html'
-        return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
+        return render(request,template_name,{'profiles':profiles,
+                                            'categories_list':categories_list,
+                                            'paginator':paginator,
+                                            'page':page,
+                                            'search':search })
     else:#si la cadena de búsqueda trae datos
         categories_all =  Category_group.objects.filter(category_group_name=search).order_by('category_group_name')     
         paginator = Paginator(categories_all, num_elemento)  
         categories_list = paginator.get_page(page)
         template_name = 'inventario/list_categories_deactivate.html'
-        return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
+        return render(request,template_name,{'profiles':profiles,
+                                            'categories_list':categories_list,
+                                            'paginator':paginator,
+                                            'page':page,
+                                            'search':search })
     
