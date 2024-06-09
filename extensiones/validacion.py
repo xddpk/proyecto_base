@@ -47,9 +47,36 @@ def validar_email(email):
     else:
         return False
 
-def validar_depto(departamento):
-    if departamento=="":
-        return False
+    
+    
+def validar_depto(dato):
+    regex = r'^[a-zA-Z0-9]+$'
+    if dato=="":
+        return True
+    if re.match(regex,dato):
+        return True
     else:
 
         return False
+    
+    
+def validar_piso(dato):
+    try:
+        # Si dato está vacío, considerarlo válido
+        if dato == "":
+            return True
+        # Intenta convertir dato a un entero
+        valor = int(dato)
+        # Si valor es un entero, es válido
+        return True
+    except ValueError:
+        # Si ocurre un ValueError, dato no es un entero válido
+        return False
+
+def validar_calle(dato):
+    regex = r'[a-zA-Z\s]{3,}'
+    # Si el dato está vacío, no es válido
+    if dato == "":
+        return False
+    # Verifica si el dato coincide con el patrón
+    return bool(re.match(regex, dato))
