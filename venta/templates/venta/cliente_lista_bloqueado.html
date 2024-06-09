@@ -19,6 +19,7 @@
 </script>
 {% endblock %}
 <header class='mb-5'>
+
     <div class="row"class="col-md-11"style="position: absolute; top: 10%; left: 15%; width: 40%; height: 10%;">
         <div class="col-12 col-sm-8 mb-3">
             <h2 class='h2 medium text-blue'>Listado de Clientes Bloqueados </h2>
@@ -43,8 +44,6 @@
         
     <form>       
 </div>
-
-
 <div class="col-md-11" style="position: absolute; top: 30%; left: 15%; width: 83%; height: 1%;">
     <table class="table table-user">
         <thead style="background-color: #3A1B78; color: #ffffff;">
@@ -61,7 +60,7 @@
         </thead>
         <tbody>
             {% for s in cliente_list %}
-                <tr>
+                <tr style="background-color: lightgray; font-size: medium;">
                     <td scope="row">{{s.rut_cliente}}</td>
                     <td scope="row">{{s.nombre_cliente}}</td>
                     <td scope="row">{{s.correo_cliente}}</td>

@@ -1,6 +1,6 @@
 <div class="alert alert-primary" role="alert">
-    <table class="carrito">
-        <thead>
+    <table class="carrito" style="position: absolute; top: 9%; left: 82%;  height: 70%;">
+        <thead style="background-color: #3A1B78; color: #ffffff;">
             <tr>
                 <th scope="row" colspan="3" class="text-center">CARRITO</th>
     {% if profiles.group_id 1 ==  or profiles.group_id == 4 %}
@@ -30,19 +30,18 @@
                 </td>
             </tr>
             {% endif %}
-            <tr>
-                <th scope="row">TOTAL:</th>
-                <td colspan="2">${{total_carrito}}</td>
-            </tr>
         </tbody>
     </table>
     <div class="col-12 col-sm-3 mb-3"  style="margin-bottom: 25px;">
         <div class="col-12" style="margin-bottom: 25px;"></div>
-        <a href="{% url 'cliente_lista_activo' %}" class="button form-control" style="position: absolute; top: 60%; left: 30%;" >Escoger cliente </a>
+        <a href="{% url 'cliente_lista_activo' %}" class="button form-control" style="position: absolute; top: 90%; left: 85%;" >Escoger cliente </a>
+        <label style="position: absolute; top: 84%; left: 85%;">
+            TOTAL:
+            ${{total_carrito}}
+        </label>
     </div> 
-    <hr>
     <div class="row text-center">
-        <div class="col-6" style="position: absolute; top: 80%; left: 30%;">
+        <div class="col-6" style="position: absolute; top: 87%; left: 90%;">
             <a href="{% url 'CLS' %}" class="btn btn-danger">Limpiar</a>
         </div>
 

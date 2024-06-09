@@ -1,4 +1,4 @@
-% extends 'core/base_admin.html' %}
+{% extends 'core/base_admin.html' %}
 {% load static %}
 
 {% block content %}
@@ -13,36 +13,35 @@
     <main role="main">
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
-                <h3>Nuevo Cliente</h3>
-                {% if profiles.group_id == 1 or profiles.group_id == 4 %} 
+                <h3 class='h2 medium text-blue' style="position: absolute; top: 10%; left: 15%;">Vista Cliente</h3> 
                 <form method="post" action="" onsubmit="mostrarAlerta()">
                     {% csrf_token %}
-                    <div class="row"> 
+                    <div class="row"  style="position: absolute; top: 20%; left: 15%; width: 83%; height: 60%; background-color: #D9D9D9;border-radius: 50px;" > 
                         <input type="hidden" value="{{ cliente_data.id }}" name="cliente_id" id="cliente_id">
-                        <div class="col-12 col-sm-8 mb-3">
+                        <div class="col-12 col-sm-8 mb-3" style="position: absolute; top: 15%; left: 20%; width: 20%; height: 70%;">
                             <label for="text">Nombre Cliente</label>
-                            <input type="text" name="nombre"  id = "nombre" value="{{ cliente_data.nombre_cliente }}" readonly/>
+                            <input type="text" name="nombre"  id = "nombre" value="{{ cliente_data.nombre_cliente }}" readonly style="position: absolute; top: 0%; left: 100%; width: 60%; height: 8%;"/>
                         </div>  
-                        <div class="col-12 col-sm-8 mb-3">
+                        <div class="col-12 col-sm-8 mb-3" style="position: absolute; top: 25%; left: 20%; width: 20%; height: 70%;"> 
                             <label for="text">Primer Apellido Cliente</label>
-                            <input type="text" name="apellido"  id = "apellido" value="{{ cliente_data.apellido_cliente }}" readonly/>
+                            <input type="text" name="apellido"  id = "apellido" value="{{ cliente_data.apellido_cliente }}" readonly style="position: absolute; top: 0%; left: 100%; width: 60%; height: 8%;"/>
                         </div>  
-                        <div class="col-12 col-sm-8 mb-3">
+                        <div class="col-12 col-sm-8 mb-3" style="position: absolute; top: 35%; left: 20%; width: 20%; height: 70%;">
                             <label for="rut">Rut</label>
-                            <input type="text" name="rut"  required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border" value="{{ cliente_data.rut_cliente }}" readonly/>
+                            <input type="text" name="rut"  required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border" value="{{ cliente_data.rut_cliente }}" readonly style="position: absolute; top: 0%; left: 100%; width: 60%; height: 8%;"/>
                         </div>
-                        <div class="col-12 col-sm-4 mb-3">
+                        <div class="col-12 col-sm-4 mb-3" style="position: absolute; top: 45%; left: 20%; width: 20%; height: 70%;">
                             <label for="mobile">Celular</label>
-                            <input type="number" class="form-control border" id="mobile" name="mobile" value="{{ cliente_data.telefono_cliente }}" readonly/>
+                            <input type="number" class="form-control border" id="mobile" name="mobile" value="{{ cliente_data.telefono_cliente }}" readonly style="position: absolute; top: 0%; left: 100%; width: 60%; height: 8%;"/>
                         </div>
-                        <div class="col-12 col-sm-8 mb-3">
+                        <div class="col-12 col-sm-8 mb-3" style="position: absolute; top: 55%; left: 20%; width: 20%; height: 70%;">
                             <label for="email">Correo ()</label>
-                            <input type="email" class="form-control border" value="{{ cliente_data.correo_cliente }}" name="email" readonly/>
+                            <input type="email" class="form-control border" value="{{ cliente_data.correo_cliente }}" name="email" readonly style="position: absolute; top: 0%; left: 100%; width: 60%; height: 8%;"/>
                         </div>
                     </div>    
                     <div class="row"> 
-                        <div class="col-12 col-sm-6 mb-3">
-                            <a href="{% url 'venta_main' %}" class="button button--gray form-control">Volver</a>
+                        <div class="col-12 col-sm-6 mb-3" style="position: absolute; top: 85%; left: 20%; width: 30%; height: 10%;">
+                            <a href="{% url 'cliente_lista_activo' %}" class="button button--gray form-control">Volver</a>
                         </div>
                     </div>
                 </form>

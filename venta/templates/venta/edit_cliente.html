@@ -19,35 +19,35 @@
             <form method="post" action="" onsubmit="mostrarAlerta()">
                 {% csrf_token %}
                     <input type="hidden" value="{{ cliente_data.id }}" name="cliente_id" id="cliente_id">
-                    <div class="col-12 col-sm-8 mb-3"style="position: absolute; top: 15%; left: 5%; width: 20%; height: 70%;">
+                    <div class="col-12 col-sm-8 mb-3"style="position: absolute; top: 15%; left: 20%; width: 20%; height: 70%;">
                         <label for="rut" class="custom-label">Rut: </label>
                     </div>
-                    <div class="col-12 col-sm-8 mb-3"style="position: absolute; top: 13%; left: 17%; width: 23%; height: 70%;">
-                        <input type="text" name="rut"  required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border custom-input" value="{{ cliente_data.rut_cliente }}"/> 
+                    <div class="col-12 col-sm-8 mb-3"style="position: absolute; top: 13%; left: 32%; width: 23%; height: 70%;">
+                        <input type="text" name="rut"  required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border custom-input" value="{{ cliente_data.rut_cliente }}" style="width: 60%; height: 8%;"/> 
                     </div>
-                    <div class="row col-md-11" style="position: absolute; top: 35%; left: 5%; width: 20%; height: 30%;">
+                    <div class="row col-md-11" style="position: absolute; top: 25%; left: 20%; width: 20%; height: 30%;">
                         <label for="name" class="custom-label">Nombre: </label>
                     </div>
-                    <div class="row col-md-11" style="position: absolute; top: 33%; left: 17%; width: 23%; height: 30%;">
-                        <input type="text" class="form-control border custom-input" name="nombre"  id = "nombre" value="{{ cliente_data.nombre_cliente }}"/>
+                    <div class="row col-md-11" style="position: absolute; top: 23%; left: 32%; width: 23%; height: 30%;">
+                        <input type="text" class="form-control border custom-input" name="nombre"  id = "nombre" value="{{ cliente_data.nombre_cliente }}" style="width: 60%; height: 18%;"/>
                     </div>  
-                    <div class="row col-md-11" style="position: absolute; top: 55%; left: 5%; width: 20%; height: 30%;">
+                    <div class="row col-md-11" style="position: absolute; top: 35%; left: 20%; width: 20%; height: 30%;">
                         <label for="last_name" class="custom-label">Primer Apellido: </label>
                     </div>
-                    <div class="row col-md-11" style="position: absolute; top: 53%; left: 17%; width: 23%; height: 30%;">
-                        <input type="text" class="form-control border custom-input" name="apellido"  id = "apellido" value="{{ cliente_data.apellido_cliente }}"/>
+                    <div class="row col-md-11" style="position: absolute; top: 32%; left: 32%; width: 23%; height: 30%;">
+                        <input type="text" class="form-control border custom-input" name="apellido"  id = "apellido" value="{{ cliente_data.apellido_cliente }}" style="width: 60%; height: 18%;"/>
                     </div>
-                    <div class="row col-md-11" style="position: absolute; top: 75%; left: 5%; width: 20%; height: 30%;">
+                    <div class="row col-md-11" style="position: absolute; top: 45%; left: 20%; width: 20%; height: 30%;">
                         <label for="email" class="custom-label">Correo: </label>
                     </div>
-                    <div class="row col-md-11" style="position: absolute; top: 73%; left: 17%; width: 23%; height: 30%;">
-                        <input type="email" class="form-control border custom-input" value="{{ cliente_data.correo_cliente }}" name="email" />
+                    <div class="row col-md-11" style="position: absolute; top: 42%; left: 32%; width: 23%; height: 30%;">
+                        <input type="email" class="form-control border custom-input" value="{{ cliente_data.correo_cliente }}" name="email"  style="width: 60%; height: 18%;"/>
                     </div>
-                    <div class="col-12 col-sm-4 mb-3"style="position: absolute; top: 15%; left: 54%; width: 20%; height: 80%;">
+                    <div class="col-12 col-sm-4 mb-3"style="position: absolute; top: 55%; left: 20%; width: 20%; height: 80%;">
                         <label for="grupo" class="custom-label">Celular: </label>
                     </div>
-                    <div class="col-12 col-sm-4 mb-3"style="position: absolute; top: 13%; left: 63%; width: 23%; height: 80%;">
-                        <input type="number" class="form-control border custom-input" id="mobile" name="mobile" value="{{ cliente_data.telefono_cliente }}"/>   
+                    <div class="col-12 col-sm-4 mb-3"style="position: absolute; top: 53%; left: 32%; width: 23%; height: 80%;">
+                        <input type="number" class="form-control border custom-input" id="mobile" name="mobile" value="{{ cliente_data.telefono_cliente }}" style="width: 60%; height: 7%;"/>   
                     </div>
                     <div class="col-12 col-sm-6 mb-3" style="position: absolute; top: 117%; left: 85%; width: 15%; height: 10%;">
                         <input type="submit" value="Editar Cliente" class="button form-control">
