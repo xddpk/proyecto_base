@@ -36,17 +36,17 @@ def admin_main(request):
 @login_required
 def users_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if not(profiles.group_id == 1 or profiles.group_id == 2):
+    if not(profiles.group_id == 1):
         
         return redirect('check_group_main')
     groups = Group.objects.all().exclude(pk=0).order_by('id')
     template_name = 'administrator/users_main.html'
     return render(request,template_name,{'groups':groups,'profiles':profiles})
 
-
+@login_required
 def user_ver(request, user_id):
     profiles = Profile.objects.get(user_id=request.user.id)
-    if not(profiles.group_id == 1 or profiles.group_id == 2):
+    if not(profiles.group_id == 1):
         
         return redirect('check_group_main')
     user_data = User.objects.get(pk=user_id)
@@ -124,9 +124,10 @@ def new_user(request):
     template_name = 'administrator/new_user.html'
     return render(request,template_name,{'groups':groups, 'profile':profiles})
 
+@login_required
 def list_main2(request):
     profiles = Profile.objects.get(user_id = request.user.id)    
-    if not(profiles.group_id == 1 or profiles.group_id == 2):
+    if not(profiles.group_id == 1):
 
         return redirect('check_group_main')
     
@@ -197,27 +198,12 @@ def edit_user(request,user_id):
                                         'groups':groups,
                                         'profile_list':profile_list})
 
-def user_ver(request, user_id):
-    profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    user_data = User.objects.get(pk=user_id)
-    profile_data = Profile.objects.get(user_id=user_id)
-    groups = Group.objects.get(pk=profile_data.group_id) 
 
-    profile_list = Group.objects.all().exclude(pk=0).order_by('name')    
-    template_name = 'administrator/user_ver.html'
-    return render(request,template_name,{'user_data':user_data,
-                                        'profile_data':profile_data,
-                                        'groups':groups,
-                                        'profile_list':profile_list,
-                                        'profiles':profiles})
 @login_required    
 def list_user_active2(request,page=None,search=None):
     
     profiles = Profile.objects.get(user_id = request.user.id)
-    if not(profiles.group_id == 1 or profiles.group_id == 2):
+    if not(profiles.group_id == 1):
         
         return redirect('check_group_main')
     if page == None:
@@ -295,9 +281,8 @@ def list_user_active2(request,page=None,search=None):
                                         'search':search })
 @login_required    
 def list_user_block2(request,page=None,search=None):
-    
     profiles = Profile.objects.get(user_id = request.user.id)
-    if not(profiles.group_id == 1 or profiles.group_id == 2):
+    if not(profiles.group_id == 1):
         
         return redirect('check_group_main')
     if page == None:
@@ -342,8 +327,8 @@ def list_user_block2(request,page=None,search=None):
                                             'user_list':user_list,
                                             'paginator':paginator,
                                             'page':page,
-                                            'search':search,
-                                            'profile':profile })
+                                            'search':search
+                                            })
     else:#si la cadena de búsqueda trae datos
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están inactivos y se ordena por primer nombre de forma ascendente
         user_array =  User.objects.filter(Q(first_name__icontains=search)|Q(username__icontains=search)).filter(is_active='f').order_by('first_name')#Ascendente
@@ -356,8 +341,8 @@ def list_user_block2(request,page=None,search=None):
             user_all.append({'id':us.id,
                             'user_name':us.username,
                             'name':name,
-                            'mail':us.email,
-                            'profile':profile})            
+                            'mail':us.email
+                            })            
     
     #profile_data = Profile.objects.all()
     paginator = Paginator(user_all, 30)  
