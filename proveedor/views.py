@@ -21,42 +21,10 @@ from extensiones import validacion
 # Create your views here.
 #numero de elementos para el listado
 global num_elemento 
-num_elemento = 1
+num_elemento = 30
 from django.views import View
 from .models import ProductoForm
 
-"""@login_required
-def barra_busqueda(request):
-    if request.method == 'POST':
-        search_text = request.POST.get('search_text')
-        if search_text:
-            # Realizar la búsqueda en la base de datos
-            productos = Producto.objects.filter(nombre_producto__icontains=search_text)
-            resultados = []
-            for producto in productos:
-                resultados.append({
-                    'nombre_producto': producto.nombre_producto,
-                    'precio_producto': producto.precio_producto,
-                })
-            return JsonResponse({'resultados': resultados})
-    return render(request, 'proveedor_main3.html')"""
-"""@login_required
-def buscar_y_redirigir(request):
-    if request.method == 'POST':
-        # Obtiene el texto de búsqueda del formulario
-        search_text = request.POST.get('search_text', '')
-        
-        # Realiza la búsqueda en tu modelo de Producto (aquí asumimos que hay un campo 'nombre' en tu modelo)
-        try:
-            producto = Producto.objects.get(nombre_producto=search_text)
-            # Redirecciona al URL correspondiente pasando el ID del producto
-            return redirect(f'http://localhost:8000/proveedor/proveedor_main3/{producto.id}')
-        except Producto.DoesNotExist:
-            # Si el producto no se encuentra, podrías redirigir a una página de error o volver a la página de búsqueda
-            return redirect('pagina_de_error')  # Reemplaza 'pagina_de_error' con el nombre de tu URL conf correspondiente
-        
-    # En caso de que no sea una solicitud POST, podrías manejarlo de acuerdo a tus necesidades, como redirigir a la página de inicio
-    return redirect('pagina_de_inicio')  # Reemplaza 'pagina_de_inicio' con el nombre de tu URL conf correspondiente"""
 class AgregarProductosView(View):
     def get(self, request):
         # Aquí puedes pasar los productos y perfiles necesarios al template
@@ -143,18 +111,6 @@ def agregar_productos(request):
             Producto.objects.filter(id=producto.id).update(stock_producto=F('stock_producto') + cantidad)
 
 
-            # Creamos una instancia de ProductoForm con los datos del formulario
-            """form = OrdenProductoForm({'nombre_producto': nombre, 'cantidad_producto': cantidad, 'precio_producto': precio, 'orden_id': orden, 'producto_id': producto})
-
-            # Verificamos si el formulario es válido
-            if form.is_valid():
-                # Guardamos el producto en la base de datos
-                producto = form.save()
-                # Añaidimos el producto creado a la lista de productos creados
-                productos_creados.append(producto)
-            else:
-                # Si el formulario no es válido, podrías manejarlo de alguna manera, como mostrar un mensaje de error
-                pass"""
             OrdenProducto.objects.create(
                     nombre_producto=nombre,
                     cantidad_producto=cantidad,
@@ -164,13 +120,14 @@ def agregar_productos(request):
                     
 
                 )
-                # Redireccionamos a alguna página después de agregar los productos
+                # Redireccionamos después de agregar los productos
         return redirect('proveedor_main')
 
     else:
         # Si la solicitud no es de tipo POST, renderizamos el formulario vacío
         form = ProductoForm()
         return render(request, 'proveedor_main.html', {'form': form})
+    
 @login_required
 def proveedor_create(request):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -210,13 +167,9 @@ def direccion_save(request, proveedor_id):
         piso= request.POST.get('piso')
         state=True
         validar = True
-        if validacion.validar_soloString(region)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
-                validar=False
-        if validacion.validar_soloString(comuna)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
-                validar=False
-        if validacion.validar_soloString(calle)==False:
+
+
+        if validacion.validar_calle(calle)==False:
                 messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
                 validar=False
         if validacion.validar_int(numero)==False:
@@ -284,39 +237,33 @@ def proveedor_save(request):
         if rut_exist==1:
                 messages.add_message(request, messages.INFO, 'Rut ya esta registrado')
                 validar=False
+        if mail_exist==1:
+                messages.add_message(request, messages.INFO, 'Correo ya esta registrado')
+                validar=False
         if validacion.validar_rut(rut)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                messages.add_message(request, messages.INFO, 'rut Ingresado incorrectamente')
                 validar=False
         if validacion.validar_soloString(name)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                messages.add_message(request, messages.INFO, 'nombre Ingresado incorrectamente')
                 validar=False
-        if validacion.validar_soloString(comuna)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
-                validar=False
-        if validacion.validar_soloString(calle)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+        if validacion.validar_calle(calle)==False:
+                messages.add_message(request, messages.INFO, 'calle Ingresado incorrectamente')
                 validar=False
         if validacion.validar_int(numero)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                messages.add_message(request, messages.INFO, 'numero Ingresado incorrectamente')
                 validar=False
         if validacion.validar_numCelular(mobile)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                messages.add_message(request, messages.INFO, 'mobile Ingresado incorrectamente')
                 validar=False
         if validacion.validar_email(correo)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                messages.add_message(request, messages.INFO, 'correo Ingresado incorrectamente')
                 validar=False
         if validacion.validar_depto(departamento)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                messages.add_message(request, messages.INFO, 'depa Ingresado incorrectamente')
                 validar=False
-        if validacion.validar_int(piso)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+        if validacion.validar_piso(piso)==False:
+                messages.add_message(request, messages.INFO, 'pisoIngresado incorrectamente')
                 validar=False
-        #es mejor k la validacion contemple todo, si esta vacio, si es el tipo de dato, etc
-        """
-        if validacion.validar_soloString(name)==False:
-            validar=False
-            messages.add_message(request,messages.INFO,'El nombre solo debe contener letras')
-         """
         if validar==True:
             proveedor_save=Proveedor(
                 rut_proveedor = rut,
@@ -355,7 +302,6 @@ def proveedor_save(request):
 
 def proveedor_lista_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    #groups = Group.objects.all().exclude(pk=0).order_by('id')
     
     if profiles.group_id != 1 and profiles.group_id != 3:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
@@ -456,6 +402,7 @@ def edit_proveedor(request,proveedor_id,page=None,search=None):
             if validacion.validar_email(correo)==False:
                 messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
                 validar=False
+                
             if validar == True:
                 Proveedor.objects.filter(pk = proveedor_id).update(nombre_proveedor = name.capitalize())
                 Proveedor.objects.filter(pk = proveedor_id).update(correo_proveedor = correo)  
@@ -475,7 +422,6 @@ def edit_proveedor(request,proveedor_id,page=None,search=None):
     proveedor_data = Proveedor.objects.get(pk=proveedor_id)
     direcciones_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search.lower() == "none" or search == '':# si la cadena de búsqueda viene vacia
-        print("search 1 : ", search)
         proveedordireccion_array = ProveedorDireccion.objects.filter(proveedor_id = proveedor_id)
         for dr in proveedordireccion_array:
             direccion = Direccion.objects.get(pk = dr.direccion_id)
@@ -494,14 +440,12 @@ def edit_proveedor(request,proveedor_id,page=None,search=None):
         template_name = 'proveedor/edit_proveedor.html'
         return render(request,template_name,{'profiles':profiles,'direccion_list':direccion_list,'paginator':paginator,'page':page,'search':search, 'proveedor_data':proveedor_data })
 
-
-  
     else:#si la cadena de búsqueda trae datos
 
         #se filtran todas las tablas ProveedorDireccion que contengan que su registro proveedor_id sea igual al proveedor_que se esta editando
         proveedordireccion_array = ProveedorDireccion.objects.filter(proveedor_id = proveedor_id)
 
-        print("search 2 : ", search)
+
         for dr in proveedordireccion_array:
             print(dr)
             #se consigue la tabla la cual su pk sea igual a la llave foranea de ProveedorDireccion
@@ -990,6 +934,7 @@ def direccion_edit(request,direccion_id,proveedor_id):
         return redirect('check_group_main')
     if request.method=='POST':
         region= request.POST.get('region')
+        
         comuna= request.POST.get('comuna')
         calle= request.POST.get('calle')
         numero= request.POST.get('numero')
@@ -999,23 +944,17 @@ def direccion_edit(request,direccion_id,proveedor_id):
         validar = True
         direccion_data_count = Direccion.objects.filter(pk=direccion_id).count()
         direccion_data = Direccion.objects.get(pk=direccion_id)
-        if validacion.validar_soloString(region)==False:
-            messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
-            validar=False
-        if validacion.validar_soloString(comuna)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
-                validar=False
-        if validacion.validar_soloString(calle)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+        if validacion.validar_calle(calle)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente la calle')
                 validar=False
         if validacion.validar_int(numero)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente el numero')
                 validar=False
         if validacion.validar_depto(departamento)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente el dpt')
                 validar=False
-        if validacion.validar_int(piso)==False:
-                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente')
+        if validacion.validar_piso(piso)==False:
+                messages.add_message(request, messages.INFO, 'Ingresado incorrectamente el piso')
                 validar=False
         if direccion_data_count == 1:
             if validar==True:

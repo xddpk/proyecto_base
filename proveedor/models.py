@@ -81,7 +81,7 @@ class Comuna(models.Model):
 class Direccion(models.Model):
     numero_direccion = models.IntegerField(null=True, blank=True, default=0)
     nombre_calle = models.CharField(max_length=100, null=True, blank=True, default='')
-    departamento = models.IntegerField(null=True, blank=True, default=0)
+    departamento = models.CharField(max_length=100,null=True, blank=True, default=0)
     piso = models.IntegerField(null=True, blank=True, default=0)
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE) 
 
