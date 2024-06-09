@@ -19,6 +19,7 @@
 </script>
 {% endblock %}
 <header class='mb-5'>
+<<<<<<< HEAD
     <div class="row">
         <div class="col-12 col-sm-8 mb-3" style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;"> 
             <h2 class='h2 medium text-blue'>Listado de Clientes Bloqueados </h2>
@@ -26,15 +27,22 @@
         <div class="col-12 col-sm-4 mb-3" style="position: absolute; top: 80%; left: 15%; width: 30%; height: 10%;">
             <a href="{% url 'cliente_lista_principal' %}" class="button button--gray form-control">Volver</a>
         </div>
+=======
+    <div class="row"class="col-md-11"style="position: absolute; top: 10%; left: 15%; width: 40%; height: 10%;">
+        <div class="col-12 col-sm-8 mb-3">
+            <h2 class='h2 medium text-blue'>Listado de Clientes Bloqueados </h2>
+        </div>
+>>>>>>> 4b48e4f37c0bf17eddffe052d03011ccd6b4d3b8
     </div>
-    <div class="d-flex flex-column flex-lg-row mt-2">
-        <p class='body--normal text-gray'>
-
-        </p>
+    <div style="position: absolute; top: 90%; left: 15%; width: 10%; height: 1%;">
+        <a href="{% url 'cliente_lista_activo' %}" class="button button--gray form-control custom-button">Volver</a>
     </div>
-
 </header>
+<<<<<<< HEAD
 <div class="d-flex flex-column flex-lg-row my-5" style="position: absolute; top: 25%; left: 15%; width: 65%; ">
+=======
+<div class="d-flex flex-column flex-lg-row my-5" style="position: absolute; top: 21%; left: 15%; width: 50%; height: 6%;">
+>>>>>>> 4b48e4f37c0bf17eddffe052d03011ccd6b4d3b8
     <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
         <div class="feedback body--small normal"></div>
     </div>
@@ -49,51 +57,52 @@
         
     <form>       
 </div>
+<<<<<<< HEAD
 <div class="table-container mt-5" style="position: absolute; top: 30%; left: 15%; width: 60%; height: 1%;">
+=======
+
+
+<div class="col-md-11" style="position: absolute; top: 30%; left: 15%; width: 83%; height: 1%;">
+>>>>>>> 4b48e4f37c0bf17eddffe052d03011ccd6b4d3b8
     <table class="table table-user">
         <thead style="background-color: #3A1B78; color: #ffffff;">
             <tr>
-                <th width="20%" scope="col">Rut Cliente</th>
-                <th width="30%" scope="col">Nombre Completo</th>
-                <th width="30%" scope="col">Correo</th>
-                <th width="30%" scope="col">Número Telefónico</th>
-                {% if profiles.group_id == 1 or profiles.group_id == 4 %}
-                    <th width="15%" scope="col">Funciones</th>
+                <th width="1%" scope="col">Rut Cliente</th>
+                <th width="1%" scope="col">Nombre Completo</th>
+                <th width="1%" scope="col">Correo</th>
+                <th width="1%" scope="col">Número Telefónico</th>
+                {% if profiles.group_id == 1 %}
+                    <th width="1.5%" scope="col">Funciones</th>
                 {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for s in cliente_list %}
                 <tr>
-                    <th scope="row">{{s.rut_cliente}}</th>
-                    <th scope="row">{{s.nombre_cliente}}</th>
-                    <th scope="row">{{s.correo_cliente}}</th>
-                    <th scope="row">{{s.telefono_cliente}}</th>      
-                    {% if profiles.group_id == 1 or profiles.group_id == 4%}
-                            <th scope="row">
-                            <a href="{% url 'ver_cliente' s.id %}" onclick="confirmarCambio(event);">
-                                Ver Cliente
+                    <td scope="row">{{s.rut_cliente}}</td>
+                    <td scope="row">{{s.nombre_cliente}}</td>
+                    <td scope="row">{{s.correo_cliente}}</td>
+                    <td scope="row">{{s.telefono_cliente}}</td>
+                    {% if profiles.group_id == 1 %}      
+                        <td style="background-color: lightgray; font-size: medium;">
+                            <a href="{% url 'ver_cliente' s.id %}" title="Ver Cliente" class="user-action">
+                                <i class="fa-solid fa-eye"></i> 
                             </a>
-                            </th>
-                            <th scope="row">
-                            <a href="{% url 'cliente_activate' s.id %}" onclick="confirmarCambio(event);">
-                                Activa Cliente
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'cliente_activate' s.id %}" title="Activar Cliente" class="user-action">
+                                <i class="fa-solid fa-person"></i> 
                             </a>
-                            </th>  
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <th scope="row">
-                                        <a href="{% url 'cliente_delete' s.id %}" onclick="confirmarCambio(event);">
-                                            Elimina Cliente
-                                        </a>
-                                    </th>
-                                
-                            
-                        </th>   
-                    {% endif %}                            
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <a href="{% url 'cliente_delete' s.id %}" title="Eliminar Cliente" class="user-action">
+                                <i class="fas fa-ban"></i>
+                            </a>
+                        </td>
+                    {% endif %}                           
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
     <!-- Paginación -->
         {% if paginator.num_pages > 1 %}
             <div class="d-flex">
