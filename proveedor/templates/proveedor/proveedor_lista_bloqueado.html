@@ -34,6 +34,7 @@
     </div>
 
 </header>
+{% if profiles.group_id == 1 or profiles.group_id == 3 %}
 <div class="d-flex flex-column flex-lg-row my-5">
     <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
         <div class="feedback body--small normal"></div>
@@ -69,7 +70,6 @@
                     <th scope="row">{{s.nombre_proveedor}}</th>
                     <th scope="row">{{s.correo_proveedor}}</th>
                     <th scope="row">{{s.telefono_proveedor}}</th>      
-                    {% if profiles.group_id == 1 %}
                     
                         <th scope="row">
                             
@@ -90,11 +90,11 @@
                             </a>
                             </th>
                         
-                {% endif %}                             
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+{% endif %}
     <!-- Paginación -->
         {% if paginator.num_pages > 1 %}
             <div class="d-flex">

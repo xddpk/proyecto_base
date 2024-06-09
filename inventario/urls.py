@@ -26,6 +26,12 @@ inventario_urlpatterns = [
     
     path('categories_save/',views.categories_save, name='categories_save'),   
 
+
+
+    path('prueba',views.prueba, name='prueba'), 
+
+
+
     path('categories_ver/<categories_id>',views.categories_ver, name='categories_ver'),
 
     path('inventario_dashboard/',views.inventario_dashboard,name="inventario_dashboard"),

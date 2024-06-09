@@ -69,9 +69,10 @@
                     <th scope="row">{{s.nombre_cliente}}</th>
                     <th scope="row">{{s.correo_cliente}}</th>
                     <th scope="row">{{s.telefono_cliente}}</th>      
-                    {% if profiles.group_id == 1 %}
+                    {% if profiles.group_id == 1 or profiles.group_id == 3 %}
                     <th scope="row">
-                        <a href="{% url 'ver_cliente' s.id %}">
+                        <a href="{% url 'ver_cliente' s.id %}" onclick="confirmarCambio(event);">
+
                             Ver Cliente
                         </a>
                         </th>        

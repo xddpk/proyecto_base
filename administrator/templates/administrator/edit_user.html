@@ -16,6 +16,8 @@
                     <h3 class='h2 medium text-blue'>Editar Usuario</h3>
                 </div>
             </div> 
+            {% if profiles.group_id == 1 %}
+
                 <form action="" method="post" onsubmit="mostrarAlerta()">
                     {% csrf_token %}
                     <input type="hidden" value="{{ user_data.id }}" name="user_id" id="user_id">
@@ -74,6 +76,7 @@
                         </div>
                     </div>
                 </form>
+            {% endif %}
             </div>
         </div>
     </main>

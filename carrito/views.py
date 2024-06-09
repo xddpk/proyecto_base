@@ -27,7 +27,6 @@ num_elemento = 30
 def tienda(request,page=None,search=None):
     profiles = Profile.objects.get(user_id = request.user.id)
     if not (profiles.group_id == 1 or profiles.group_id == 4):
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     # Asegurarse de que el carrito esté inicializado en la sesión
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -58,6 +57,7 @@ def tienda(request,page=None,search=None):
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
 
     producto_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
+
     if search == None or search.strip() == "None" or search.strip() == "":# si la cadena de búsqueda viene vacia:# si la cadena de búsqueda viene vacia
         producto_array = Producto.objects.filter(producto_state = "Activa").order_by('stock_producto')
         
@@ -67,12 +67,12 @@ def tienda(request,page=None,search=None):
                 categoria_group = categoria_data.category_group
                 
                 #se guarda la información del producto
+
                 producto_all.append({'id':iv.id,
                                     'nombre_producto':iv.nombre_producto,
                                     'precio_producto':iv.precio_producto,
                                     'stock_producto':iv.stock_producto,
-                                    'categoria_data':categoria_group})
-                
+                                    'categoria_data':categoria_group})              
     else:#si la cadena de búsqueda trae datos
         producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).filter(producto_state = "Activa").order_by('-stock_producto')#Ascendente
         for iv in producto_array:
@@ -105,7 +105,6 @@ def agregar_producto(request, producto_id):
     producto = Producto.objects.get(id = producto_id)
     producto_stock = Producto.objects.get(id = producto_id).stock_producto
     cantidad_en_carrito = carrito.get_cantidad(producto_id)
-
     # Verificar si hay suficiente stock disponible
     if producto_stock > cantidad_en_carrito:
         #Producto.objects.filter(id = producto_id).update(stock_producto = producto_stock -1)

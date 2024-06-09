@@ -28,7 +28,6 @@
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
                 <h3>Editar Proveedor</h3> 
-{% if profiles.group_id == 1 or profiles.group_id == 3 %}
                 <form action="" method="post" onsubmit="mostrarAlerta()">
                     {% csrf_token %}
                     <input type="hidden" value="{{ proveedor_data.id }}" name="proveedor_id" id="proveedor_id">
@@ -67,7 +66,6 @@
                         </div>
                     </div>
                 </form>
-
 
                     <!-- Campo de búsqueda y botón de búsqueda -->
     <div class="container col-12 mt-3">
@@ -110,7 +108,9 @@
                 <th width="20%" scope="col">Región</th>
                 <th width="20%" scope="col">Comuna</th>
                 <th width="30%" scope="col">Dirreción</th>
-                <th width="15%" scope="col">Funciones</th>
+                {% if profiles.group_id == 1 %}
+                    <th width="15%" scope="col">Funciones</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -119,6 +119,7 @@
                     <th scope="row">{{s.region}}</th>
                     <th scope="row">{{s.comuna}}</th>
                     <th scope="row">{{s.direccion}}</th>
+                    {% if profiles.group_id == 1 or profiles.group_id == 3%}
                             <th scope="row">
                             
                                 <a href="{% url 'direccion_edit' s.id s.proveedor_id %}">
@@ -134,11 +135,11 @@
                                     </th>
                                 
                         </th>   
+                    {% endif %}                            
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-{% endif% }
     <!-- Paginación -->
         {% if paginator.num_pages > 1 %}
             <div class="d-flex">

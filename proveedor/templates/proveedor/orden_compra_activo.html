@@ -22,10 +22,12 @@
     <div class="row">
         <div class="col-12 col-sm-8 mb-3">
             <h2 class='h2 medium text-blue'>Listado de Ordenes en transito</h2>
+
         </div>
         <div class="col-12 col-sm-4 mb-3">
             <a href="{% url 'proveedor_main4' %}" class="button button--gray form-control">Volver</a>
         </div>
+{% if profiles.group_id == 1 or profiles.group_id == 3 %}
     </div>
     <div class="d-flex flex-column flex-lg-row mt-2">
 
@@ -55,7 +57,8 @@
                 <th width="20%" scope="col">Teléfono de Orden</th>
                 <th width="20%" scope="col">Estado de Orden</th>
                 <th width="20%" scope="col">Proveedor</th>
-                {% if profiles.group_id == 1 %}
+                {% if profiles.group_id == 1 or profiles.group_id == 3 %}
+
                     <th width="15%" scope="col">Funciones</th>
                 {% endif %}
             </tr>
@@ -89,6 +92,8 @@
             {% endfor %}
         </tbody>
     </table>
+{% endif %}
+
     <!-- Paginación -->
         {% if paginator.num_pages > 1 %}
             <div class="d-flex">

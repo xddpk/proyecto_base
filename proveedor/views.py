@@ -51,24 +51,24 @@ def buscar_y_redirigir(request):
 @login_required
 def proveedor_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
     template_name = 'proveedor/proveedor_main.html'
     return render(request,template_name,{'profiles':profiles})
 @login_required
 def proveedor_main4(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
     template_name = 'proveedor/proveedor_main4.html'
     return render(request,template_name,{'profiles':profiles})
 @login_required
 def proveedor_main2(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
     template_name = 'proveedor/proveedor_main2.html'
     return render(request,template_name,{'profiles':profiles})
@@ -79,7 +79,7 @@ def proveedor_main3(request, producto_id=None):
     profiles = Profile.objects.get(user_id=request.user.id)
     
     if profiles.group_id not in [1, 3]:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        
         return redirect('check_group_main')
     
     productos = Producto.objects.all()
@@ -98,54 +98,24 @@ def agregar_productos(request):
         email = request.POST['email']
         fecha = request.POST['fecha']
         numero = request.POST['numero']
-  
+
         # Crear la orden
         orden = Orden(proveedor_id=proveedor, telefono_orden=email, creacion=fecha, nota_orden=numero)
         orden.save()
         # Iteramos sobre los datos del formulario
-        for i in range(len(request.POST.getlist('nombre[]'))):
-            nombre = request.POST.getlist('nombre[]')[i]
-            cantidad = request.POST.getlist('cantidad[]')[i]
-            precio = request.POST.getlist('precio[]')[i]
-            productos = Producto.objects.filter(nombre_producto=nombre)
-            producto = productos.first() 
-            "Producto.objects.filter(id=producto.id).update(stock_producto=F('stock_producto') + cantidad)"
 
-
-            # Creamos una instancia de ProductoForm con los datos del formulario
-            """form = OrdenProductoForm({'nombre_producto': nombre, 'cantidad_producto': cantidad, 'precio_producto': precio, 'orden_id': orden, 'producto_id': producto})
-
-            # Verificamos si el formulario es válido
-            if form.is_valid():
-                # Guardamos el producto en la base de datos
-                producto = form.save()
-                # Añaidimos el producto creado a la lista de productos creados
-                productos_creados.append(producto)
-            else:
-                # Si el formulario no es válido, podrías manejarlo de alguna manera, como mostrar un mensaje de error
-                pass"""
-            OrdenProducto.objects.create(
-                    nombre_producto=nombre,
-                    cantidad_producto=cantidad,
-                    precio_producto=precio,
-                    orden=orden,
-                    producto=producto,
-                    
-
-                )
-                # Redireccionamos a alguna página después de agregar los productos
         return redirect('proveedor_main')
 
     else:
         # Si la solicitud no es de tipo POST, renderizamos el formulario vacío
         form = ProductoForm()
         return render(request, 'proveedor_main.html', {'form': form})
-    
+
 @login_required
 def proveedor_create(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
     template_name = 'proveedor/proveedor_create.html'
     regiones = Region.objects.all()
@@ -154,8 +124,8 @@ def proveedor_create(request):
 @login_required
 def direccion_create(request, proveedor_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
     template_name = 'proveedor/direccion_create.html'
     regiones = Region.objects.all()
@@ -166,8 +136,8 @@ def direccion_create(request, proveedor_id):
 @login_required
 def direccion_save(request, proveedor_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
 
     if request.method=='POST':
@@ -316,8 +286,8 @@ def proveedor_save(request):
 def proveedor_lista_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
     
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
     
     template_name = 'proveedor/proveedor_lista_main.html'
@@ -328,7 +298,8 @@ def editar_orden(request, orden_id):
     profiles = Profile.objects.get(user_id=request.user.id)
     validar = True
     
-    if profiles.group_id != 1 and profiles.group_id != 3:
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
 
@@ -347,13 +318,23 @@ def editar_orden(request, orden_id):
             total_impuesto = request.POST.get('total_impuesto')
             total_compra = request.POST.get('total_compra')
             nota_orden = request.POST.get('nota_orden')
-
-            orden.orden_id = orden_id
-            Orden.objects.filter(pk = orden_id).update(numero_orden=numero_orden) 
-            Orden.objects.filter(pk = orden_id).update(direccion_orden=direccion_orden)
-            Orden.objects.filter(pk = orden_id).update(telefono_orden=telefono_orden)
-            Orden.objects.filter(pk = orden_id).update(numero_orden=numero_orden)
-            Orden.objects.filter(pk = orden_id).update(nota_orden=nota_orden)
+            validar=True
+            if  validacion.validar_int(numero_orden)==False:
+                validar=False
+            if  validacion.validar_soloString(direccion_orden)==False:
+                validar=False
+            if  validacion.validar_numCelular(telefono_orden)==False:
+                validar=False
+            if  validacion.validar_soloString(nota_orden)==False:
+                validar=False
+            
+                orden.orden_id = orden_id
+                Orden.objects.filter(pk = orden_id).update(numero_orden=numero_orden) 
+                Orden.objects.filter(pk = orden_id).update(direccion_orden=direccion_orden)
+                Orden.objects.filter(pk = orden_id).update(telefono_orden=telefono_orden)
+                Orden.objects.filter(pk = orden_id).update(nota_orden=nota_orden)
+            else:
+                messages.add_message(request, messages.INFO, 'Complete segun lo pedido') 
             
             messages.success(request, 'Orden de compra editada exitosamente.')
             return redirect('orden_compra_activo')
@@ -369,8 +350,8 @@ def editar_orden(request, orden_id):
 def edit_proveedor(request,proveedor_id,page=None,search=None):
     profiles = Profile.objects.get(user_id = request.user.id)
     validar = True
-    if profiles.group_id != 1 and profiles.group_id != 3 :
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 and profiles.group_id == 3):
+        
         return redirect('check_group_main')
     if page == None:
         page = request.GET.get('page')
@@ -453,6 +434,7 @@ def edit_proveedor(request,proveedor_id,page=None,search=None):
         template_name = 'proveedor/edit_proveedor.html'
         return render(request,template_name,{'profiles':profiles,'direccion_list':direccion_list,'paginator':paginator,'page':page,'search':search, 'proveedor_data':proveedor_data })
 
+
     else:#si la cadena de búsqueda trae datos
 
         #se filtran todas las tablas ProveedorDireccion que contengan que su registro proveedor_id sea igual al proveedor_que se esta editando
@@ -493,8 +475,9 @@ def edit_proveedor(request,proveedor_id,page=None,search=None):
 @login_required
 def ver_proveedor(request, proveedor_id):
     profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
+
         return redirect('check_group_main') 
     template_name = 'proveedor/ver_proveedor.html'
     proveedor_data = Proveedor.objects.get(pk=proveedor_id)
@@ -503,7 +486,8 @@ def ver_proveedor(request, proveedor_id):
 def ver_orden(request, orden_id):
     profiles = Profile.objects.get(user_id=request.user.id)
     
-    if profiles.group_id != 1 and profiles.group_id != 2:
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
     
@@ -539,8 +523,6 @@ def ejemplos_correo1(request,mail_to,data_1):
 @login_required
 def orden_block(request, orden_id):
     profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id not in [1, 3]:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
         
     try:
@@ -591,8 +573,9 @@ def orden_rechazar(request, orden_id):
 @login_required
 def orden_delete(request,orden_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
+
         return redirect('check_group_main')
 
     orden_data_count = Orden.objects.filter(pk=orden_id).count()
@@ -635,8 +618,9 @@ def orden_delete(request,orden_id):
 @login_required
 def orden_activate(request, orden_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
+
         return redirect('check_group_main')
     order_data_count = Orden.objects.filter(pk=orden_id).count()
     order_data = Orden.objects.get(pk=orden_id)     
@@ -654,11 +638,12 @@ def orden_activate(request, orden_id):
 
 
 
+
 @login_required    
 def proveedor_lista_activo(request,page=None,search=None):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
     
     if page == None:
@@ -982,8 +967,7 @@ def orden_compra_finalizada(request, page=None, search=None):
 @login_required    
 def orden_lista_bloqueada(request, page=None, search=None):
     profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id not in [1, 3]:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
         return redirect('check_group_main')
     
     if page is None:
@@ -1052,8 +1036,8 @@ def orden_lista_bloqueada(request, page=None, search=None):
 @login_required    
 def proveedor_lista_bloqueado(request,page=None,search=None):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
     if page == None:
         page = request.GET.get('page')
@@ -1111,8 +1095,8 @@ def proveedor_lista_bloqueado(request,page=None,search=None):
 @login_required
 def proveedor_block(request,proveedor_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
 
     order_data_count = Proveedor.objects.filter(pk=proveedor_id).count()
@@ -1127,8 +1111,8 @@ def proveedor_block(request,proveedor_id):
 @login_required
 def proveedor_activate(request,proveedor_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
     proveedor_data_count = Proveedor.objects.filter(pk=proveedor_id).count()
     proveedor_data = Proveedor.objects.get(pk=proveedor_id)     
@@ -1143,8 +1127,8 @@ def proveedor_activate(request,proveedor_id):
 @login_required
 def proveedor_delete(request,proveedor_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
 
     proveedor_data_count = Proveedor.objects.filter(pk=proveedor_id).count()
@@ -1163,8 +1147,8 @@ def proveedor_delete(request,proveedor_id):
 @login_required
 def direccion_delete(request,direccion_id,proveedor_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
 
     direccion_data_count = Direccion.objects.filter(pk=direccion_id).count()
@@ -1185,8 +1169,8 @@ def direccion_delete(request,direccion_id,proveedor_id):
 @login_required
 def direccion_edit(request,direccion_id,proveedor_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
     if request.method=='POST':
         region= request.POST.get('region')

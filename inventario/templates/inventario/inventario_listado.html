@@ -12,6 +12,7 @@
         </div>
     </div>
 </header>
+{% if profiles.group_id 1 ==  or profiles.group_id == 2 %}
 
 <div class="col-md-11" style="position: absolute; top: 20%; left: 15%; width: 40%; height: 60%; border-radius: 90px;">
     <div class="position-relative h-100">
@@ -47,15 +48,9 @@
                 <th width="7%" scope="col">Precio $</th>
                 <th width="5%" scope="col">Categoría</th>
                 <th width="5%" scope="col">Estado</th>
-                {% if profiles.group_id == 1 %}
-                    <th width="2%" scope="col">
-                        {% if profiles.group_id == 1 %}
-                            <i class="fas fa-cogs" title="Funciones"></i>
-                            
-                        {% endif %}
-                    </th>
-                {% endif %}
-            </tr>
+                <th width="2%" scope="col">
+                <i class="fas fa-cogs" title="Funciones"></i>
+
         </thead>
         <tbody>
 
@@ -89,11 +84,13 @@
                                     <i class="fas fa-ban"></i>
                                 </a>
                             </th>
+
                     {% endif %}                            
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% endif %}
     <script>
         console.log(producto_list);
     </script>

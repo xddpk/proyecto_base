@@ -28,6 +28,8 @@
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
                 <h3>Ver Proveedor</h3> 
+                {% if profiles.group_id == 1 or profiles.group_id == 3%}
+
                 <form action="" method="post" onsubmit="mostrarAlerta()">
                     {% csrf_token %}
                     <input type="hidden" value="{{ proveedor_data.id }}" name="proveedor_id" id="proveedor_id">
@@ -61,6 +63,8 @@
                     
                     </div>
                 </form>
+                {% endif %}
+
 
                 
 

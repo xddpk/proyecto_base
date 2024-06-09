@@ -5,6 +5,8 @@
 
 {% endblock %}
     <main role="main">
+        {% if profiles.group_id == 1 or profiles.group_id == 2 %}
+
                         <div class="col-md-11"style="position: absolute; top: 35%; left: 15%; width: 50%; height: 70%;">
                             <div class="col-12" style="margin-bottom: 25px;"></div>
                             <a href="{% url 'inventario_listado' %}" class="button form-control">Listado de productos Activos</a>
@@ -14,6 +16,7 @@
                             <div style="font-size: 100px;">Dashboard</div>
                         </div>
                         
-                        
+        {% endif %}                
+
     </main>
 {% endblock %}

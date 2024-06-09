@@ -10,7 +10,7 @@ from venta import views
 
 venta_urlpatterns = [
     path('venta_main/',views.venta_main, name='venta_main'),  
-    
+
     path('cliente_create/',views.cliente_create, name='cliente_create'),
     path('cliente_save/',views.cliente_save, name='cliente_save'),   
     path('edit_cliente/<cliente_id>/',views.edit_cliente, name='edit_cliente'),   
@@ -37,7 +37,14 @@ venta_urlpatterns = [
     path('cliente_activate/<cliente_id>',views.cliente_activate, name='cliente_activate'),
     path('cliente_delete/<cliente_id>',views.cliente_delete, name='cliente_delete'),
     
+    path('finalizar_venta/<cliente_id>/',views.finalizar_venta, name='finalizar_venta'), 
+
+    
+    
+    #path('venta_create/',views.venta_create, name='venta_create'),
+    #path('venta_save/',views.venta_save, name='venta_save'),     
     path('finalizar_venta/<cliente_id>/',views.finalizar_venta, name='finalizar_venta'),    
+
     
     ]
 
