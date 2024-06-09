@@ -104,7 +104,7 @@ def ejemplos_correo1(request,mail_to,data_1):
                         <head>
                             <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                         </head>
-                         <body>
+                        <body>
                             <h3>Estimad@</h3>
                             <p>Es es el cuerpo que agrega el dato por parametro """+str(data_1)+""" mas texto .</p>
                             <p>otro párrafo</p>
