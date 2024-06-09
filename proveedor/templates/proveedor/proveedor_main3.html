@@ -110,7 +110,10 @@
     <div class="nav-buttons">
     </div>
     <script src="{% static 'js/util.js' %}"></script>
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     <form method="POST" action="{% url 'agregar_productos' %}">
         <div>
             <label for="proveedor">Nombre Proveedor:</label>
@@ -142,14 +145,19 @@
             <input type="text" id="total" readonly>
         </div>
         <button type="submit">Enviar</button>
-        <button id="volverButton">Volver</button>
+        <button onclick="volver()">Volver</button>
     </form>
-
     <script>
         let contadorItems = 0;
+<<<<<<< Updated upstream
         document.getElementById('agregarItem').addEventListener('click', agregarItemYProducto);
         document.getElementById('volverButton').addEventListener('click', volver);
         document.getElementById('enviarButton').addEventListener('click', enviar);
+=======
+    
+        
+        
+>>>>>>> Stashed changes
     </script>
 </body>
 </html>

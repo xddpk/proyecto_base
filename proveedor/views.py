@@ -105,9 +105,13 @@ def agregar_productos(request):
             nombre = request.POST.getlist('nombre[]')[i]
             cantidad = request.POST.getlist('cantidad[]')[i]
             precio = request.POST.getlist('precio[]')[i]
+<<<<<<< Updated upstream
             productos = Producto.objects.filter(nombre_producto=nombre)
             producto = productos.first() 
             "Producto.objects.filter(id=producto.id).update(stock_producto=F('stock_producto') + cantidad)"
+=======
+            producto = Producto.objects.get(nombre_producto=nombre)
+>>>>>>> Stashed changes
 
 
             # Creamos una instancia de ProductoForm con los datos del formulario
