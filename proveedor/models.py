@@ -133,10 +133,10 @@ class OrdenProducto(models.Model):
     class Meta:
         verbose_name = 'OrdenProducto'
         verbose_name_plural = 'OrdenProductos'  
-        ordering = ['cantidad_producto']
+        ordering = ['nombre_producto']
 
     def __str__(self):
-        return str(self.numero_direccion or '')
+        return str(self.nombre_producto or '')
 class OrdenProductoForm(forms.ModelForm):
     class Meta:
         model = OrdenProducto
@@ -144,3 +144,7 @@ class OrdenProductoForm(forms.ModelForm):
     def __str__(self):
         return str(self.numero_direccion or '')
 
+class OrdenForm(forms.ModelForm):
+    class Meta:
+        model = Orden
+        fields = ['numero_orden', 'direccion_orden', 'telefono_orden', 'estado_orden', 'descuento', 'tasa', 'total_impuesto', 'total_compra', 'proveedor', 'nota_orden']

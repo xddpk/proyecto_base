@@ -98,7 +98,6 @@ def agregar_productos(request):
         email = request.POST['email']
         fecha = request.POST['fecha']
         numero = request.POST['numero']
-
         # Crear la orden
         orden = Orden(proveedor_id=proveedor, telefono_orden=email, creacion=fecha, nota_orden=numero)
         orden.save()
@@ -107,7 +106,8 @@ def agregar_productos(request):
             nombre = request.POST.getlist('nombre[]')[i]
             cantidad = request.POST.getlist('cantidad[]')[i]
             precio = request.POST.getlist('precio[]')[i]
-            producto = Producto.objects.get(nombre_producto=nombre) 
+            productof = Producto.objects.filter(nombre_producto=nombre) 
+            producto= productof.first()
 
 
             OrdenProducto.objects.create(
@@ -507,13 +507,22 @@ def orden_block(request, orden_id):
     order_data_count = Orden.objects.filter(pk=orden_id).count()
     order_data = Orden.objects.get(pk=orden_id)     
     if order_data_count == 1:
-        Orden.objects.filter(pk=orden_id).update(estado_orden='f')
+        orden = OrdenProducto(orden_id)
+        Orden.objects.filter(pk=orden_id).update(estado_orden='t')
         messages.add_message(request, messages.INFO, ' Orden ha llegado con éxito')
+        orden = OrdenProducto(orden_id)
+        ordent = OrdenProducto.objects.filter(orden_id=orden_id).values_list()
+        print(ordent)
+        for orden_producto in ordent:
+            producto = Producto.objects.get(pk=orden_producto.producto_id)
+            producto.stock_producto += orden_producto.cantidad_producto
+            producto.save()
         return redirect('orden_compra_activo')        
     else:
         messages.add_message(request, messages.INFO, 'Hubo un error con la orden ' )
         return redirect('orden_compra_activo')    
-    
+   
+"""   
 @login_required
 def orden_delete(request,orden_id):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -534,8 +543,25 @@ def orden_delete(request,orden_id):
             return redirect('proveedor_lista_bloqueado')       
     else:
         messages.add_message(request, messages.INFO, 'Hubo un error al eliminar la Orden ')
-        return redirect('proveedor_lista_bloqueado')      
+        return redirect('proveedor_lista_bloqueado')  """    
+        
+@login_required
+def orden_delete(request,orden_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 3:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+        return redirect('check_group_main')
 
+    order_data_count = Orden.objects.filter(pk=orden_id).count()
+    order_data = Orden.objects.get(pk=orden_id)     
+    if order_data_count == 1:
+        Orden.objects.filter(pk=orden_id).update(estado_orden='z')
+        messages.add_message(request, messages.INFO, ' Orden ha llegado con éxito')
+        return redirect('orden_compra_activo')        
+    else:
+        messages.add_message(request, messages.INFO, 'Hubo un error con la orden ' )
+        return redirect('orden_compra_activo')    
+      
 @login_required
 def orden_activate(request, orden_id):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -553,20 +579,7 @@ def orden_activate(request, orden_id):
         return redirect('proveedor_lista_bloqueado')        
 
 
-@login_required
-def orden_delete(request, orden_id):
-    profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
-        return redirect('check_group_main')
 
-    orden_data = Orden.objects.filter(pk=orden_id).first()
-    if orden_data:
-        orden_data.delete()
-        messages.add_message(request, messages.INFO, 'Orden  eliminada con éxito')
-    else:
-        messages.add_message(request, messages.INFO, 'Hubo un error al eliminar la Orden')
-    return redirect('proveedor_lista_bloqueado')  
 @login_required    
 def proveedor_lista_activo(request,page=None,search=None):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -699,6 +712,91 @@ def orden_compra_activo(request, page=None, search=None):
             
     else: # Si la cadena de búsqueda trae datos
         orden_array = Orden.objects.filter(numero_orden__icontains=search).filter(estado_orden='t').order_by('numero_orden')
+        
+        for orden in orden_array:
+            orden_all.append({
+                'numero_orden': orden.numero_orden,
+                'direccion_orden': orden.direccion_orden,
+                'telefono_orden': orden.telefono_orden,
+                'estado_orden': orden.estado_orden,
+                'proveedor': orden.proveedor,
+                'id': orden.id  # Aquí añadimos el id de la orden al contexto
+            })
+            
+    paginator = Paginator(orden_all, num_elemento)  
+    orden_list = paginator.get_page(page)
+    template_name = 'proveedor/orden_compra_activo.html'
+    
+    return render(request, template_name, {
+        'profiles': profiles,
+        'orden_list': orden_list,
+        'paginator': paginator,
+        'page': page,
+        'search': search
+    })
+@login_required    
+def orden_compra_finalizada(request, page=None, search=None):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    
+    if profiles.group_id not in [1, 3]:  # Verificar permisos
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
+        return redirect('check_group_main')
+    
+    if page is None:
+        page = request.GET.get('page')
+    else:
+        page = page
+        
+    if request.GET.get('page') is None:
+        page = page
+    else:
+        page = request.GET.get('page')
+        
+    # Lógica para recibir la cadena de búsqueda y propagarla a través del paginador
+    if search is None:
+        search = request.GET.get('search')
+    else:
+        search = search
+        
+    if request.GET.get('search') is None:
+        search = search
+    else:
+        search = request.GET.get('search')
+        
+    if request.method == 'POST':
+        search = request.POST.get('search') 
+        page = None
+    
+    # Lógica para construir la lista de órdenes de compra activas
+    orden_all = [] 
+    
+    if search is None or search.lower() == "none": # Si la cadena de búsqueda está vacía
+        orden_array = Orden.objects.filter(estado_orden='z').order_by('numero_orden')
+        
+        for orden in orden_array:
+            orden_all.append({
+                'numero_orden': orden.formatted_numero_orden,
+                'direccion_orden': orden.direccion_orden,
+                'telefono_orden': orden.telefono_orden,
+                'estado_orden': orden.estado_orden,
+                'proveedor': orden.proveedor,
+                'id': orden.id  # Aquí añadimos el id de la orden al contexto
+            })
+        
+        paginator = Paginator(orden_all, 20)  
+        orden_list = paginator.get_page(page)
+        template_name = 'proveedor/orden_compra_activo.html'
+        
+        return render(request, template_name, {
+            'profiles': profiles,
+            'orden_list': orden_list,
+            'paginator': paginator,
+            'page': page,
+            'search': search
+        })
+            
+    else: # Si la cadena de búsqueda trae datos
+        orden_array = Orden.objects.filter(numero_orden__icontains=search).filter(estado_orden='z').order_by('numero_orden')
         
         for orden in orden_array:
             orden_all.append({
