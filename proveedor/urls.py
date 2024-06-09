@@ -17,6 +17,7 @@ proveedor_urlpatterns = [
     path('proveedor_main2/',views.proveedor_main2, name='proveedor_main2'), 
     path('proveedor_main3/',views.proveedor_main3, name='proveedor_main3'),  
     path('proveedor_main4/',views.proveedor_main4, name='proveedor_main4'),
+    
     path('orden_compra_activo/',views.orden_compra_activo, name='orden_compra_activo'),
     path('orden_compra_activo/<groups>/<page>/',views.orden_compra_activo, name='orden_compra_activo'),
     path('proveedor_create/',views.proveedor_create, name='proveedor_create'),   
