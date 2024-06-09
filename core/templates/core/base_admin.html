@@ -36,9 +36,9 @@
         <div class='menu' style="background-color:#270F57; width: 13%;height: 100vh;">
             <!--=== Menu Administrador ===-->
             {% if template_name == 'admin_main.html' %}
-            <a href="{% url 'users_main' %}" class='item active'style="margin-top: 10%;">
+            <a href="{% url 'admin_dashboard' %}" class='item active'style="margin-top: 10%;">
             {% else %}
-                <a href="{% url 'users_main' %}" class='item'>   
+                <a href="{% url 'admin_dashboard' %}" class='item'>   
             {% endif %}
                     <div style="height: 3%;">
 
@@ -51,9 +51,9 @@
                 <!--=== Fin Menú Admin ===-->
                 <!--=== Menu inventario ===-->
             {% if template_name == 'inventario/inventario_main.html' %}
-                <a href="{% url 'inventario_main' %}" class='item active'>
+                <a href="{% url 'inventario_dashboard' %}" class='item active'>
             {% else %}
-                <a href="{% url 'inventario_main' %}" class='item'>
+                <a href="{% url 'inventario_dashboard' %}" class='item'>
             {% endif %}
                       <span class="material-icons-outlined" style="color: white; display: flex; justify-content: center; margin-right: 40px;font-size: 20px;margin-top: 10%; ">
                         <i class="fa-solid fa-cart-flatbed"></i>
@@ -109,6 +109,7 @@
         {% block content %}{% endblock %}
     </div>
     <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+
 </body>
 
 </html>

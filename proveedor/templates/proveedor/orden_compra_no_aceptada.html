@@ -70,20 +70,11 @@
                     <th scope="row">{{ orden.proveedor.nombre_proveedor }}</th>
                     {% if profiles.group_id == 1 or profiles.group_id == 3 %}
                         <th scope="row">
-                            <a href="{% url 'editar_orden' orden.id   %}">
-                                Editar 
-                            </a>
-                        </th>
-                        <th scope="row">
                             <a href="{% url 'ver_orden' orden.id  %}">
                                 Ver Orden
                             </a>
                         </th>
-                        <th scope="row">
-                            <a href="{% url 'orden_block' orden.id %}" onclick="confirmarCambio(event);">
-                                Entregada
-                            </a>
-                        </th>
+
                     {% endif %}                            
                 </tr>
             {% endfor %}

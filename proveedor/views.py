@@ -24,6 +24,8 @@ global num_elemento
 num_elemento = 30
 from django.views import View
 from .models import ProductoForm
+from django.conf import settings #importamos el archivo settings, para usar constantes declaradas en él
+from django.core.mail import EmailMultiAlternatives #libreria para el envio de correos
 
 class AgregarProductosView(View):
     def get(self, request):
@@ -96,7 +98,7 @@ def agregar_productos(request):
         email = request.POST['email']
         fecha = request.POST['fecha']
         numero = request.POST['numero']
-
+  
         # Crear la orden
         orden = Orden(proveedor_id=proveedor, telefono_orden=email, creacion=fecha, nota_orden=numero)
         orden.save()
@@ -105,13 +107,9 @@ def agregar_productos(request):
             nombre = request.POST.getlist('nombre[]')[i]
             cantidad = request.POST.getlist('cantidad[]')[i]
             precio = request.POST.getlist('precio[]')[i]
-<<<<<<< Updated upstream
             productos = Producto.objects.filter(nombre_producto=nombre)
             producto = productos.first() 
             "Producto.objects.filter(id=producto.id).update(stock_producto=F('stock_producto') + cantidad)"
-=======
-            producto = Producto.objects.get(nombre_producto=nombre)
->>>>>>> Stashed changes
 
 
             # Creamos una instancia de ProductoForm con los datos del formulario
@@ -511,11 +509,59 @@ def ver_orden(request, orden_id):
     
     orden = Orden.objects.get(pk=orden_id)
     template_name = 'proveedor/ver_orden.html'
-    
     return render(request, template_name, {'orden': orden})
-
+@login_required
+def ejemplos_correo1(request,mail_to,data_1):
+    #Ejemplo que permite enviar un correo solo con texto, el metodo, recibe por parametro la información para su ejecución    
+    from_email = settings.DEFAULT_FROM_EMAIL #exporta desde el settings.py, el correo de envio por defecto
+    subject = "Asunto del correo"    
+    html_content = """
+                    <html>
+                        <head>
+                            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                        </head>
+                        <body>
+                            <h3>Estimad@</h3>
+                            <p>Es es el cuerpo que agrega el dato por parametro """+str(data_1)+""" mas texto .</p>
+                            <p>otro párrafo</p>
+                            <br/>
+                            <p>Le saluda</p>
+                            <p>Equipo de soluciones pyme.</p>
+                            <br/>
+                            <p><small>Correo generado automáticamente, por favor no responder.<small></p>
+                        </body>
+                    </html>            
+                """
+    msg = EmailMultiAlternatives(subject, html_content, from_email, [mail_to])
+    msg.content_subtype = "html"
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
 @login_required
 def orden_block(request, orden_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id not in [1, 3]:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
+        return redirect('check_group_main')
+        
+    try:
+        order_data = Orden.objects.get(pk=orden_id)
+    except Orden.DoesNotExist:
+        messages.add_message(request, messages.INFO, 'La orden no existe')
+        return redirect('orden_compra_activo')
+
+    # Actualizar el estado de la orden a 't' (supongo que 't' significa "llegada")
+    Orden.objects.filter(pk=orden_id).update(estado_orden='f')
+
+    # Mensaje de éxito
+    messages.add_message(request, messages.INFO, 'Orden ha llegado con éxito')
+
+    
+    ejemplos_correo1(request,'pedrozzzlp@gmail.com',str(orden))
+
+    return redirect('orden_compra_activo')
+   
+@login_required
+def orden_rechazar(request, orden_id):
     profiles = Profile.objects.get(user_id=request.user.id)
     if profiles.group_id not in [1, 3]:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
@@ -528,7 +574,7 @@ def orden_block(request, orden_id):
         return redirect('orden_compra_activo')
 
     # Actualizar el estado de la orden a 't' (supongo que 't' significa "llegada")
-    Orden.objects.filter(pk=orden_id).update(estado_orden='t')
+    Orden.objects.filter(pk=orden_id).update(estado_orden='x')
 
     # Mensaje de éxito
     messages.add_message(request, messages.INFO, 'Orden ha llegado con éxito')
@@ -540,7 +586,6 @@ def orden_block(request, orden_id):
         Producto.objects.filter(id=producto.id).update(stock_producto=F('stock_producto') + ordert.cantidad_producto)
 
     return redirect('orden_compra_activo')
-   
    
 """   
 @login_required
@@ -577,7 +622,12 @@ def orden_delete(request,orden_id):
     if order_data_count == 1:
         Orden.objects.filter(pk=orden_id).update(estado_orden='z')
         messages.add_message(request, messages.INFO, ' Orden ha llegado con éxito')
-        return redirect('orden_compra_activo')        
+        return redirect('orden_compra_activo')
+    # Actualizar el stock de los productos asociados a la orden
+    ordent = OrdenProducto.objects.filter(orden_id=orden_id)
+    for ordert in ordent:
+        producto = Producto.objects.get(pk=ordert.producto_id)
+        Producto.objects.filter(id=producto.id).update(stock_producto=F('stock_producto') + ordert.cantidad_producto)        
     else:
         messages.add_message(request, messages.INFO, 'Hubo un error con la orden ' )
         return redirect('orden_compra_activo')    
@@ -593,7 +643,11 @@ def orden_activate(request, orden_id):
     if order_data_count == 1:
         Orden.objects.filter(pk=orden_id).update(estado_orden='t')
         messages.add_message(request, messages.INFO, 'Orden '+order_data.formatted_numero_orden +' activado con éxito')
-        return redirect('proveedor_lista_bloqueado')        
+        return redirect('proveedor_lista_bloqueado')
+    ordent = OrdenProducto.objects.filter(orden_id=orden_id)
+    for ordert in ordent:
+        producto = Producto.objects.get(pk=ordert.producto_id)
+        Producto.objects.filter(id=producto.id).update(stock_producto=F('stock_producto') - ordert.cantidad_producto)        
     else:
         messages.add_message(request, messages.INFO, 'Hubo un error al activar el Proveedor '+order_data.formatted_numero_orden +'activado')
         return redirect('proveedor_lista_bloqueado')        
@@ -755,6 +809,91 @@ def orden_compra_activo(request, page=None, search=None):
         'search': search
     })
 @login_required    
+def orden_compra_no_aceptada(request, page=None, search=None):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    
+    if profiles.group_id not in [1, 3]:  # Verificar permisos
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tienes permisos')
+        return redirect('check_group_main')
+    
+    if page is None:
+        page = request.GET.get('page')
+    else:
+        page = page
+        
+    if request.GET.get('page') is None:
+        page = page
+    else:
+        page = request.GET.get('page')
+        
+    # Lógica para recibir la cadena de búsqueda y propagarla a través del paginador
+    if search is None:
+        search = request.GET.get('search')
+    else:
+        search = search
+        
+    if request.GET.get('search') is None:
+        search = search
+    else:
+        search = request.GET.get('search')
+        
+    if request.method == 'POST':
+        search = request.POST.get('search') 
+        page = None
+    
+    # Lógica para construir la lista de órdenes de compra activas
+    orden_all = [] 
+    
+    if search is None or search.lower() == "none": # Si la cadena de búsqueda está vacía
+        orden_array = Orden.objects.filter(estado_orden='x').order_by('numero_orden')
+        
+        for orden in orden_array:
+            orden_all.append({
+                'numero_orden': orden.formatted_numero_orden,
+                'nota_orden': orden.nota_orden,
+                'telefono_orden': orden.telefono_orden,
+                'estado_orden': orden.estado_orden,
+                'proveedor': orden.proveedor,
+                'id': orden.id  # Aquí añadimos el id de la orden al contexto
+            })
+        
+        paginator = Paginator(orden_all, 20)  
+        orden_list = paginator.get_page(page)
+        template_name = 'proveedor/orden_compra_no_aceptada.html'
+        
+        return render(request, template_name, {
+            'profiles': profiles,
+            'orden_list': orden_list,
+            'paginator': paginator,
+            'page': page,
+            'search': search
+        })
+            
+    else: # Si la cadena de búsqueda trae datos
+        orden_array = Orden.objects.filter(numero_orden__icontains=search).filter(estado_orden='x').order_by('numero_orden')
+        
+        for orden in orden_array:
+            orden_all.append({
+                'numero_orden': orden.numero_orden,
+                'direccion_orden': orden.direccion_orden,
+                'telefono_orden': orden.telefono_orden,
+                'estado_orden': orden.estado_orden,
+                'proveedor': orden.proveedor,
+                'id': orden.id  # Aquí añadimos el id de la orden al contexto
+            })
+            
+    paginator = Paginator(orden_all, num_elemento)  
+    orden_list = paginator.get_page(page)
+    template_name = 'proveedor/orden_compra_.html'
+    
+    return render(request, template_name, {
+        'profiles': profiles,
+        'orden_list': orden_list,
+        'paginator': paginator,
+        'page': page,
+        'search': search
+    })    
+@login_required    
 def orden_compra_finalizada(request, page=None, search=None):
     profiles = Profile.objects.get(user_id=request.user.id)
     
@@ -796,7 +935,7 @@ def orden_compra_finalizada(request, page=None, search=None):
         for orden in orden_array:
             orden_all.append({
                 'numero_orden': orden.formatted_numero_orden,
-                'direccion_orden': orden.direccion_orden,
+                'nota_orden': orden.nota_orden,
                 'telefono_orden': orden.telefono_orden,
                 'estado_orden': orden.estado_orden,
                 'proveedor': orden.proveedor,
@@ -805,7 +944,7 @@ def orden_compra_finalizada(request, page=None, search=None):
         
         paginator = Paginator(orden_all, 20)  
         orden_list = paginator.get_page(page)
-        template_name = 'proveedor/orden_compra_activo.html'
+        template_name = 'proveedor/orden_compra_finalizada.html'
         
         return render(request, template_name, {
             'profiles': profiles,
@@ -821,7 +960,7 @@ def orden_compra_finalizada(request, page=None, search=None):
         for orden in orden_array:
             orden_all.append({
                 'numero_orden': orden.numero_orden,
-                'direccion_orden': orden.direccion_orden,
+                'nota_orden': orden.nota_orden,
                 'telefono_orden': orden.telefono_orden,
                 'estado_orden': orden.estado_orden,
                 'proveedor': orden.proveedor,
@@ -830,7 +969,7 @@ def orden_compra_finalizada(request, page=None, search=None):
             
     paginator = Paginator(orden_all, num_elemento)  
     orden_list = paginator.get_page(page)
-    template_name = 'proveedor/orden_compra_activo.html'
+    template_name = 'proveedor/orden_compra_finalizada.html'
     
     return render(request, template_name, {
         'profiles': profiles,
@@ -879,7 +1018,7 @@ def orden_lista_bloqueada(request, page=None, search=None):
             orden_all.append({
                 'id': orden.id,
                 'numero_orden': orden.formatted_numero_orden,
-                'direccion_orden': orden.direccion_orden,
+                'nota_orden': orden.nota_orden,
                 'telefono_orden': orden.telefono_orden,
                 'estado_orden': orden.estado_orden,
                 'proveedor': orden.proveedor.nombre_proveedor if orden.proveedor else ''
@@ -900,7 +1039,7 @@ def orden_lista_bloqueada(request, page=None, search=None):
             orden_all.append({
                 'id': orden.id,
                 'numero_orden': orden.formatted_numero_orden,
-                'direccion_orden': orden.direccion_orden,
+                'nota_orden': orden.nota_orden,
                 'telefono_orden': orden.telefono_orden,
                 'estado_orden': orden.estado_orden,
                 'proveedor': orden.proveedor.nombre_proveedor if orden.proveedor else ''

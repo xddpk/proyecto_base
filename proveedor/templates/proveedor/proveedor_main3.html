@@ -110,10 +110,6 @@
     <div class="nav-buttons">
     </div>
     <script src="{% static 'js/util.js' %}"></script>
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
     <form method="POST" action="{% url 'agregar_productos' %}">
         <div>
             <label for="proveedor">Nombre Proveedor:</label>
@@ -127,7 +123,7 @@
         </div>
         <div>
             <label for="fecha">Fecha de llegada:</label>
-            <input type="date" id="fecha" name="fecha" required>
+            <input type="date" id="fecha" name="fecha" min="{{ fecha_actual }}" required>
         </div>
         <div>
             <label for="email">Telefono Proveedor:</label>
@@ -148,16 +144,20 @@
         <button onclick="volver()">Volver</button>
     </form>
     <script>
+        let today = new Date();
+
+        // Formatea la fecha como YYYY-MM-DD
+        let year = today.getFullYear();
+        let month = String(today.getMonth() + 1).padStart(2, '0');
+        let day = String(today.getDate()).padStart(2, '0');
+        let fecha_actual = `${year}-${month}-${day}`;
+
         let contadorItems = 0;
-<<<<<<< Updated upstream
         document.getElementById('agregarItem').addEventListener('click', agregarItemYProducto);
         document.getElementById('volverButton').addEventListener('click', volver);
         document.getElementById('enviarButton').addEventListener('click', enviar);
-=======
-    
-        
-        
->>>>>>> Stashed changes
+        var totalValue = document.getElementById("total").value;
+
     </script>
 </body>
 </html>

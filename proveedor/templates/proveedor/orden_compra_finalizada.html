@@ -21,7 +21,7 @@
 <header class='mb-5'>
     <div class="row">
         <div class="col-12 col-sm-8 mb-3">
-            <h2 class='h2 medium text-blue'>Listado de Ordenes en transito</h2>
+            <h2 class='h2 medium text-blue'>Listado de Ordenes no aceptada</h2>
         </div>
         <div class="col-12 col-sm-4 mb-3">
             <a href="{% url 'proveedor_main4' %}" class="button button--gray form-control">Volver</a>
@@ -71,18 +71,12 @@
                     {% if profiles.group_id == 1 or profiles.group_id == 3 %}
                         <th scope="row">
                             <a href="{% url 'ver_orden' orden.id  %}">
-                                Ver Orden
+                                Ver Orden Finalizada
                             </a>
                         </th>
                         <th scope="row">
-                            <a href="{% url 'orden_block' orden.id %}" onclick="confirmarCambio(event);">
-                                Aceptar
-                            </a>
                         </th>
                         <th scope="row">
-                            <a href="{% url 'orden_rechazar' orden.id %}" onclick="confirmarCambio(event);">
-                                Rechazar
-                            </a>
                         </th>
                     {% endif %}                            
                 </tr>

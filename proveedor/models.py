@@ -42,7 +42,7 @@ class Orden(models.Model):
         ordering = ['numero_orden']
     
     def __str__(self):
-        return self.numero_orden
+        return f"Número de Orden: {self.numero_orden}, Dirección de Orden: {self.direccion_orden}, Teléfono de Orden: {self.telefono_orden}, Estado de Orden: {self.estado_orden}, Descuento: {self.descuento}, Tasa: {self.tasa}, Total de Impuesto: {self.total_impuesto}, Total de Compra: {self.total_compra}, Creación: {self.creacion}, Actualizado: {self.updated}, Proveedor: {self.proveedor}, Nota de Orden: {self.nota_orden}, Número de Orden Formateado: {self.formatted_numero_orden}"
     def save(self, *args, **kwargs):
         if not self.numero_orden: # si no hay ningun registro 
             last_record = Orden.objects.all().order_by('numero_orden').last() #busca el ultimo registro, obtiene el codigo de venta

@@ -11,12 +11,15 @@ from .views import AgregarProductosView
 
 proveedor_urlpatterns = [
     path('orden_block/<int:orden_id>/', views.orden_block, name='orden_block'),
+    path('orden_rechazar/<int:orden_id>/', views.orden_rechazar, name='orden_rechazar'),
     path('orden_activate/<int:orden_id>/', views.orden_activate, name='orden_activate'),
     path('orden_delete/<int:orden_id>/', views.orden_delete, name='orden_delete'),
     path('proveedor_main/',views.proveedor_main, name='proveedor_main'),
     path('proveedor_main2/',views.proveedor_main2, name='proveedor_main2'), 
     path('proveedor_main3/',views.proveedor_main3, name='proveedor_main3'),  
     path('proveedor_main4/',views.proveedor_main4, name='proveedor_main4'),
+    path('orden_compra_no_aceptada/',views.orden_compra_no_aceptada, name='orden_compra_no_aceptada'),
+    path('orden_compra_no_aceptada/<groups>/<page>/',views.orden_compra_no_aceptada, name='orden_compra_no_aceptada'),
     path('orden_compra_finalizada/',views.orden_compra_finalizada, name='orden_compra_finalizada'),
     path('orden_compra_finalizada/<groups>/<page>/',views.orden_compra_finalizada, name='orden_compra_finalizada'),
     path('orden_compra_activo/',views.orden_compra_activo, name='orden_compra_activo'),
