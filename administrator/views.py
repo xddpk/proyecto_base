@@ -30,6 +30,7 @@ def admin_main(request):
         return redirect('check_group_main')
     template_name = 'administrator/admin_main.html'
     return render(request,template_name,{'profiles':profiles})
+    
 
 #Flujo usuarios
 @login_required

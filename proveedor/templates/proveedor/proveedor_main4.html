@@ -12,19 +12,20 @@
             <div class="row mt-4 mb-4">
                 {% if profiles.group_id == 1 or profiles.group_id == 3 %}
                 <div class="col-12 col-sm-3 mb-3"  style="margin-bottom: 25px;">
-                    <a href="{% url 'proveedor_main3' %}" class="button button--gray form-control">Orden de compra</a>
+                    <a href="{% url 'proveedor_main3' %}" class="button form-control">Realizar orden de compra</a>
                 </div>
 
                 <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
-                    <a href="{% url 'orden_compra_activo' %}" class="button form-control">Por Entregar</a>
+                    <a href="{% url 'orden_compra_activo' %}" class="button form-control">Ordenes</a>
                 </div>
                 <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">                     
-                    <a href="{% url 'orden_lista_bloqueada' %}" class="button form-control">Entregadas</a>
+                    <a href="{% url 'orden_lista_bloqueada' %}" class="button form-control">Orden Aceptada</a>
                 </div>
+
                 {% endif %}    
 
                 <div class="col-12 col-sm-3 mb-3">
-                    <a href="{% url 'admin_main' %}" class="button button--gray form-control">Volver</a>
+                    <a href="{% url 'proveedor_main' %}" class="button button--gray form-control">Volver</a>
                 </div>
             </div>
         </div>
