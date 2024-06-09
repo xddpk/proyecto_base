@@ -5,33 +5,16 @@
 
 {% endblock %}
     <main role="main">
-        <div class="container col-12 mt-3">
-            <div class="col-12  mt-3">
-                <h3>Gestión De Usuarios </h3> 
-                <div class="col-12" style="margin-bottom: 15px;"></div>               
-                <div class="row mt-4 mb-4">
-                    {% if profiles.group_id == 1%}
-                        <div class="col-12 col-sm-3 mb-3">
-                            <a href="{% url 'new_user' %}" class="button form-control">Nuevo Usuario</a>
+                    {% if profiles.group_id == 1 %}  
+                    <div class="col-12 col-sm-3 mb-3" style="position: absolute; top: 10%; left: 15%; width: 10%; height: 10%;">
                             <div class="col-12" style="margin-bottom: 30px;"></div> 
+                            <a href="{% url 'admin_dashboard' %}" class="button">Dashboard</a>
                         </div>
-                    {% endif %}
-                    
-                        <div class="col-12 col-sm-3 mb-3">
+                        <div class="col-12 col-sm-3 mb-3" style="position: absolute; top: 16%; left: 15%; width: 10%; height: 10%;">
                             <div class="col-12" style="margin-bottom: 25px;"></div>
                             <a href="{% url 'list_main2' %}" class="button form-control">Listado</a>
+                            
                         </div>
-                    
-                    <div class="col-12 col-sm-3 mb-3">
-                        <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <a href="{% url 'carga_masiva' %}" class="button">Carga Masiva</a>
-                        <div class="col-12" style="margin-bottom: 30px;"></div> 
-                        <a href="{% url 'admin_dashboard' %}" class="button">Dashboard</a>
-                        <div class="col-12" style="margin-bottom: 30px;"></div>
-                        <a href="{% url 'admin_main' %}" class="button button--gray form-control">Volver</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    {% endif %}
     </main>
 {% endblock %}

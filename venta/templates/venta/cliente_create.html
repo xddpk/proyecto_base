@@ -9,6 +9,7 @@
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
                 <h3>Nuevo Cliente</h3> 
+                {% if profiles.group_id == 1 or profiles.group_id == 4 %}
                 <form method="post" action="{% url 'cliente_save' %}">
                     {% csrf_token %}
                     <div class="row"> 
@@ -42,6 +43,7 @@
                         </div>
                     </div>
                 </form>
+                {% endif %}
             </div>
         </div>
     </main>

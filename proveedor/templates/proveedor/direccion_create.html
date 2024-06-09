@@ -9,6 +9,7 @@
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
                 <h3>Nueva Dirrecion</h3> 
+                {% if profiles.group_id == 1 or profiles.group_id == 3%}
                 <form method="post" action="{% url 'direccion_save' id %}">
                     {% csrf_token %}
                     <div class="row">                       
@@ -42,12 +43,14 @@
                             <div class="col-12 col-sm-6 mb-3">
                                 <input type="submit" value="Crear Dirrecion" class="button form-control">
                             </div>
+                        
                             <div class="col-12 col-sm-6 mb-3">
                                 <a href="{% url 'proveedor_main' %}" class="button button--gray form-control">Volver</a>
                             </div>
                         </div>
                     </div>
                 </form>
+                {% endif %}
             </div>
         </div>
         <script type="text/javascript">

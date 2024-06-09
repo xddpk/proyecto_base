@@ -7,18 +7,21 @@
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
                 <h3 class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">Listado Clientes  </h3> 
-                <div class="row mt-4 mb-4">
-                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
-                        
-                        <a href="{% url 'cliente_lista_activo' %}" class="button form-control">Activos</a>
+                {% if profiles.group_id == 1 or profiles.group_id == 4 %}
+                    <div class="row mt-4 mb-4">
+                        <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                            
+                            <a href="{% url 'cliente_lista_activo' %}" class="button form-control">Activos</a>
+                        </div>
+                        <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;" >
+                            <a href="{% url 'cliente_lista_bloqueado' %}" class="button form-control">Bloqueados</a>
+                        </div>
+                        <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                            <a href="{% url 'venta_main' %}" class="button button--gray form-control">Volver</a>
+                        </div>
                     </div>
-                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;" >
-                        <a href="{% url 'cliente_lista_bloqueado' %}" class="button form-control">Bloqueados</a>
-                    </div>
-                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
-                        <a href="{% url 'venta_main' %}" class="button button--gray form-control">Volver</a>
-                    </div>
-                </div>
+                {% endif %}
+                
             </div>
         </div>
     </main>

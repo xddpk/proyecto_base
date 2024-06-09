@@ -1,0 +1,112 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% load mathfilters %}
+{% block content %}
+{% block extrahead %}
+<script>
+    function confirmarCambio(event) {
+        var confirmacion = confirm("¿Estás seguro de que deseas realizar este cambio?");
+        if (!confirmacion) {
+            event.preventDefault();
+            alert("Cambio cancelado.");
+        } else {
+            alert("Cambio realizado exitosamente.");
+        }
+    }
+</script>
+{% endblock %}
+<header class='mb-5'>
+    <div class="row">
+        <div class="col-12 col-sm-8 mb-3">
+            <h2 class='h2 medium text-blue'>Listado de Órdenes Entregadas</h2>
+        </div>
+        <div class="col-12 col-sm-4 mb-3">
+            <a href="{% url 'proveedor_main' %}" class="button button--gray form-control">Volver</a>
+        </div>
+{% if profiles.group_id == 1 or profiles.group_id == 3 %}
+    </div>
+    <div class="d-flex flex-column flex-lg-row mt-2">
+
+
+    </div>
+</header>
+<div class="d-flex flex-column flex-lg-row my-5">
+    <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
+        <div class="feedback body--small normal"></div>
+    </div>
+    <form method="get" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
+        <input name="search" id="search" type="text" placeholder='Buscar por Número de Orden, Dirección' value="{{ search }}" />
+        <button type="submit" class="button button--gray">
+            <span class="material-icons-outlined">search</span>
+        </button>
+    </form>
+</div>
+<div class="table-container mt-5">
+    <table class="table table-user">
+        <thead>
+            <tr>
+                <th width="20%" scope="col">Número de Orden</th>
+                <th width="20%" scope="col">Dirección</th>
+                <th width="20%" scope="col">Teléfono</th>
+                <th width="20%" scope="col">Estado</th>
+                <th width="20%" scope="col">Proveedor</th>
+                <th width="15%" scope="col">Funciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for orden in orden_list %}
+                <tr>
+                    <th scope="row">{{ orden.numero_orden }}</th>
+                    <td>{{ orden.direccion_orden }}</td>
+                    <td>{{ orden.telefono_orden }}</td>
+                    <td>{{ orden.estado_orden }}</td>
+                    <td>{{ orden.proveedor }}</td>
+                    
+                        <td>
+                            <a href="{% url 'ver_orden' orden.id%}">Ver Orden</a>
+                            <a href="{% url 'orden_activate' orden.id %}" onclick="confirmarCambio(event);">No Entregado</a>
+                            <a href="{% url 'orden_delete' orden.id %}" onclick="confirmarCambio(event);">Eliminar</a>
+                        </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endif %}
+    {% if paginator.num_pages > 1 %}
+        <div class="d-flex">
+            <nav aria-label="Page navigation example" class="ms-auto">
+                <ul class="pagination pagination-table">
+                    {% if orden_list.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ orden_list.previous_page_number }}&search={{ search }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">&laquo;</a>
+                        </li>
+                    {% endif %}
+                    {% for i in paginator.page_range %}
+                        {% if i >= page|sub:2 and i < page|add:3 %}
+                            <li class="page-item {% if orden_list.number == i %}active{% endif %}">
+                                <a class="page-link" href="?page={{ i }}&search={{ search }}">{{ i }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if orden_list.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ orden_list.next_page_number }}&search={{ search }}">&raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">&raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

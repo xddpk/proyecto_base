@@ -26,13 +26,11 @@ from registration.models import Profile
 
 #validaciones .py!!!!! <---------------------------------
 from extensiones import validacion
-global num_elemento 
-num_elemento = 2
 @login_required
 def admin_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2 or profiles.group_id == 3 or profiles.group_id == 4):
+        
         return redirect('check_group_main')
     template_name = 'administrator/admin_main.html'
     return render(request,template_name,{'profiles':profiles})
@@ -41,22 +39,34 @@ def admin_main(request):
 @login_required
 def users_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     groups = Group.objects.all().exclude(pk=0).order_by('id')
     template_name = 'administrator/users_main.html'
     return render(request,template_name,{'groups':groups,'profiles':profiles})
 
+
+def user_ver(request, user_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
+        return redirect('check_group_main')
+    user_data = User.objects.get(pk=user_id)
+    profile_data = Profile.objects.get(user_id=user_id)
+    groups = Group.objects.get(pk=profile_data.group_id) 
+
+    profile_list = Group.objects.all().exclude(pk=0).order_by('name')    
+    template_name = 'administrator/user_ver.html'
+    return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list, 'profiles':profiles})
+
 @login_required
 def new_user(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    
-    if request.method == 'POST':
+    if not(profiles.group_id == 1):
         
+        return redirect('check_group_main')
+    if request.method == 'POST':
         validar=True
 
         grupo = request.POST.get('grupo')
@@ -81,7 +91,6 @@ def new_user(request):
         if validacion.validar_soloString(cargo)==False: #<- de validaciones Strings
             validar=False                               #cargo     QUIZAS SE VA
             messages.add_message(request, messages.INFO, 'Error en cargo: invalido')
-
         if validacion.validar_numCelular(mobile)==False:
             validar=False
             messages.add_message(request, messages.INFO, 'Error en numero de telefono: Ingrese un numero telefonico valido')#Buscar regeex numero chilenos
@@ -90,17 +99,16 @@ def new_user(request):
         if validacion.validar_rut(rut)==False: #<- de validaciones saca validar_rut
                     messages.add_message(request, messages.INFO, 'Rut invalido')  
                     validar=False
-
-        if validacion.validar_email(email)==False: #<- de validaciones saca validar_email
-                    messages.add_message(request, messages.INFO, 'Email invalido')  
-                    validar=False
         if rut_exist==1:
                 messages.add_message(request, messages.INFO, 'Rut ya esta registrado')
                 validar=False
-
+        if validacion.validar_email(email)==False: #<- de validaciones saca validar_email
+                    messages.add_message(request, messages.INFO, 'Email invalido')  
+                    validar=False
         if mail_exist==1:
                 messages.add_message(request, messages.INFO, 'Este correo ya esta registrado')  
                 validar=False
+        
         if validar == True:
                     user = User.objects.create_user(
                         username= rut,
@@ -117,18 +125,18 @@ def new_user(request):
                         )
                     profile_save.save()
                     messages.add_message(request, messages.INFO, 'Usuario creado con exito')                             
-
+ 
         #el metodo no contempla validacioens deberá realizarlas
     groups = Group.objects.all().exclude(pk=0).order_by('id')
     template_name = 'administrator/new_user.html'
-    return render(request,template_name,{'groups':groups})
+    return render(request,template_name,{'groups':groups, 'profile':profiles})
 
 def list_main2(request):
     profiles = Profile.objects.get(user_id = request.user.id)
     #groups = Group.objects.all().exclude(pk=0).order_by('id')
     
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     
     template_name = 'administrator/list_main2.html'
@@ -139,8 +147,8 @@ def list_main2(request):
 def edit_user(request,user_id):
     profiles = Profile.objects.get(user_id = request.user.id)
     validar = True
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1):
+        
         return redirect('check_group_main')
     if request.method == 'POST':
         grupo = request.POST.get('grupo')
@@ -191,13 +199,14 @@ def edit_user(request,user_id):
 
     profile_list = Group.objects.all().exclude(pk=0).order_by('name')    
     template_name = 'administrator/edit_user.html'
-    return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list})
+    return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list, 'profiles':profiles})
 
 @login_required    
 def list_user_active2(request,page=None,search=None):
+    
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     if page == None:
         page = request.GET.get('page')
@@ -232,10 +241,6 @@ def list_user_active2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-        paginator = Paginator(user_all, num_elemento)  
-        user_list = paginator.get_page(page)
-        template_name = 'administrator/list_user_active2.html'
-        return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
             
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
@@ -251,17 +256,17 @@ def list_user_active2(request,page=None,search=None):
     
     #user_array = User.objects.filter(is_active='t').order_by('first_name')
     #profile_data = Profile.objects.all()
-    paginator = Paginator(user_all, num_elemento)  
+    paginator = Paginator(user_all, 30)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page ,'search':search })
+    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
 
 @login_required    
 def list_user_block2(request,page=None,search=None):
     
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     if page == None:
         page = request.GET.get('page')
@@ -295,10 +300,7 @@ def list_user_block2(request,page=None,search=None):
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-        paginator = Paginator(user_all, num_elemento)  
-        user_list = paginator.get_page(page)
-        template_name = 'administrator/list_user_block2.html'
-        return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page,'search':search })
+            
     else:#si la cadena de búsqueda trae datos
         #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están inactivos y se ordena por primer nombre de forma ascendente
@@ -312,17 +314,15 @@ def list_user_block2(request,page=None,search=None):
             user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})            
     
     #profile_data = Profile.objects.all()
-    paginator = Paginator(user_all, num_elemento)  
+    paginator = Paginator(user_all, 30)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_block2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page ,'search':search})
-
-
+    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
 @login_required
 def user_block(request,user_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1):
+        
         return redirect('check_group_main')
 
     user_data_count = User.objects.filter(pk=user_id).count()
@@ -338,8 +338,8 @@ def user_block(request,user_id):
 @login_required
 def user_activate(request,user_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1):
+        
         return redirect('check_group_main')
     user_data_count = User.objects.filter(pk=user_id).count()
     user_data = User.objects.get(pk=user_id)
@@ -355,8 +355,8 @@ def user_activate(request,user_id):
 @login_required
 def user_delete(request,user_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1):
+        
         return redirect('check_group_main')
 
     user_data_count = User.objects.filter(pk=user_id).count()
@@ -461,8 +461,8 @@ def update_hours(request):
 @login_required
 def carga_masiva(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1):
+        
         return redirect('check_group_main')
     template_name = 'administrator/carga_masiva.html' #administrado/administrador_carga_masiva
     return render(request,template_name,{'template_name':template_name,'profiles':profiles})
@@ -471,8 +471,8 @@ def carga_masiva(request):
 #se descarga el archivo el archivo
 def import_administrator(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1):         
+        
         return redirect('check_group_main')
     response = HttpResponse(content_type='application/ms-excel') #bajo un archivo
     response['Content-Disposition'] = 'attachment; filename="archivo_carga_masiva.xls"' #  va a tomar un nombre en particular// carga masiva
@@ -509,7 +509,7 @@ def import_administrator(request):
 @login_required
 def carga_masiva_save(request):
     profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id != 1:
+    if not(profiles.group_id == 1):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
 
@@ -524,33 +524,27 @@ def carga_masiva_save(request):
         except Exception as e:
             messages.add_message(request, messages.INFO, 'Error al leer el archivo Excel: ' + str(e))
             return redirect('carga_masiva')
+
         acc = 0
         for item in data.itertuples():
             username = str(item[1])
             first_name = str(item[2])
             last_name = str(item[3])
             email = str(item[4])
-            rut_exist = User.objects.filter(username=username).count()
-            
-            if rut_exist == 0:
-                user_save = User.objects.create(
+
+            user_save = User.objects.create(
                 username=username,
                 first_name=first_name,
                 last_name=last_name,
                 email=email
-                )
-                profile_save = Profile.objects.create(
-                    user=user_save,
-                    group_id=1,
-                    first_session='No',
-                    token_app_session='No'
-                )
-                acc += 1
-            
-            
-    
-    
-            
+            )
+            profile_save = Profile.objects.create(
+                user=user_save,
+                group_id=1,
+                first_session='No',
+                token_app_session='No'
+            )
+            acc += 1
 
         messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
         return redirect('carga_masiva')

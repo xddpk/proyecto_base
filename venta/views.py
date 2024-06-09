@@ -16,6 +16,7 @@ from venta.models import *
 from django.http import JsonResponse
 #validaciones .py!!!!! <---------------------------------
 from extensiones import validacion
+from carrito.Carrito import *
 # Create your views here.
 #numero de elementos para el listado
 global num_elemento 
@@ -26,7 +27,7 @@ num_elemento = 30
 @login_required
 def venta_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'venta/venta_main.html'
@@ -53,16 +54,16 @@ def crear_venta(request):
 @login_required
 def cliente_create(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'venta/cliente_create.html'
     category_group_data = Category_group.objects.all()
-    return render(request,template_name,{'category_groups':category_group_data})
+    return render(request,template_name,{'category_groups':category_group_data,'profiles':profiles})
 @login_required
 def cliente_save(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
 
@@ -126,7 +127,7 @@ def cliente_lista_principal(request):
     profiles = Profile.objects.get(user_id = request.user.id)
     #groups = Group.objects.all().exclude(pk=0).order_by('id')
     
-    if profiles.group_id != 1 and profiles.group_id != 4:
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     
@@ -138,7 +139,7 @@ def cliente_lista_principal(request):
 def edit_cliente(request,cliente_id):
     profiles = Profile.objects.get(user_id = request.user.id)
     validar = True
-    if profiles.group_id != 1:
+    if not(profiles.group_id == 1):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if request.method == 'POST':
@@ -188,12 +189,20 @@ def edit_cliente(request,cliente_id):
     cliente_data = Cliente.objects.get(pk=cliente_id) 
     template_name = 'venta/edit_cliente.html'
     return render(request,template_name,{'cliente_data':cliente_data})
-
+@login_required
+def ver_cliente(request, cliente_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main') 
+    template_name = 'venta/ver_cliente.html'
+    cliente_data = Cliente.objects.get(pk=cliente_id)
+    return render(request,template_name,{'cliente_data':cliente_data})
 
 @login_required    
 def cliente_lista_activo(request,page=None,search=None):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if page == None:
@@ -252,7 +261,7 @@ def cliente_lista_activo(request,page=None,search=None):
 def cliente_lista_bloqueado(request,page=None,search=None):
     
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if page == None:
@@ -310,7 +319,7 @@ def cliente_lista_bloqueado(request,page=None,search=None):
 @login_required
 def cliente_block(request,cliente_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
 
@@ -326,7 +335,7 @@ def cliente_block(request,cliente_id):
 @login_required
 def cliente_activate(request,cliente_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
 
@@ -360,31 +369,36 @@ def cliente_delete(request,cliente_id):
         return redirect('cliente_lista_bloqueado')       
 
 
-def finalizar_venta(request):
-    if request.method == 'POST':
-        carrito = request.session.get('carrito', {})
-        cliente_id = request.POST.get('cliente_id')  # Obtener el ID del cliente del formulario
-        pago_id = request.POST.get('pago_id')  # Obtener el ID del método de pago del formulario
+def finalizar_venta(request,cliente_id):
+    carrito = Carrito(request)
+    if carrito.esta_vacio():
+        messages.error(request, 'El carrito está vacío.')
+        return redirect('tienda')      
 
-        # Verificar si el cliente y el método de pago existen
-        try:
-            cliente = Cliente.objects.get(id=cliente_id)
-            pago = Pago.objects.get(id=pago_id)
-        except (Cliente.DoesNotExist, Pago.DoesNotExist):
-            messages.error(request, 'Cliente o método de pago no válido.')
-            return redirect('pagina_de_error')
-
-        # Procesar los productos del carrito y calcular el total de la venta
-        total_venta = 0
-        venta = Venta(
-            cliente=cliente,
-            pago=pago,
-            total_venta=total_venta, 
-        )
-        venta.save()
-        for producto_id, detalle in carrito.items():
-            producto = Producto.objects.get(id=detalle['producto_id'])
-            cantidad = detalle['cantidad']
+    # Verificar si el cliente y el método de pago existen
+    try:
+        cliente = Cliente.objects.get(id=cliente_id)
+        
+    except (Cliente.DoesNotExist):
+        messages.error(request, 'Cliente  no válido.')
+        return redirect('tienda')
+    carrito = request.session.get('carrito', {})
+    # Procesar los productos del carrito y calcular el total de la venta
+    total_venta = 0
+    venta = Venta(
+        cliente=cliente,
+        total_venta=total_venta, 
+    )
+    venta.save()
+    for producto_id, detalle in carrito.items():
+        producto = Producto.objects.get(id=detalle['producto_id'])
+        cantidad = detalle['cantidad']
+        print(f"stock: {producto.stock_producto}")
+        print(f"cantidad: {cantidad}")
+        if  cantidad <=  producto.stock_producto:
+            producto_stock_update = producto.stock_producto - cantidad
+            Producto.objects.filter(pk= producto_id).update(stock_producto = producto_stock_update)
+        
             total_producto = detalle['acumulado']
             total_venta += total_producto
 
@@ -398,30 +412,32 @@ def finalizar_venta(request):
                 #total=total_producto
             )
             detalle_venta.save()
-        # Crear una nueva instancia de Venta
-        Venta.objects.filter(id=venta.id).update(total_venta=total_venta)
+        else:
+            messages.add_message(request, messages.INFO, f'No hay stock suficiente para el producto: {producto.nombre_producto}')
+            return redirect('tienda')
+    # Crear una nueva instancia de Venta
+    Venta.objects.filter(id=venta.id).update(total_venta=total_venta)
 
-        # Asociar los productos vendidos a la venta
-        #venta.venta_producto.set(VentaProducto.objects.all())
+    # Asociar los productos vendidos a la venta
+    #venta.venta_producto.set(VentaProducto.objects.all())
 
-        # Limpiar el carrito después de procesar la venta
-        request.session['carrito'] = {}
+    # Limpiar el carrito después de procesar la venta
+    request.session['carrito'] = {}
 
-        # Redirigir a la página de confirmación con un mensaje
-        messages.success(request, 'La venta se ha procesado correctamente.')
-        return redirect('tienda')
-    else:
-        messages.success(request, 'ha ocurrido un problema')
-        return redirect('tienda')
+    # Redirigir a la página de confirmación con un mensaje
+    messages.success(request, 'La venta se ha procesado correctamente.')
+    return redirect('tienda')
+
 
 
 @login_required    
 def cliente_lista_venta(request,cliente_id,page=None,search=None):
     
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
+
     if page == None:
         page = request.GET.get('page')
     else:
@@ -478,7 +494,7 @@ def cliente_lista_venta(request,cliente_id,page=None,search=None):
 def cliente_lista_venta_detalle(request,venta_id,page=None,search=None):
     
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     if page == None:
@@ -509,7 +525,7 @@ def cliente_lista_venta_detalle(request,venta_id,page=None,search=None):
     for c in clientes:
         cliente_id = c.id
     venta_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None":# si la cadena de búsqueda viene vacia
+    if search == None or search == "None" or search == "":# si la cadena de búsqueda viene vacia
         #usuario_count = cliente.objects.filter(estado_cliente='t').count()
         venta_array =  VentaProducto.objects.filter(venta_id = venta_id).order_by('venta_id')
         
@@ -525,13 +541,18 @@ def cliente_lista_venta_detalle(request,venta_id,page=None,search=None):
     else:#si la cadena de búsqueda trae datos
         #h_count = cliente.objects.filter(estado_cliente='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
-        venta_array =  VentaProducto.objects.filter(venta_id = venta_id).order_by('venta_id')
+        productos = Producto.objects.filter(Q(nombre_producto__icontains=search))
+            
+        for producto in productos:
+            # Filtrar los productos vendidos en esta venta
+            venta_array = VentaProducto.objects.filter(
+                Q(producto_id=producto.id), Q(venta_id=venta_id)
+            ).order_by('venta_id')
         
-        for cl in venta_array:
-            #se guarda la información de la venta
-            nombre_producto = Producto.objects.get(pk = cl.producto_id).nombre_producto
-            venta_all.append({'nombre':nombre_producto,'cantidad':cl.cantidad,'precio_unitario':cl.precio_unitario, 'precio_total':cl.precio_total})
-        paginator = Paginator(venta_all, num_elemento)            
+            for cl in venta_array:
+                #se guarda la información de la venta
+                nombre_producto = Producto.objects.get(pk = cl.producto_id).nombre_producto
+                venta_all.append({'nombre':nombre_producto,'cantidad':cl.cantidad,'precio_unitario':cl.precio_unitario, 'precio_total':cl.precio_total})
 
     paginator = Paginator(venta_all, num_elemento)  
     venta_detalle_list = paginator.get_page(page)

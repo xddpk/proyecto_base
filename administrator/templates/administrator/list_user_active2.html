@@ -19,22 +19,26 @@
 </script>
 {% endblock %}
 <header class='mb-5'>
-    <div class="row">
+    <div class="row"class="col-md-11"style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
         <div class="col-12 col-sm-8 mb-3">
-            <h2 class='h2 medium text-blue'>Listado de usuarios activos </h2>
+            <h2 class='h2 medium text-blue'>Listado de Usuarios activos </h2>
         </div>
+        {% if profiles.group_id == 1 %}
+    </div>
+    <div class="col-12 col-sm-3 mb-3"style="position: absolute; top: 23%; left: 80%; width: 10%; height: 1%;">
+        <a href="{% url 'new_user' %}" class="button form-control">Nuevo Usuario</a>
+        <div class="col-12" style="margin-bottom: 30px;"></div> 
+    </div>
+    <div class="col-md-11" style="position: absolute; top: 23%; left: 90%; width: 10%; height: 10%; border-radius: 90px;">
+        <a href="{% url 'carga_masiva' %}" class="button form-control"> <i class="fa-solid fa-folder"></i></a>
+    </div>
+    <div class="row"class="col-md-11"style="position: absolute; top: 94%; left: 15%; width: 10%; height: 1%;">
         <div class="col-12 col-sm-4 mb-3">
-            <a href="{% url 'list_main2' %}" class="button button--gray form-control">Volver</a>
+        <a href="{% url 'list_main2' %}" class="button button--gray form-control">Volver</a>
         </div>
     </div>
-    <div class="d-flex flex-column flex-lg-row mt-2">
-        <p class='body--normal text-gray'>
-            {% lorem 2 b random %}
-        </p>
-    </div>
-
 </header>
-<div class="d-flex flex-column flex-lg-row my-5">
+<div class="d-flex flex-column flex-lg-row my-5"style="position: absolute; top: 20%; left: 15%; width: 50%; height: 70%;">
     <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
         <div class="feedback body--small normal"></div>
     </div>
@@ -49,48 +53,48 @@
         
     <form>       
 </div>
-<div class="table-container mt-5">
+<div class="col-md-11" style="position: absolute; top: 30%; left: 15%; width: 80%; height: 1%;">
     <table class="table table-user">
-        <thead>
+        <thead style="background-color: #3A1B78; color: #ffffff;">
             <tr>
-                <th width="20%" scope="col">Nombre Usuario</th>
-                <th width="30%" scope="col">Nombre Completo</th>
-                <th width="30%" scope="col">Correo</th>
-                <th width="30%" scope="col">Perfil</th>
+                <th width="5%" scope="col">Nombre Usuario</th>
+                <th width="5%" scope="col">Nombre Completo</th>
+                <th width="5%" scope="col">Correo</th>
+                <th width="5%" scope="col">Perfil</th>
                 {% if profiles.group_id == 1 %}
-                    <th width="15%" scope="col">Funciones</th>
+                    <th width="5%" scope="col">Funciones</th>
                 {% endif %}
             </tr>
         </thead>
         <tbody>
             {% for s in user_list %}
                 <tr>
-                    <th scope="row">{{s.user_name}}</th>
-                    <th scope="row">{{s.name}}</th>
-                    <th scope="row">{{s.mail}}</th>
-                    <th scope="row">{{s.profile}}</th>      
+                    <td style="background-color: lightgray;">{{ s.user_name }}</td>
+                    <td style="background-color: lightgray;">{{ s.name }}</td>
+                    <td style="background-color: lightgray;">{{ s.mail }}</td>
+                    <td style="background-color: lightgray;">{{ s.profile }}</td>
                     {% if profiles.group_id == 1 %}
-                            <th scope="row">
+                        <td style="background-color: lightgray; font-size:medium">
                             {% if s.id != request.user.id %}
-                                <a href="{% url 'edit_user' s.id %}">
-                                    Edita Usuario
+                                <a href="{% url 'user_ver' s.id %}" title="Ver Usuario">
+                                    <i class="fa-solid fa-eye"></i>
                                 </a>
-                            </th>
-                                {% if s.id != request.user.id %}
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <th scope="row">
-                                        <a href="{% url 'user_block' s.id %}" onclick="confirmarCambio(event);">
-                                            Bloquea Usuario
-                                        </a>
-                                    </th>
-                                {% endif %}
+                                &nbsp;
+                                <a href="{% url 'edit_user' s.id %}" title="Editar Usuario">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                &nbsp;
+                                <a href="{% url 'user_block' s.id %}" title="Bloquear Usuario">
+                                    <i class="fas fa-ban"></i>
+                                </a>
                             {% endif %}
-                        </th>   
-                    {% endif %}                            
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
     <!-- Paginación -->
         {% if paginator.num_pages > 1 %}
             <div class="d-flex">
@@ -127,5 +131,8 @@
                 </nav>
             </div>
         {% endif %}  
+    {% endif %}
     <!-- Paginación -->   
 {% endblock %}
+
+

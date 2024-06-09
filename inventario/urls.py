@@ -18,6 +18,8 @@ inventario_urlpatterns = [
     path('producto_create/',views.producto_create, name='producto_create'),
     path('producto_save/',views.producto_save, name='producto_save'),     
     path('producto_edit/<producto_id>/',views.producto_edit, name='producto_edit'),
+    path('producto_ver/<producto_id>/',views.producto_ver, name='producto_ver'),
+
     path('producto_delete/<producto_id>',views.producto_delete, name='producto_delete'),
     path('producto_deactivate/<producto_id>/',views.producto_deactivate, name='producto_deactivate'),
     path('producto_activate/<producto_id>/',views.producto_activate, name='producto_activate'),
@@ -26,6 +28,9 @@ inventario_urlpatterns = [
     path('import_inventario/',views.import_inventario,name="import_inventario"),#administrador
     path('categories_create/',views.categories_create, name='categories_create'),   
     path('categories_save/',views.categories_save, name='categories_save'),   
+
+    path('categories_ver/<categories_id>',views.categories_ver, name='categories_ver'),
+
     path('inventario_dashboard/',views.inventario_dashboard,name="inventario_dashboard"),
     path('categories_create/',views.categories_create, name='categories_create'),   
     path('categories_save/',views.categories_save, name='categories_save'),

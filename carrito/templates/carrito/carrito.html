@@ -1,25 +1,25 @@
 <div class="alert alert-primary" role="alert">
-    <table class=" table table-bordered">
+    <table class="carrito">
         <thead>
             <tr>
                 <th scope="row" colspan="3" class="text-center">CARRITO</th>
+    {% if profiles.group_id 1 ==  or profiles.group_id == 4 %}
             </tr>
             <tr>
-                <th scope="col"> Nombre</th>
-                <th scope="col"> Precio</th>
-                <th scope="col"> Cantidad</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Cantidad</th>
             </tr>
-
         </thead>
         <tbody>
             {% if request.session.carrito.items %}
             {% for key, value in request.session.carrito.items %}
             <tr>
                 <td>{{value.nombre}}</td>
-                <td>{{value.precio}}</td>
-                <td>{{value.acumulado}}
-                    <a href="{% url 'Add' value.producto_id %}" class="badge btn btn-dark badge-dark">+</a>
-                    <a href="{% url 'Sub' value.producto_id %}" class="badge btn btn-dark badge-dark">-</a>
+                <td>{{value.acumulado}}</td>
+                <td>{{value.cantidad}}
+                    <a href="{% url 'Add' value.producto_id  %}" class="badge btn btn-dark badge-dark">+</a>
+                    <a href="{% url 'Sub' value.producto_id  %}" class="badge btn btn-dark badge-dark">-</a>
                 </td>
             </tr>
             {% endfor %}
@@ -32,14 +32,20 @@
             {% endif %}
             <tr>
                 <th scope="row">TOTAL:</th>
-                <td colspan="2"> ${{total_carrito}}</td>
+                <td colspan="2">${{total_carrito}}</td>
             </tr>
         </tbody>
     </table>
+    <div class="col-12 col-sm-3 mb-3"  style="margin-bottom: 25px;">
+        <div class="col-12" style="margin-bottom: 25px;"></div>
+        <a href="{% url 'cliente_lista_activo' %}" class="button form-control">Escoger cliente </a>
+    </div> 
     <hr>
-    <div class="rom text-center">
-        <div class="col-6"> <a href="{% url 'CLS' %}" class="btn btn-danger">Limpiar</a></div>
-        <!--acá redirige a finalizar la compra-->
-        <div class="col-6"> <a href=" " class="btn btn-success"></a></div>
+    <div class="row text-center">
+        <div class="col-6">
+            <a href="{% url 'CLS' %}" class="btn btn-danger">Limpiar</a>
+        </div>
+
     </div>
 </div>
+    {% endif %}

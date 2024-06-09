@@ -17,8 +17,8 @@ import pandas as pd
 @login_required
 def inventario_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     template_name = 'inventario/inventario_main.html'
     return render(request,template_name,{'profiles':profiles})
@@ -29,8 +29,8 @@ def inventario_main(request):
 def inventario_listado(request,page=None,search=None):
     
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     if page == None:
         page = request.GET.get('page')
@@ -84,7 +84,7 @@ def inventario_listado(request,page=None,search=None):
     producto_list = paginator.get_page(page)
     print(producto_list)
     template_name = 'inventario/inventario_listado.html'
-    return render(request,template_name,{'profiles':profiles,'producto_list':producto_list,'paginator':paginator,'page':page,'search':search })
+    return render(request,template_name,{'profiles':profiles,'producto_list':producto_list,'paginator':paginator,'page':page })
 
 
 
@@ -92,8 +92,8 @@ def inventario_listado(request,page=None,search=None):
 @login_required
 def producto_create(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     template_name = 'inventario/producto_create.html'
     category_group_data = Category_group.objects.all()
@@ -102,8 +102,8 @@ def producto_create(request):
 @login_required
 def producto_create3(request,producto_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if profiles.group_id != 1:
+        
         return redirect('check_group_main')
     if request.method == 'POST':
         category_group_id = request.POST.get('category_group_id')
@@ -115,7 +115,7 @@ def producto_create3(request,producto_id):
         descripcion_producto = request.POST.get('descripcion_producto')
         producto_data_count = Producto.objects.filter(pk=producto_id).count()
         producto_data = Producto.objects.get(pk=producto_id)
-
+    
     producto_data = Producto.objects.get(pk=producto_id)
     print("nomre: "+producto_data.nombre_producto)
     category_data = Category.objects.get(producto_id=producto_id)
@@ -129,8 +129,8 @@ def producto_create3(request,producto_id):
 @login_required
 def producto_save(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if profiles.group_id != 1:
+        
         return redirect('check_group_main')
     if request.method == 'POST':
         category_group_id = request.POST.get('category_group_id')
@@ -142,27 +142,22 @@ def producto_save(request):
         descripcion_producto = request.POST.get('descripcion_producto')
         validar=True
         Produc_exist = Producto.objects.filter(nombre_producto=nombre_producto).count()
-
         if Produc_exist == 1:
             validar = False
             messages.add_message(request, messages.INFO, 'Este producto ya a sido creado anteriormente')
-            
-        if validacion.validar_soloString(nombre_producto) ==False:
-            messages.add_message(request, messages.INFO, 'El nombre del producto no puede estar vacio')
+        if int(precio_producto) < 0:
+            messages.add_message(request, messages.INFO, 'El precio del producto no puede ser negativo')
             validar=False
-        if validacion.validar_int(precio_producto) ==False:
-            messages.add_message(request, messages.INFO, 'El precio del producto no puede ser negativo ni nulo')
+        if int(stock_producto) <0:
+            messages.add_message(request, messages.INFO, 'El stock del producto no puede ser negativo')
             validar=False
-        if validacion.validar_int(stock_producto) ==False:
-            messages.add_message(request, messages.INFO, 'El stock del producto no puede ser negativo ni nulo (si el stock es 0, entonces digitelo)')
-            validar=False
-        if validacion.validar_int(stock_minimo_producto) ==False:
+        if int(stock_minimo_producto) < 0:
             messages.add_message(request, messages.INFO, 'El stock minimo del producto no puede ser negativo')
             validar=False    
-        if validacion.validar_int(stock_maximo_producto) ==False:
+        if int(stock_maximo_producto) < 0:
             messages.add_message(request, messages.INFO, 'El stock maximo del producto no puede ser negativo')
             validar=False   
-        if stock_minimo_producto > stock_maximo_producto:
+        if int(stock_minimo_producto) > int(stock_maximo_producto):
             messages.add_message(request, messages.INFO, 'El stock minimo no puede ser maxor al stock maximo del producto')
             validar=False
         if validar == True:
@@ -190,8 +185,8 @@ def producto_save(request):
 @login_required
 def producto_edit(request,producto_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if profiles.group_id != 1:
+        
         return redirect('check_group_main')
     if request.method == 'POST':
         category_group_id = request.POST.get('category_group_id')
@@ -212,23 +207,21 @@ def producto_edit(request,producto_id):
                     #que es page
                     messages.add_message(request, messages.INFO, 'El correo '+str(nombre_producto)+' ya existe en nuestros registros asociado a otro usuario, por favor utilice otro ')
                     validar=False
-        if validacion.validar_soloString(nombre_producto)==False:
-            messages.add_message(request, messages.INFO, 'El nombre del producto no puede ser nulo')
+        
+        if int(precio_producto) < 0:
+            messages.add_message(request, messages.INFO, 'El precio del producto no puede ser negativo')
             validar=False
-        if validacion.validar_int(precio_producto) == False:
-            messages.add_message(request, messages.INFO, 'El precio del producto no puede ser negativo ni nulo')
-            validar=False
-        if validacion.validar_int(stock_producto) == False:
+        if int(stock_producto) <0:
             messages.add_message(request, messages.INFO, 'El stock del producto no puede ser negativo')
             validar=False
-        if validacion.validar_int(stock_minimo_producto) == False:
+        if int(stock_minimo_producto) < 0:
             messages.add_message(request, messages.INFO, 'El stock minimo del producto no puede ser negativo')
             validar=False    
-        if validacion.validar_int(stock_maximo_producto) == False:
+        if int(stock_maximo_producto) < 0:
             messages.add_message(request, messages.INFO, 'El stock maximo del producto no puede ser negativo')
             validar=False   
         if int(stock_minimo_producto) > int(stock_maximo_producto):
-            messages.add_message(request, messages.INFO, 'El stock minimo no puede ser mayor al stock maximo del producto')
+            messages.add_message(request, messages.INFO, 'El stock minimo no puede ser maxor al stock maximo del producto')
             validar=False
         if validar == True:
             Producto.objects.filter(pk = producto_id).update(nombre_producto = nombre_producto)
@@ -254,8 +247,8 @@ def producto_edit(request,producto_id):
 @login_required
 def producto_delete(request,producto_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id !=2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if profiles.group_id != 1:
+        
         return redirect('check_group_main')
 
     producto_data_count = Producto.objects.filter(pk=producto_id).count()
@@ -270,109 +263,14 @@ def producto_delete(request,producto_id):
     else:
         messages.add_message(request, messages.INFO, 'Hubo un error al eliminar el producto '+producto_data.nombre_producto)
         return redirect('inventario_listado')  
-    
 
-@login_required    
-def inventario_listado_deactivate(request,page=None,search=None):
-    
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    if page == None:
-        page = request.GET.get('page')
-    else:
-        page = page
-    if request.GET.get('page') == None:
-        page = page
-    else:
-        page = request.GET.get('page')
-    #logica que permite recibir la cadena de búsqueda y propoga a través del paginador
-    if search == None:
-        search = request.GET.get('search')
-    else:
-        search = search
-    if request.GET.get('search') == None:
-        search = search
-    else:
-        search = request.GET.get('search') 
-    if request.method == 'POST':
-        search = request.POST.get('search') 
-        page = None
-    #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
-
-    producto_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None":# si la cadena de búsqueda viene vacia
-        #usuario_count = Producto.objects.filter(is_active='t').count()
-        producto_array = Producto.objects.all().order_by('stock_producto')
-        
-        for iv in producto_array:
-            categoria_data = Category.objects.get(producto_id=iv.id)
-            categoria_group = categoria_data.category_group
-            
-            #se guarda la información del usuario
-            producto_all.append({'id':iv.id,'nombre_producto':iv.nombre_producto,'precio_producto':iv.precio_producto,'stock_producto':iv.stock_producto, 'stock_minimo_producto':iv.stock_minimo_producto,'stock_maximo_producto':iv.stock_maximo_producto,'descripcion_producto':iv.descripcion_producto,'categoria_data':categoria_group})
-            
-    else:#si la cadena de búsqueda trae datos
-        #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
-        #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
-        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).order_by('-stock_producto')#Ascendente
-        for iv in producto_array:
-            categoria_data = Category.objects.get(producto_id=iv.id)
-            categoria_group = categoria_data.category_group
-            #profile = categoria_data.group
-            #se guarda la información del usuario
-            producto_all.append({'id':iv.id,'nombre_producto':iv.nombre_producto,'precio_producto':iv.precio_producto,'stock_producto':iv.stock_producto, 'stock_minimo_producto':iv.stock_minimo_producto,'stock_maximo_producto':iv.stock_maximo_producto,'descripcion_producto':iv.descripcion_producto,'categoria_data':categoria_group})          
-    
-    #user_array = User.objects.filter(is_active='t').order_by('first_name')
-    #categoria_data = Profile.objects.all()
-    paginator = Paginator(producto_all, 2)  
-    
-    producto_list = paginator.get_page(page)
-    print(producto_list)
-    template_name = 'inventario/inventario_listado_deactivate.html'
-    return render(request,template_name,{'profiles':profiles,'producto_list':producto_list,'paginator':paginator,'page':page,'search':search })
-
-
-@login_required
-def producto_deactivate(request,producto_id):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id !=2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-
-    producto_data_count = Producto.objects.filter(pk=producto_id).count()
-    producto_data = Producto.objects.get(pk=producto_id)       
-    if producto_data_count == 1:
-        Producto.objects.filter(pk=producto_id).update(producto_state='Deactivate')
-        messages.add_message(request, messages.INFO, 'Producto '+producto_data.nombre_producto +' desactivado con éxito')
-        return redirect('inventario_listado')        
-    else:
-        messages.add_message(request, messages.INFO, 'Hubo un error al desactivar el producto '+producto_data.nombre_producto)
-        return redirect('inventario_listado')  
-@login_required
-def producto_activate(request,producto_id):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id !=2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-
-    producto_data_count = Producto.objects.filter(pk=producto_id).count()
-    producto_data = Producto.objects.get(pk=producto_id)       
-    if producto_data_count == 1:
-        Producto.objects.filter(pk=producto_id).update(producto_state='Activa')
-        messages.add_message(request, messages.INFO, 'Producto '+producto_data.nombre_producto +' Activado con éxito')
-        return redirect('inventario_listado_deactivate')        
-    else:
-        messages.add_message(request, messages.INFO, 'Hubo un error al activar el producto '+producto_data.nombre_producto)
-        return redirect('inventario_listado_deactivate') 
 
 
 @login_required
 def categories_create(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     template_name = 'inventario/categories_create.html'
     return render(request,template_name)
@@ -389,9 +287,12 @@ def categories_save(request):
         if categories_exist==1:
             validar=False
             messages.add_message(request,messages.INFO,'Solo puede haber un tipo de categoria')
+        if name=='':
+            messages.add_message(request,messages.INFO,'Debe ingresar un nombre para la categoria')
+            return('categories_create')   
         if validacion.validar_soloString(name)==False:
             validar=False
-            messages.add_message(request,messages.INFO,'El nombre solo debe contener letras, y el campo no debe estar vacio')
+            messages.add_message(request,messages.INFO,'El nombre solo debe contener letras')
         
         if validar==True:
             categories_save=Category_group(
@@ -427,8 +328,8 @@ def categories_delete(request):
 @login_required
 def carga_masiva2(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if profiles.group_id != 1:
+        
         return redirect('check_group_main')
     template_name = 'inventario/carga_masiva2.html' #administrado/administrador_carga_masiva
     return render(request,template_name,{'template_name':template_name,'profiles':profiles})
@@ -437,8 +338,8 @@ def carga_masiva2(request):
 #se descarga el archivo el archivo
 def import_inventario(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if profiles.group_id != 1:
+        
         return redirect('check_group_main')
     response = HttpResponse(content_type='application/ms-excel') #bajo un archivo
     response['Content-Disposition'] = 'attachment; filename="archivo_carga_masiva_inventario.xls"' #  va a tomar un nombre en particular// carga masiva
@@ -473,11 +374,117 @@ def import_inventario(request):
                 ws.write(row_num, col_num, 'bajo' , font_style)
     wb.save(response)
     return response  
+@login_required
+def inventario_listado_deactivate(request,page=None,search=None):
+    
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
+        return redirect('check_group_main')
+    if page == None:
+        page = request.GET.get('page')
+    else:
+        page = page
+    if request.GET.get('page') == None:
+        page = page
+    else:
+        page = request.GET.get('page')
+    #logica que permite recibir la cadena de búsqueda y propoga a través del paginador
+    if search == None:
+        search = request.GET.get('search')
+    else:
+        search = search
+    if request.GET.get('search') == None:
+        search = search
+    else:
+        search = request.GET.get('search') 
+    if request.method == 'POST':
+        search = request.POST.get('search') 
+        page = None
+    #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
 
+    producto_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
+    if search == None or search == "None":# si la cadena de búsqueda viene vacia
+        #usuario_count = Producto.objects.filter(is_active='t').count()
+        producto_array = Producto.objects.filter(producto_state ='Deactivate').order_by('stock_producto')
+        
+        for iv in producto_array:
+            categoria_data = Category.objects.get(producto_id=iv.id)
+            categoria_group = categoria_data.category_group
+            
+            #se guarda la información del usuario
+            producto_all.append({'id':iv.id,'nombre_producto':iv.nombre_producto,'precio_producto':iv.precio_producto,'stock_producto':iv.stock_producto, 'stock_minimo_producto':iv.stock_minimo_producto,'stock_maximo_producto':iv.stock_maximo_producto,'descripcion_producto':iv.descripcion_producto,'categoria_data':categoria_group})
+            
+    else:#si la cadena de búsqueda trae datos
+        #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
+        #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
+        producto_array =  Producto.objects.filter(Q(nombre_producto__icontains=search)).filter(producto_state ='Deactivate').order_by('-stock_producto')#Ascendente
+        for iv in producto_array:
+            categoria_data = Category.objects.get(producto_id=iv.id)
+            categoria_group = categoria_data.category_group
+            #profile = categoria_data.group
+            #se guarda la información del usuario
+            producto_all.append({'id':iv.id,'nombre_producto':iv.nombre_producto,'precio_producto':iv.precio_producto,'stock_producto':iv.stock_producto, 'stock_minimo_producto':iv.stock_minimo_producto,'stock_maximo_producto':iv.stock_maximo_producto,'descripcion_producto':iv.descripcion_producto,'categoria_data':categoria_group})          
+    
+    #user_array = User.objects.filter(is_active='t').order_by('first_name')
+    #categoria_data = Profile.objects.all()
+    paginator = Paginator(producto_all, 2)  
+    
+    producto_list = paginator.get_page(page)
+    print(producto_list)
+    template_name = 'inventario/inventario_listado_deactivate.html'
+    return render(request,template_name,{'profiles':profiles,'producto_list':producto_list,'paginator':paginator,'page':page,'search':search })
+@login_required
+def producto_ver(request, producto_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
+        return redirect('check_group_main')
+    producto_data = Producto.objects.get(pk=producto_id)
+    category_data = Category.objects.get(producto_id=producto_id)
+    category_datas = Category_group.objects.get(pk=category_data.category_group_id) 
+    category_groups = Category_group.objects.all().exclude(pk=0).order_by('category_group_name')    
+    template_name = 'inventario/producto_ver.html'
+    return render(request,template_name,{'producto_data':producto_data,'category_data':category_data,'category_datas':category_datas,'category_groups':category_groups})
+
+@login_required
+def producto_deactivate(request,producto_id):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
+        return redirect('check_group_main')
+
+    producto_data_count = Producto.objects.filter(pk=producto_id).count()
+    producto_data = Producto.objects.get(pk=producto_id)       
+    if producto_data_count == 1:
+        Producto.objects.filter(pk=producto_id).update(producto_state='Deactivate')
+        messages.add_message(request, messages.INFO, 'Producto '+producto_data.nombre_producto +' desactivado con éxito')
+        return redirect('inventario_listado')        
+    else:
+        messages.add_message(request, messages.INFO, 'Hubo un error al desactivar el producto '+producto_data.nombre_producto)
+        return redirect('inventario_listado') 
+    
+@login_required
+def producto_activate(request,producto_id):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
+        return redirect('check_group_main')
+
+    producto_data_count = Producto.objects.filter(pk=producto_id).count()
+    producto_data = Producto.objects.get(pk=producto_id)       
+    if producto_data_count == 1:
+        Producto.objects.filter(pk=producto_id).update(producto_state='Activa')
+        messages.add_message(request, messages.INFO, 'Producto '+producto_data.nombre_producto +' Activado con éxito')
+        return redirect('inventario_listado_deactivate')        
+    else:
+        messages.add_message(request, messages.INFO, 'Hubo un error al activar el producto '+producto_data.nombre_producto)
+        return redirect('inventario_listado_deactivate')   
+  
 @login_required
 def carga_masiva_save2(request):
     profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
+    if profiles.group_id != 1:
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
         return redirect('check_group_main')
 
@@ -520,7 +527,15 @@ def carga_masiva_save2(request):
         messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
         return redirect('carga_masiva2')
     
-    
+def categories_ver(request, categories_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
+        return redirect('check_group_main')
+    template_name = 'inventario/categories_ver.html' 
+    Category_group.objects.filter(pk=categories_id)
+    category_data = Category_group.objects.get(pk=categories_id) 
+    return render(request, template_name, {'template_name': template_name, 'profiles': profiles, 'categories_id': categories_id,'category_data':category_data})
 def inventario_dashboard(request):
     #datos tarjeta 1
     productos_count = Producto.objects.all().count()
@@ -562,15 +577,14 @@ def inventario_dashboard(request):
 @login_required
 def categories_create(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     template_name = 'inventario/categories_create.html'
     return render(request,template_name)
 
 @login_required
 def categories_save(request):
-
     if request.method=='POST':
         name= request.POST.get('name')
         state=True
@@ -579,9 +593,12 @@ def categories_save(request):
         if categories_exist==1:
             validar=False
             messages.add_message(request,messages.INFO,'Solo puede haber un tipo de categoria')
+        if name=='':
+            messages.add_message(request,messages.INFO,'Debe ingresar un nombre para la categoria')
+            return('categories_create')   
         if validacion.validar_soloString(name)==False:
             validar=False
-            messages.add_message(request,messages.INFO,'El nombre no debe contener solo numeros y no debe estar vacio')
+            messages.add_message(request,messages.INFO,'El nombre solo debe contener letras')
         
         if validar==True:
             categories_save=Category_group(
@@ -596,8 +613,8 @@ def categories_save(request):
 @login_required
 def categories_delete(request,categories_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if profiles.group_id != 1:
+        
         return redirect('check_group_main')
 
     category_data_count = Category_group.objects.filter(pk=categories_id).count()
@@ -613,7 +630,7 @@ def categories_delete(request,categories_id):
         Category.objects.filter(category_group_id=categories_id).delete()
         Category_group.objects.get(pk=categories_id).delete()
         messages.add_message(request, messages.INFO, 'Categoria '+category_data.category_group_name +' eliminada con éxito')
-        return redirect('list_categories_active')        
+        return redirect('list_categories')        
     else:
         messages.add_message(request, messages.INFO, 'Hubo un error al eliminar la Categoria '+category_data.category_group_name)
         return redirect('categories_listado')
@@ -623,8 +640,8 @@ def categories_delete(request,categories_id):
 def list_categories(request,page=None,search=None):
     
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     if page == None:
         page = request.GET.get('page')
@@ -650,43 +667,53 @@ def list_categories(request,page=None,search=None):
     print("search> ",search)
     categories_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
     if search == None or search == "None":# si la cadena de búsqueda viene vacia
-        #categories_all=Category_group.objects.all()
-        categories_all = Category_group.objects.filter(category_state='Activa')#.order_by('category_group')
-        paginator = Paginator(categories_all, 1)  
-        categories_list = paginator.get_page(page)
-        template_name = 'inventario/list_categories.html'
-        return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
+        categories_all = Category_group.objects.all()
     else:#si la cadena de búsqueda trae datos
         categories_all =  Category_group.objects.filter(category_group_name=search).order_by('category_group_name')#Ascendente         
-        paginator = Paginator(categories_all, 1)  
-        categories_list = paginator.get_page(page)
-        template_name = 'inventario/list_categories.html'
-        return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
-@login_required
-def categories_deactivate(request,categories_id):
-    profiles= Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    paginator = Paginator(categories_all, 30)  
+    categories_list = paginator.get_page(page)
+    template_name = 'inventario/list_categories.html'
+    return render(request,template_name,{'categories_list':categories_list,'paginator':paginator,'page':page })
+
+"""@login_required
+def categories_edit(request,categories_id):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1:
+        
         return redirect('check_group_main')
-    new_state = 'Deactivate'
-    category_data_count = Category_group.objects.filter(pk=categories_id).count()
+    name= request.POST.get('name')
+    Category_group.objects.filter(pk=categories_id).update(category_group_name=name)
+    template_name='inventario/categorias_editar.html'
+    return render(request,template_name,{'name':name, 'categories_id':categories_id})"""
+def categories_edit(request,categories_id):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1:
+        
+        return redirect('check_group_main')
+    if request.method == 'POST':
+        category_group_name = request.POST.get('nombre')
+        category_data_count = Category_group.objects.filter(pk=categories_id).count()
+        category_data = Category_group.objects.get(pk=categories_id) 
+        print(category_data.category_group_name)
+        if category_data_count == 1:
+            Category_group.objects.filter(pk = categories_id).update(category_group_name = category_group_name)
+
+
+            messages.add_message(request, messages.INFO, 'Categoria  '+ category_data.category_group_name +' editado con éxito')                             
+            return redirect('list_categories')
+        else:
+            messages.add_message(request, messages.INFO, 'Hubo un error al editar la categoria: '+category_data.category_group_name )
+            return redirect('list_categories')    
+        
     category_data = Category_group.objects.get(pk=categories_id) 
-    categoria = Category.objects.filter(category_group_id=categories_id)
-    if category_data_count == 1:
-        for c in categoria:
-            id_producto = c.producto_id
-            Producto.objects.filter(pk = id_producto).update(producto_state='Deactivate')
-        Category_group.objects.filter(pk = categories_id).update(category_state = new_state)
-        messages.add_message(request, messages.INFO, 'Categoria  '+ category_data.category_group_name +' desactivada con éxito')                             
-        return redirect('list_categories_active')
-    else:
-        messages.add_message(request, messages.INFO, 'Hubo un error al desactivar la categoria: '+category_data.category_group_name )
-        return redirect('list_categories_active') 
-@login_required
+    
+    template_name = 'inventario/categories_edit.html'
+    return render(request,template_name,{'category_data':category_data})
+
 def categories_activate(request,categories_id):
     profiles= Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     new_state = 'Activa'
     category_data_count = Category_group.objects.filter(pk=categories_id).count()
@@ -702,33 +729,6 @@ def categories_activate(request,categories_id):
     else:
         messages.add_message(request, messages.INFO, 'Hubo un error al desactivar la categoria: '+category_data.category_group_name )
         return redirect('list_categories_deactivate') 
-
-def categories_edit(request,categories_id):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    if request.method == 'POST':
-        category_group_name = request.POST.get('nombre')
-        if validacion.validar_soloString(category_group_name)==False:
-             messages.add_message(request,messages.INFO,'El nombre de la categoria no debe estar vacio y no debe contener solo numeros')
-        category_data_count = Category_group.objects.filter(pk=categories_id).count()
-        category_data = Category_group.objects.get(pk=categories_id) 
-        if category_data_count == 1:
-
-            Category_group.objects.filter(pk = categories_id).update(category_group_name = category_group_name)
-            messages.add_message(request, messages.INFO, 'Categoria  '+ category_data.category_group_name +' editado con éxito')                             
-            return redirect('list_categories_active')
-        else:
-            messages.add_message(request, messages.INFO, 'Hubo un error al editar la categoria: '+category_data.category_group_name )
-            return redirect('list_categories_active')    
-        
-    category_data = Category_group.objects.get(pk=categories_id) 
-    
-    template_name = 'inventario/categories_edit.html'
-    return render(request,template_name,{'category_data':category_data})
-
-
 
 """@login_required
 def categories_save_edit(request, categories_id):
@@ -748,19 +748,19 @@ def categories_save_edit(request, categories_id):
 
 def categories_save_edit(request, categories_id):
     profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if profiles.group_id != 1:
+        
         return redirect('check_group_main')
     template_name = 'inventario/categories_edit.html' 
     name = request.POST.get('name')
     Category_group.objects.filter(pk=categories_id).update(category_group_name=name)
     return render(request, template_name, {'template_name': template_name, 'profiles': profiles, 'categories_id': categories_id})
-@login_required    
+
 def list_categories_deactivate(request,page=None,search=None):
     
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main')
     if page == None:
         page = request.GET.get('page')
@@ -798,4 +798,43 @@ def list_categories_deactivate(request,page=None,search=None):
         categories_list = paginator.get_page(page)
         template_name = 'inventario/list_categories_deactivate.html'
         return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
-    
+login_required
+def categories_deactivate(request,categories_id):
+    profiles= Profile.objects.get(user_id = request.user.id)
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
+        return redirect('check_group_main')
+    new_state = 'Deactivate'
+    category_data_count = Category_group.objects.filter(pk=categories_id).count()
+    category_data = Category_group.objects.get(pk=categories_id) 
+    categoria = Category.objects.filter(category_group_id=categories_id)
+    if category_data_count == 1:
+        for c in categoria:
+            id_producto = c.producto_id
+            Producto.objects.filter(pk = id_producto).update(producto_state='Deactivate')
+        Category_group.objects.filter(pk = categories_id).update(category_state = new_state)
+        messages.add_message(request, messages.INFO, 'Categoria  '+ category_data.category_group_name +' desactivada con éxito')                             
+        return redirect('list_categories_active')
+    else:
+        messages.add_message(request, messages.INFO, 'Hubo un error al desactivar la categoria: '+category_data.category_group_name )
+        return redirect('list_categories_active') 
+@login_required
+def categories_activate(request,categories_id):
+    profiles= Profile.objects.get(user_id = request.user.id)
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
+        return redirect('check_group_main')
+    new_state = 'Activa'
+    category_data_count = Category_group.objects.filter(pk=categories_id).count()
+    category_data = Category_group.objects.get(pk=categories_id) 
+    categoria = Category.objects.filter(category_group_id=categories_id)
+    if category_data_count == 1:
+        for c in categoria:
+            id_producto = c.producto_id
+            Producto.objects.filter(pk = id_producto).update(producto_state='Activa')
+        Category_group.objects.filter(pk = categories_id).update(category_state = new_state)
+        messages.add_message(request, messages.INFO, 'Categoria  '+ category_data.category_group_name +' activada con éxito')                             
+        return redirect('list_categories_deactivate')
+    else:
+        messages.add_message(request, messages.INFO, 'Hubo un error al desactivar la categoria: '+category_data.category_group_name )
+        return redirect('list_categories_deactivate') 

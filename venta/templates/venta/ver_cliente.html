@@ -1,0 +1,51 @@
+% extends 'core/base_admin.html' %}
+{% load static %}
+
+{% block content %}
+{% block extrahead %}
+<script>
+    // Función para mostrar la alerta cuando se envía el formulario
+    function mostrarAlerta() {
+        alert("¡El Usuario fue modificado con exito!");
+    }
+</script>
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3">
+                <h3>Nuevo Cliente</h3>
+                {% if profiles.group_id == 1 or profiles.group_id == 4 %} 
+                <form method="post" action="" onsubmit="mostrarAlerta()">
+                    {% csrf_token %}
+                    <div class="row"> 
+                        <input type="hidden" value="{{ cliente_data.id }}" name="cliente_id" id="cliente_id">
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="text">Nombre Cliente</label>
+                            <input type="text" name="nombre"  id = "nombre" value="{{ cliente_data.nombre_cliente }}" readonly/>
+                        </div>  
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="text">Primer Apellido Cliente</label>
+                            <input type="text" name="apellido"  id = "apellido" value="{{ cliente_data.apellido_cliente }}" readonly/>
+                        </div>  
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="rut">Rut</label>
+                            <input type="text" name="rut"  required oninput="checkRut(this)" autofocus maxlength="254" required id="id_rut" class="form-control border" value="{{ cliente_data.rut_cliente }}" readonly/>
+                        </div>
+                        <div class="col-12 col-sm-4 mb-3">
+                            <label for="mobile">Celular</label>
+                            <input type="number" class="form-control border" id="mobile" name="mobile" value="{{ cliente_data.telefono_cliente }}" readonly/>
+                        </div>
+                        <div class="col-12 col-sm-8 mb-3">
+                            <label for="email">Correo ()</label>
+                            <input type="email" class="form-control border" value="{{ cliente_data.correo_cliente }}" name="email" readonly/>
+                        </div>
+                    </div>    
+                    <div class="row"> 
+                        <div class="col-12 col-sm-6 mb-3">
+                            <a href="{% url 'venta_main' %}" class="button button--gray form-control">Volver</a>
+                        </div>
+                    </div>
+                </form>
+                {% endif %}
+                
+{% endblock %}

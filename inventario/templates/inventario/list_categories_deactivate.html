@@ -9,6 +9,7 @@
     <div class="row">
         <div class="col-12 col-sm-8 mb-3">
             <h2 class='h2 medium text-blue'>Listado de categorias</h2>
+    {% if profiles.group_id 1 ==  or profiles.group_id == 2 %}
         </div>
         <div class="col-12 col-sm-4 mb-3">
             <a href="{% url 'inventario_main' %}" class="button button--gray form-control">Volver</a>
@@ -40,10 +41,9 @@
     <table class="table table-use">
         <thead>
             <tr>
+                <div style="background-color: aqua;"></div>
                 <th width="20%" scope="col">Nombre de Categoría</th>
-                {% if profiles.group_id == 1 %}
-                    <th width="15%" scope="col">Funciones</th>
-                {% endif %}
+                <th width="15%" scope="col">Funciones</th>
             </tr>
         </thead>
         <tbody>
@@ -60,15 +60,17 @@
                         <a href="{% url 'categories_activate' category.id %}">
                             activar categoria
                         </a>
+                        <a href="{% url 'categories_ver' category.id %}">
+                            ver categoria
+                        </a>
+                        
                 </th> 
-                    {% if profiles.group_id == 2 or profiles.group_id == 1  %}
                       
-                {% endif %}     
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    
+    {% endif %}
 <!-- Paginación -->
 {% if categories_list.paginator.num_pages > 1 %}
     <div class="d-flex">
