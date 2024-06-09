@@ -9,7 +9,7 @@
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
                 <h3>Nueva Categoría</h3>
-                {% if profiles.group_id 1 ==  or profiles.group_id == 2 %}
+                {% if profiles.group_id == 1   or profiles.group_id == 2 %}
                 <form method="post" action="{% url 'categories_save' %}">
                     {% csrf_token %}
                     <div class="row">                       
