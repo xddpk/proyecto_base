@@ -87,8 +87,6 @@ def proveedor_main3(request, producto_id=None):
     return render(request, template_name, {'profiles': profiles, 'productos': productos,'proveedores': proveedores})
 
 
-
-
 @login_required
 def agregar_productos(request):
     if request.method == 'POST':
@@ -98,6 +96,7 @@ def agregar_productos(request):
         email = request.POST['email']
         fecha = request.POST['fecha']
         numero = request.POST['numero']
+
         # Crear la orden
         orden = Orden(proveedor_id=proveedor, telefono_orden=email, creacion=fecha, nota_orden=numero)
         orden.save()
@@ -106,19 +105,33 @@ def agregar_productos(request):
             nombre = request.POST.getlist('nombre[]')[i]
             cantidad = request.POST.getlist('cantidad[]')[i]
             precio = request.POST.getlist('precio[]')[i]
-            productof = Producto.objects.filter(nombre_producto=nombre) 
-            producto= productof.first()
+            productos = Producto.objects.filter(nombre_producto=nombre)
+            producto = productos.first() 
+            "Producto.objects.filter(id=producto.id).update(stock_producto=F('stock_producto') + cantidad)"
 
 
+            # Creamos una instancia de ProductoForm con los datos del formulario
+            """form = OrdenProductoForm({'nombre_producto': nombre, 'cantidad_producto': cantidad, 'precio_producto': precio, 'orden_id': orden, 'producto_id': producto})
+
+            # Verificamos si el formulario es válido
+            if form.is_valid():
+                # Guardamos el producto en la base de datos
+                producto = form.save()
+                # Añaidimos el producto creado a la lista de productos creados
+                productos_creados.append(producto)
+            else:
+                # Si el formulario no es válido, podrías manejarlo de alguna manera, como mostrar un mensaje de error
+                pass"""
             OrdenProducto.objects.create(
                     nombre_producto=nombre,
                     cantidad_producto=cantidad,
                     precio_producto=precio,
                     orden=orden,
                     producto=producto,
+                    
 
                 )
-                # Redireccionamos después de agregar los productos
+                # Redireccionamos a alguna página después de agregar los productos
         return redirect('proveedor_main')
 
     else:
@@ -500,27 +513,30 @@ def ver_orden(request, orden_id):
 @login_required
 def orden_block(request, orden_id):
     profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una área para la que no tiene permisos')
+    if profiles.group_id not in [1, 3]:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a un área para la que no tiene permisos')
         return redirect('check_group_main')
 
-    order_data_count = Orden.objects.filter(pk=orden_id).count()
-    order_data = Orden.objects.get(pk=orden_id)     
-    if order_data_count == 1:
-        orden = OrdenProducto(orden_id)
-        Orden.objects.filter(pk=orden_id).update(estado_orden='t')
-        messages.add_message(request, messages.INFO, ' Orden ha llegado con éxito')
-        orden = OrdenProducto(orden_id)
-        ordent = OrdenProducto.objects.filter(orden_id=orden_id).values_list()
-        print(ordent)
-        for orden_producto in ordent:
-            producto = Producto.objects.get(pk=orden_producto.producto_id)
-            producto.stock_producto += orden_producto.cantidad_producto
-            producto.save()
-        return redirect('orden_compra_activo')        
-    else:
-        messages.add_message(request, messages.INFO, 'Hubo un error con la orden ' )
-        return redirect('orden_compra_activo')    
+    try:
+        order_data = Orden.objects.get(pk=orden_id)
+    except Orden.DoesNotExist:
+        messages.add_message(request, messages.INFO, 'La orden no existe')
+        return redirect('orden_compra_activo')
+
+    # Actualizar el estado de la orden a 't' (supongo que 't' significa "llegada")
+    Orden.objects.filter(pk=orden_id).update(estado_orden='t')
+
+    # Mensaje de éxito
+    messages.add_message(request, messages.INFO, 'Orden ha llegado con éxito')
+
+    # Actualizar el stock de los productos asociados a la orden
+    ordent = OrdenProducto.objects.filter(orden_id=orden_id)
+    for ordert in ordent:
+        producto = Producto.objects.get(pk=ordert.producto_id)
+        Producto.objects.filter(id=producto.id).update(stock_producto=F('stock_producto') + ordert.cantidad_producto)
+
+    return redirect('orden_compra_activo')
+   
    
 """   
 @login_required
@@ -691,7 +707,7 @@ def orden_compra_activo(request, page=None, search=None):
         for orden in orden_array:
             orden_all.append({
                 'numero_orden': orden.formatted_numero_orden,
-                'direccion_orden': orden.direccion_orden,
+                'nota_orden': orden.nota_orden,
                 'telefono_orden': orden.telefono_orden,
                 'estado_orden': orden.estado_orden,
                 'proveedor': orden.proveedor,
@@ -819,6 +835,7 @@ def orden_compra_finalizada(request, page=None, search=None):
         'page': page,
         'search': search
     })
+    
 @login_required    
 def orden_lista_bloqueada(request, page=None, search=None):
     profiles = Profile.objects.get(user_id=request.user.id)
