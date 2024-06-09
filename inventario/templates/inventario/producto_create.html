@@ -1,112 +1,123 @@
 {% extends 'core/base_admin.html' %}
 {% load static %}
-
 {% block content %}
 {% block extrahead %}
-
 {% endblock %}
-    <main role="main">
-        <div class="col-md-11" style="position: absolute; top: 20%; left: 30%; width: 50%; height: 60%; background-color: #D9D9D9;border-radius: 60px;">
-            <div style="margin-left: 15%; margin-top: 15%;" class="col-12  mt-3">
-                <h3>Añadir producto</h3> 
-                {% if profiles.group_id 1 ==  or profiles.group_id == 2 %}
+<main role="main">
+    {% if profiles.group_id == 1 or profiles.group_id == 2 %}
+    <div class="col-md-11"
+        style="position: absolute; top: 20%; left: 30%; width: 50%; height: 60%; background-color: #D9D9D9;border-radius: 60px;">
+        <div style="margin-left: 15%; margin-top: 15%;" class="col-12  mt-3">
+            <h3>Añadir producto</h3>
 
-                <form method="post" action="{% url 'producto_save' %}">
-                    {% csrf_token %}
-                    <div class="row"> 
-                        <div>
-                            <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
-                                <label for="text">Nombre Producto</label>
-                            </div>
-                            <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 11%;">
-                                <input type="text" name="nombre" class="form-control border" placeholder="RTX 4090" style="font-size: 20px;"/>
-                            </div>
+
+            <form method="post" action="{% url 'producto_save' %}">
+                {% csrf_token %}
+                <div class="row">
+                    <div>
+                        <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
+                            <label for="text">Nombre Producto</label>
                         </div>
-                        
-                        <div>
-                            <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
-                                <label for="text">Categoría</label>
-                            </div>
-                            <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 18%;">
-                                <select name="category_group_id" id="category_group_id" class="form-control border" required style="font-size: 20px;">
-                                    <option value="">----------</option>
-                                    {% for g in category_groups %}
-                                    <option value="{{g.id}}">{{g.category_group_name}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
+                        <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 11%;">
+                            <input type="text" name="nombre" class="form-control border" placeholder="RTX 4090"
+                                style="font-size: 20px;" />
                         </div>
-                        
-                    </div>    
-                    <div class="row">                       
-                        <div>
-                            <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
-                                <label for="text">Precio $</label>
-                            </div>
-                            <div style="display: inline-block; margin-left: 19%;">
-                                <input type="number" class="form-control border" id="precio" name="precio" placeholder="$Valor del producto" autofocus maxlength="254" required style="font-size: 20px;">
-                            </div>
-                            
-                        </div>
-                        
-                        <div>
-                            <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
-                                <label for="text">Unidades</label>
-                            </div>
-                            <div class="col-12 col-sm-8 mb-3" style="display: inline-block; margin-left: 18%;">
-                                <input type="number" class="form-control border" id="stock" name="stock" placeholder="Cantidad" required style="font-size: 20px;"/>
-                            </div>
-                        </div>
-                                              
-                        <div>
-                            <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
-                                <label for="text">Stock mínimo producto</label>
-                            </div>
-                            <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 5%;">
-                                <input type="number" class="form-control border" id="stock_minimo" name="stock_minimo" placeholder="Stock mínimo" required style="font-size: 20px;"/>
-                            </div>
-                        </div>
-                                              
                     </div>
-                    <div class="row"> 
-                        <div>
-                            <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
-                                <label for="text">Stock Máximo producto (*)</label>
-                            </div>
-                            <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 2%;">
-                                <input type="number" class="form-control border" id="stock_maximo" name="stock_maximo" placeholder="Stock máximo" required style="font-size: 20px;"/>
-                            </div>
+
+                    <div>
+                        <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
+                            <label for="text">Categoría</label>
                         </div>
-                        
-                        <div>
-                            <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
-                                <label for="text">Descripción producto</label>
-                            </div>
-                            <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 7%;">
-                                <input type="text" class="form-control border" id="descripcion_producto" name="descripcion_producto" placeholder="Especificaciones" required style="font-size: 20px;"/>
-                            </div>
+                        <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 18%;">
+                            <select name="category_group_id" id="category_group_id" class="form-control border" required
+                                style="font-size: 20px;">
+                                <option value="">----------</option>
+                                {% for g in category_groups %}
+                                <option value="{{g.id}}">{{g.category_group_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div>
+                        <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
+                            <label for="text">Precio $</label>
+                        </div>
+                        <div style="display: inline-block; margin-left: 19%;">
+                            <input type="number" class="form-control border" id="precio" name="precio"
+                                placeholder="$Valor del producto" autofocus maxlength="254" required
+                                style="font-size: 20px;">
                         </div>
 
-                        <div>
-                            <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
-                                <label for="text">Código producto</label>
-                            </div>
-                            <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 7%;">
-                                <input type="text" class="form-control border" id="codigo_producto" name="codigo_producto" placeholder="0 000000 000000" required style="font-size: 20px;"/>
-                            </div>
-                        </div>                        
-            
+                    </div>
+
+                    <div>
+                        <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
+                            <label for="text">Unidades</label>
+                        </div>
+                        <div class="col-12 col-sm-8 mb-3" style="display: inline-block; margin-left: 18%;">
+                            <input type="number" class="form-control border" id="stock" name="stock"
+                                placeholder="Cantidad" required style="font-size: 20px;" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
+                            <label for="text">Stock mínimo producto</label>
+                        </div>
+                        <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 5%;">
+                            <input type="number" class="form-control border" id="stock_minimo" name="stock_minimo"
+                                placeholder="Stock mínimo" required style="font-size: 20px;" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div>
+                        <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
+                            <label for="text">Stock Máximo producto (*)</label>
+                        </div>
+                        <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 2%;">
+                            <input type="number" class="form-control border" id="stock_maximo" name="stock_maximo"
+                                placeholder="Stock máximo" required style="font-size: 20px;" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
+                            <label for="text">Descripción producto</label>
+                        </div>
+                        <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 7%;">
+                            <input type="text" class="form-control border" id="descripcion_producto"
+                                name="descripcion_producto" placeholder="Especificaciones" required
+                                style="font-size: 20px;" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="col-12 col-sm-4 mb-3" style="display: inline-block;">
+                            <label for="text">Código producto</label>
+                        </div>
+                        <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 7%;">
+                            <input type="text" class="form-control border" id="codigo_producto" name="codigo_producto"
+                                placeholder="0 000000 000000" required style="font-size: 20px;" />
+                        </div>
+                    </div>
+
                     <div>
                         <div class="col-12 col-sm-8 mb-3" style="display: inline-block;margin-left: 50%;">
                             <a href="{% url 'inventario_main' %}" class="button  form-control float-right">Cancelar</a>
                         </div>
                         <div class="col-12 col-sm-4 mb-3" style="display: inline-block;margin-top: 30%;">
                             <input type="submit" value="Crear Producto" class="button form-control">
-                        </div>   
+                        </div>
                     </div>
-                </form>
-                {% endif %}
-            </div>
+            </form>
+
         </div>
-    </main>
+    </div>
+    {% endif %}
+</main>
 {% endblock %}
