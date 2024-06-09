@@ -29,6 +29,7 @@
         <div class="col-12  mt-3">
             <h3>Editar Orden de Compra</h3> 
             {% if profiles.group_id == 1 or profiles.group_id == 3%}
+
             <form action="" method="post" onsubmit="mostrarAlerta()">
                 {% csrf_token %}
                 <input type="hidden" value="{{ orden_id }}" name="orden_id" id="orden_id">
@@ -82,7 +83,7 @@
                     <div class="col-12 col-sm-6 mb-3">
                         <a href="{% url 'proveedor_lista_activo' %}" class="btn btn-danger form-control">Volver</a>
                     </div>
-                    
+
                     <div class="col-12 col-sm-6 mb-3">
                         <button type="submit" class="btn btn-success form-control" onclick="confirmarCambio(event)">Guardar Cambios</button>
                     </div>
@@ -90,6 +91,7 @@
 
             </form>
             {% endif %}
+
         </div>
     </div>
 </main>

@@ -53,12 +53,12 @@
                         
                         <p class='body--small'style="color: white; text-align: center; font-size: 20px;">Administrador</p>
                     
+
                     </span>
                 {% endif %}
                 </a>
                 <!--=== Fin Menú Admin ===-->
                 <!--=== Menu inventario ===-->
-
             {% if profiles.group_id == 1 or profiles.group_id == 2 %}      
                 {% if template_name == 'inventario/inventario_main.html' %}
                     <a href="{% url 'inventario_main' %}" class='item active'>

@@ -17,6 +17,7 @@
                 </div>
             </div> 
             {% if profiles.group_id == 1 %}
+
                 <form action="" method="post" onsubmit="mostrarAlerta()">
                     {% csrf_token %}
                     <input type="hidden" value="{{ user_data.id }}" name="user_id" id="user_id">

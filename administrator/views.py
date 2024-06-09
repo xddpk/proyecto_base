@@ -5,11 +5,8 @@ from turtle import home
 import pandas as pd
 from datetime import datetime, time, timedelta
 from django.utils import timezone
-from datetime import datetime
 import pytz
-
 import xlwt
-
 from django.http import HttpResponse
 from django import forms
 from django.contrib import messages
@@ -30,7 +27,6 @@ from extensiones import validacion
 def admin_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
     if not(profiles.group_id == 1 or profiles.group_id == 2 or profiles.group_id == 3 or profiles.group_id == 4):
-        
         return redirect('check_group_main')
     template_name = 'administrator/admin_main.html'
     return render(request,template_name,{'profiles':profiles})
@@ -79,9 +75,6 @@ def new_user(request):
 
         rut_exist = User.objects.filter(username=rut).count()
         mail_exist = User.objects.filter(email=email).count()
-        print (mail_exist)
-        #cambie toda la estructura pero no me gusta tanto (ineficiente)
-
         if validacion.validar_soloString(first_name)==False: #<- de validaciones Strings
             validar=False
             messages.add_message(request, messages.INFO, 'Error en Nombre: invalido')  
@@ -125,18 +118,15 @@ def new_user(request):
                         )
                     profile_save.save()
                     messages.add_message(request, messages.INFO, 'Usuario creado con exito')                             
- 
-        #el metodo no contempla validacioens deberá realizarlas
+    #se obtiene todos los grupos
     groups = Group.objects.all().exclude(pk=0).order_by('id')
     template_name = 'administrator/new_user.html'
     return render(request,template_name,{'groups':groups, 'profile':profiles})
 
 def list_main2(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    #groups = Group.objects.all().exclude(pk=0).order_by('id')
-    
+    profiles = Profile.objects.get(user_id = request.user.id)    
     if not(profiles.group_id == 1 or profiles.group_id == 2):
-        
+
         return redirect('check_group_main')
     
     template_name = 'administrator/list_main2.html'
@@ -199,8 +189,27 @@ def edit_user(request,user_id):
 
     profile_list = Group.objects.all().exclude(pk=0).order_by('name')    
     template_name = 'administrator/edit_user.html'
-    return render(request,template_name,{'user_data':user_data,'profile_data':profile_data,'groups':groups,'profile_list':profile_list, 'profiles':profiles})
+    return render(request,template_name,{'user_data':user_data,
+                                        'profile_data':profile_data,
+                                        'groups':groups,
+                                        'profile_list':profile_list})
 
+def user_ver(request, user_id):
+    profiles = Profile.objects.get(user_id=request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 2:
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        return redirect('check_group_main')
+    user_data = User.objects.get(pk=user_id)
+    profile_data = Profile.objects.get(user_id=user_id)
+    groups = Group.objects.get(pk=profile_data.group_id) 
+
+    profile_list = Group.objects.all().exclude(pk=0).order_by('name')    
+    template_name = 'administrator/user_ver.html'
+    return render(request,template_name,{'user_data':user_data,
+                                        'profile_data':profile_data,
+                                        'groups':groups,
+                                        'profile_list':profile_list,
+                                        'profiles':profiles})
 @login_required    
 def list_user_active2(request,page=None,search=None):
     
@@ -229,10 +238,8 @@ def list_user_active2(request,page=None,search=None):
         search = request.POST.get('search') 
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
-    print("search> ",search)
     user_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None":# si la cadena de búsqueda viene vacia
-        #usuario_count = User.objects.filter(is_active='t').count()
+    if search == None or search.strip() == "None" or search.strip() == "":# si la cadena de búsqueda viene vacia:# si la cadena de búsqueda viene vacia
         user_array = User.objects.filter(is_active='t').order_by('first_name')
         
         for us in user_array:
@@ -240,27 +247,49 @@ def list_user_active2(request,page=None,search=None):
             profile = profile_data.group
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
-            user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-            
+            user_all.append({'id':us.id,
+                            'user_name':us.username,
+                            'name':name,
+                            'mail':us.email,
+                            'profile':profile})
+        paginator = Paginator(user_all, 20)  
+        user_list = paginator.get_page(page)
+        template_name = 'administrator/list_user_active2.html'
+        return render(request,template_name,{'profiles':profiles,
+                                            'user_list':user_list,
+                                            'paginator':paginator,
+                                            'page':page,
+                                            'search':search,
+                                            'profile':profile})            
     else:#si la cadena de búsqueda trae datos
-        #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están activos o no y se ordena por primer nombre de forma ascendente
         user_array =  User.objects.filter(Q(first_name__icontains=search)|Q(username__icontains=search)).filter(is_active='t').order_by('first_name')#Ascendente
         
         for us in user_array:
+            
+
             profile_data = Profile.objects.get(user_id=us.id)
             profile = profile_data.group
-            name = us.first_name+' '+us.last_name
-            #se guarda la información del usuario
-            user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})            
-    
-    #user_array = User.objects.filter(is_active='t').order_by('first_name')
-    #profile_data = Profile.objects.all()
-    paginator = Paginator(user_all, 30)  
+
+            
+            name = us.first_name + ' ' + us.last_name
+            # Guarda la información del usuario
+            user_all.append({
+                'id': us.id,
+                'user_name': us.username,
+                'name': name,
+                'mail': us.email,
+                'profile': profile_data.group.name
+            })
+
+    paginator = Paginator(user_all, 20)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_active2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
-
+    return render(request,template_name,{'profiles':profiles,
+                                        'user_list':user_list,
+                                        'paginator':paginator,
+                                        'page':page ,
+                                        'search':search })
 @login_required    
 def list_user_block2(request,page=None,search=None):
     
@@ -290,8 +319,7 @@ def list_user_block2(request,page=None,search=None):
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
     user_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None":# si la cadena de búsqueda viene vacia
-        #usuario_count = User.objects.filter(is_active='f').count()
+    if search == None or search.strip() == "None" or search.strip() == "":# si la cadena de búsqueda viene vacia:# si la cadena de búsqueda viene vacia
         user_array = User.objects.filter(is_active='f').order_by('first_name')
         
         for us in user_array:
@@ -299,10 +327,21 @@ def list_user_block2(request,page=None,search=None):
             profile = profile_data.group
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
-            user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})
-            
+            user_all.append({'id':us.id,
+                            'user_name':us.username,
+                            'name':name,
+                            'mail':us.email,
+                            'profile':profile})
+        paginator = Paginator(user_all, 20)  
+        user_list = paginator.get_page(page)
+        template_name = 'administrator/list_user_block2.html'
+        return render(request,template_name,{'profiles':profiles,
+                                            'user_list':user_list,
+                                            'paginator':paginator,
+                                            'page':page,
+                                            'search':search,
+                                            'profile':profile })
     else:#si la cadena de búsqueda trae datos
-        #h_count = User.objects.filter(is_active='t').filter(nombre__icontains=search).count()
         #Lógica de busqueda por primer nombre, nombre de usuario, los filtra si están inactivos y se ordena por primer nombre de forma ascendente
         user_array =  User.objects.filter(Q(first_name__icontains=search)|Q(username__icontains=search)).filter(is_active='f').order_by('first_name')#Ascendente
         
@@ -311,13 +350,24 @@ def list_user_block2(request,page=None,search=None):
             profile = profile_data.group
             name = us.first_name+' '+us.last_name
             #se guarda la información del usuario
-            user_all.append({'id':us.id,'user_name':us.username,'name':name,'mail':us.email, 'profile':profile})            
+            user_all.append({'id':us.id,
+                            'user_name':us.username,
+                            'name':name,
+                            'mail':us.email,
+                            'profile':profile})            
     
     #profile_data = Profile.objects.all()
     paginator = Paginator(user_all, 30)  
     user_list = paginator.get_page(page)
     template_name = 'administrator/list_user_block2.html'
-    return render(request,template_name,{'profiles':profiles,'user_list':user_list,'paginator':paginator,'page':page })
+
+    return render(request,template_name,{'profiles':profiles,
+                                        'user_list':user_list,
+                                        'paginator':paginator,
+                                        'page':page ,
+                                        'search':search})
+
+
 @login_required
 def user_block(request,user_id):
     profiles = Profile.objects.get(user_id = request.user.id)
@@ -326,8 +376,7 @@ def user_block(request,user_id):
         return redirect('check_group_main')
 
     user_data_count = User.objects.filter(pk=user_id).count()
-    user_data = User.objects.get(pk=user_id)
-    profile_data = Profile.objects.get(user_id=user_id)       
+    user_data = User.objects.get(pk=user_id)     
     if user_data_count == 1:
         User.objects.filter(pk=user_id).update(is_active='f')
         messages.add_message(request, messages.INFO, 'Usuario '+user_data.first_name +' '+user_data.last_name+' bloqueado con éxito')
@@ -342,8 +391,7 @@ def user_activate(request,user_id):
         
         return redirect('check_group_main')
     user_data_count = User.objects.filter(pk=user_id).count()
-    user_data = User.objects.get(pk=user_id)
-    profile_data = Profile.objects.get(user_id=user_id)       
+    user_data = User.objects.get(pk=user_id) 
     if user_data_count == 1:
         User.objects.filter(pk=user_id).update(is_active='t')
         messages.add_message(request, messages.INFO, 'Usuario '+user_data.first_name +' '+user_data.last_name+' activado con éxito')
@@ -361,9 +409,8 @@ def user_delete(request,user_id):
 
     user_data_count = User.objects.filter(pk=user_id).count()
     user_data = User.objects.get(pk=user_id)
-    profile_data = Profile.objects.get(user_id=user_id)       
     if user_data_count == 1:
-        #Profile.objects.filter(user_id=user_id).delete()
+
         Profile.objects.filter(user_id=user_id).delete()
         User.objects.filter(pk=user_id).delete()
         messages.add_message(request, messages.INFO, 'Usuario '+user_data.first_name +' '+user_data.last_name+' eliminado con éxito')
@@ -373,6 +420,7 @@ def user_delete(request,user_id):
         return redirect('list_user_block2')        
 
 def ejemplo_query_set(request):
+
     #los query set que estan acontinuación retornan elementos iterables
     #para obtener todos los datos de un modelo
     user_array =  User.objects.all()
@@ -414,22 +462,6 @@ def ejemplo_query_set(request):
 
     print(user_data_count)
     return redirect('login')
-"""def update_hours(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    user_data = User.objects.get(pk=profiles.user_id)
-    User.objects.filter(pk=profiles.user_id).update(horas_trabajadas='55')
-    return redirect('login')"""
-"""def update_hours(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    user_data = User.objects.get(pk=profiles.user_id)
-    last_login=user_data.last_login
-    fecha_hora = timezone.datetime.strptime(str(last_login), "%Y-%m-%d %H:%M:%S.%f%z")
-    hora_exacta1 = int(fecha_hora.strftime("%H"))
-    hora_actual = datetime.now()
-    hora_exacta = int(hora_actual.strftime("%H"))
-    horas_trabajadas=abs(hora_exacta-hora_exacta1)
-    Profile.objects.filter(pk=profiles.user_id).update(horas_trabajadas=int(hora_exacta))
-    return redirect('login')    """
 
 def update_hours(request):
     chile_tz = pytz.timezone('Chile/Continental')
@@ -537,14 +569,18 @@ def carga_masiva_save(request):
                 first_name=first_name,
                 last_name=last_name,
                 email=email
-            )
+                )
             profile_save = Profile.objects.create(
-                user=user_save,
-                group_id=1,
-                first_session='No',
-                token_app_session='No'
-            )
+                    user=user_save,
+                    group_id=1,
+                    first_session='No',
+                    token_app_session='No'
+                )
             acc += 1
+            
+            
+    
+            
 
         messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
         return redirect('carga_masiva')

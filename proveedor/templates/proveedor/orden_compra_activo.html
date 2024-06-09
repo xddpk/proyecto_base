@@ -58,6 +58,7 @@
                 <th width="20%" scope="col">Estado de Orden</th>
                 <th width="20%" scope="col">Proveedor</th>
                 {% if profiles.group_id == 1 or profiles.group_id == 3 %}
+
                     <th width="15%" scope="col">Funciones</th>
                 {% endif %}
             </tr>
@@ -92,6 +93,7 @@
         </tbody>
     </table>
 {% endif %}
+
     <!-- Paginación -->
         {% if paginator.num_pages > 1 %}
             <div class="d-flex">

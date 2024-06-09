@@ -33,6 +33,7 @@ def check_profile(request):
         return redirect('login')
     profile_datos=Profile.objects.get(user_id=request.user.id)
     if (profile.group_id == 1 or profile.group_id == 2 or profile.group_id == 3 or profile.group_id == 4):
+
         inicio_sesion = profile.first_session
         if inicio_sesion == 'No':
             return redirect('admin_main')
@@ -44,19 +45,5 @@ def check_profile(request):
 
 
 def check_group_main(request):
-    messages.add_message(request, messages.INFO, 'No tiene permisos para acceder a esta área.')
     return render(request, 'core/check_group_main.html')
-
-"""@login_required
-def check_profile(request):  
-    try:
-        profile = Profile.objects.filter(user_id=request.user.id).get()    
-    except:
-        messages.add_message(request, messages.INFO, 'Hubo un error con su usuario, por favor contactese con los administradores')              
-        return redirect('login')
-    if profile.group_id == 1:        
-        #return HttpResponse('Usted se ha autentificado')
-        return redirect('admin_main')
-    else:
-        return redirect('logout')"""
 

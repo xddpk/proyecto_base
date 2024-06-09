@@ -35,6 +35,7 @@
 
 </header>
 {% if profiles.group_id == 1 or profiles.group_id == 3 %}
+
 <div class="d-flex flex-column flex-lg-row my-5">
     <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
         <div class="feedback body--small normal"></div>
@@ -59,6 +60,7 @@
                 <th width="30%" scope="col">Correo Proveedor</th>
                 <th width="30%" scope="col">Telefono</th>
                 <th width="15%" scope="col">Funciones</th>
+
             </tr>
         </thead>
         <tbody>
@@ -69,10 +71,13 @@
                     <th scope="row">{{s.correo_proveedor}}</th>
                     <th scope="row">{{s.telefono_proveedor}}</th>      
                             <th scope="row">
+
                                 <a href="{% url 'edit_proveedor' s.id %}">
                                     Editar 
                                 </a>
                             </th>
+
+
                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                     <th scope="row">
                                         <a href="{% url 'proveedor_block' s.id %}" onclick="confirmarCambio(event);">
@@ -81,11 +86,13 @@
                                     </th>
                                 
                         </th>   
+
                 </tr>
             {% endfor %}
         </tbody>
     </table>
     {% endif %}
+
     <!-- Paginación -->
         {% if paginator.num_pages > 1 %}
             <div class="d-flex">

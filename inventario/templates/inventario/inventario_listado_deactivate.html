@@ -49,6 +49,7 @@
                 <th width="30%" scope="col">Categoría</th>
                 <th width="30%" scope="col">Estado</th>
                 <th width="15%" scope="col">Funciones</th>
+
             </tr>
         </thead>
         <tbody>
@@ -61,7 +62,7 @@
                 <th scope="row">{{ p.precio_producto }}</th>
                 <th scope="row">{{ p.categoria_data }}</th>
                 <th scope="row">
-                    {% if p.stock_producto < p.stock_minimo_producto %} <a href="{% url 'producto_create3' p.id %}">
+                    {% if p.stock_producto < p.stock_minimo_producto %} <a href="">
                         Bajo
                         </a>
                         {% elif p.stock_maximo_producto < p.stock_producto %} Alto {% else %} Medio {% endif %} </th>

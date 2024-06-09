@@ -1,0 +1,33 @@
+{% extends 'core/base_admin.html' %}
+{% load static %}
+{% block content %}
+{% block extrahead %}
+
+{% endblock %}
+    <main role="main">
+        <div class="container col-12 mt-3">
+            <div class="col-12  mt-3">
+                <h3>Orden de compra </h3> 
+                <div class="col-12" style="margin-bottom: 15px;"></div>     
+                <div class="col-12 col-sm-4 mb-3">
+                    <a href="{% url 'proveedor_main' %}" class="button button--gray form-control">Volver</a>
+                </div>     
+                     
+                <div class="row mt-4 mb-4">
+                    <a href="{% url 'proveedor_main3' %}" class="button button--gray form-control">Crear orden</a>
+                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                </div>
+                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                <div class="row mt-4 mb-4">        
+                    <a href="{% url 'lista_orden_enviada' %}" class="button button--gray form-control">orden enviada</a>
+                </div>   
+                <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                    <div class="row mt-4 mb-4">        
+                    <a href="{% url 'lista_orden_proceso' %}" class="button button--gray form-control">orden proceso</a>
+                </div>  
+                    
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

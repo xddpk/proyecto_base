@@ -9,31 +9,31 @@
             <div class="col-12  mt-3">
                 <h3>Gestión De Ventas </h3> 
                 {% if profiles.group_id == 1 or profiles.group_id == 4 %}
+
                 <div class="col-12" style="margin-bottom: 15px;"></div>               
                 <div class="row mt-4 mb-4">
                     
                     <div class="col-12 col-sm-3 mb-3"  style="margin-bottom: 25px;">
                         <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <a href="{% url 'cliente_create' %}" class="button form-control">Nuevo Cliente</a>
+                        <a href="{% url 'cliente_create' %}" class="button form-control" style="position: absolute; top: 30%; left: 14%;">Nuevo Cliente</a>
                     </div> 
 
                     <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
                         
-                        <a href="{% url 'cliente_lista_principal' %}" class="button form-control">Listado</a>
+                        <a href="{% url 'cliente_lista_principal' %}" class="button form-control" style="position: absolute; top: 40%; left: 14%;"> Listado</a>
+                    </div>
+
+                    <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
+                        
+                        <a href="{% url 'tienda' %}" class="button form-control"style="position: absolute; top: 50%; left: 14%;">Crear Venta</a>
                     </div>
 
                     <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
                         
                         <a href="{% url 'tienda' %}" class="button form-control">Crear Venta</a>
                     </div>
-                    <a href="{% url 'admin_main' %}" class="button button--gray form-control">Volver</a>
-
-                    
-                    
                     {% endif %}
-                    
-
-                    
+                        <a href="{% url 'admin_main' %}" class="button button--gray form-control" style="position: absolute; top: 20%; left: 14%;">Volver</a>
                         
                         
                     </div>
