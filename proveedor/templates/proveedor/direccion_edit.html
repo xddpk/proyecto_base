@@ -62,7 +62,6 @@
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
                 <h3>Editar Direccion</h3> 
-                {% if profiles.group_id == 1 or profiles.group_id == 3 %}
                 <form method="post" action="{% url 'direccion_edit' direccion_data.id proveedor_id %}" onsubmit="mostrarAlerta()">
                     {% csrf_token %}
                     <input type="hidden" value="{{ direccion_data.id }}" name="direccion_id" id="direccion_id">
@@ -104,7 +103,6 @@
                         </div>
                     </div>
                 </form>
-                {% endif %}
             </div>
         </div>
         

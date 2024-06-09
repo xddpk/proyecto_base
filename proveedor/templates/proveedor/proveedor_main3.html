@@ -87,7 +87,7 @@
 </head>
 <body>
     <h1>Proveedor Main</h1>
-    {% if profiles.group_id == 1 or profiles.group_id == 3%}
+    
     <div>
         <p>Nombre de usuario: {{ profiles.user.username }}</p>
         <p>Grupo: {{ profiles.group_id }}</p>
@@ -154,12 +154,10 @@
 
         let contadorItems = 0;
         document.getElementById('agregarItem').addEventListener('click', agregarItemYProducto);
-        
         document.getElementById('volverButton').addEventListener('click', volver);
         document.getElementById('enviarButton').addEventListener('click', enviar);
         var totalValue = document.getElementById("total").value;
 
     </script>
-    {% endif %}
 </body>
 </html>

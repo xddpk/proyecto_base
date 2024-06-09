@@ -18,12 +18,19 @@
                 <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
                     <a href="{% url 'orden_compra_activo' %}" class="button form-control">Ordenes</a>
                 </div>
+
                 <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">                     
                     <a href="{% url 'orden_lista_bloqueada' %}" class="button form-control">Orden Aceptada</a>
                 </div>
-
-                {% endif %}    
-
+                <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">                     
+                    <a href="{% url 'orden_compra_finalizada' %}" class="button form-control">Orden Finalizada/Entregada</a>
+                </div>
+                <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">                     
+                    <a href="{% url 'orden_compra_no_aceptada' %}" class="button form-control">Ordenes Rechazadas</a>
+                </div>
+                
+                {% endif %}
+                    
                 <div class="col-12 col-sm-3 mb-3">
                     <a href="{% url 'proveedor_main' %}" class="button button--gray form-control">Volver</a>
                 </div>
