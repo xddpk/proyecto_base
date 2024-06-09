@@ -24,7 +24,7 @@
         {% if profiles.group_id 1 ==  or profiles.group_id == 4 %}
             </div>
         </div>
-        <div class="d-flex flex-column flex-lg-row my-5">
+        <div class=>
             <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
                 <div class="feedback body--small normal"></div>
             </div>
@@ -42,9 +42,9 @@
         <div class="row">
             <form method="post" action="">
 
-                <div class="table-container mt-5">
+                <div class="table-container mt-5" style="position: absolute; top: 30%; left: 20%; width: 100%; height: 100%;">
                     <table class="table table-user">
-                        <thead>
+                        <thead style="background-color: #3A1B78; color: #ffffff;">
                             <tr>
                                 <th scope="row" colspan="3" class="text-center">Productos</th>
                             </tr>
@@ -125,7 +125,7 @@
 
 
         </div>
-        <br><a href="{% url 'venta_main' %}" class="button button--gray form-control">Volver</a>
+        <br><a href="{% url 'venta_main' %}" class="button button--gray form-control" style="position: absolute; top: 60%; left: 15%;" >Volver</a>
 
         <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
 
