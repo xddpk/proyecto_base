@@ -139,7 +139,6 @@ def edit_user(request,user_id):
     profiles = Profile.objects.get(user_id = request.user.id)
     validar = True
     if not(profiles.group_id == 1):
-        
         return redirect('check_group_main')
     if request.method == 'POST':
         grupo = request.POST.get('grupo')
@@ -195,7 +194,8 @@ def edit_user(request,user_id):
     return render(request,template_name,{'user_data':user_data,
                                         'profile_data':profile_data,
                                         'groups':groups,
-                                        'profile_list':profile_list})
+                                        'profile_list':profile_list,
+                                        'profiles':profiles})
 
 
 @login_required    
