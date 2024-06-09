@@ -58,11 +58,11 @@ def tienda(request,page=None,search=None):
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
 
     producto_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None" or search == "" :# si la cadena de búsqueda viene vacia
+    if search == None or search.strip() == "None" or search.strip() == "":# si la cadena de búsqueda viene vacia:# si la cadena de búsqueda viene vacia
         producto_array = Producto.objects.filter(producto_state = "Activa").order_by('stock_producto')
         
         for iv in producto_array:
-            if iv.stock_producto >0:
+            if iv.stock_producto > 0:
                 categoria_data = Category.objects.get(producto_id=iv.id)
                 categoria_group = categoria_data.category_group
                 

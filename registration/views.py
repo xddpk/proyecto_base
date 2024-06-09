@@ -11,7 +11,7 @@ from django import forms
 from .models import Profile
 from django.core.mail import send_mail
 from django.http import HttpResponse
-
+import xlwt
 from django.conf import settings #importamos el archivo settings, para usar constantes declaradas en él
 from django.core.mail import EmailMultiAlternatives #libreria para el envio de correos
 
@@ -208,36 +208,3 @@ def send_mail_ejemplo2(request,mail_to,data_1):
 
     msg.send()
 
-"""
-@login_required
-def password_change2(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    user_id = request.user.id
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    if request.method == 'POST':
-        
-        old_password = request.POST.get('id_old_password')
-        new_password1 = request.POST.get('id_new_password1')
-        new_password2 = request.POST.get('id_new_password2')
-
-        #el metodo no contempla validacioens deberá realizarlas
-        rut_exist = User.objects.filter(username=old_password).count()
-        
-        if new_password1 == new_password2 :
-            User.objects.filter(pk = user_id).update(password = new_password1)  
-            Profile.objects.filter(user_id = user_id).update(first_session = 'No')  
-            Profile.objects.filter(user_id = user_id).update(token_app_session = 'No')  
-            
-        
-        
-            
-        else:
-            messages.add_message(request, messages.INFO, 'Las contraseñas no coinciden') 
-
-    template_name = 'registration/password_change_done.html'
-    
-    
-    return render(request,template_name)
-    """
