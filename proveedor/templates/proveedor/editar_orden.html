@@ -28,8 +28,6 @@
     <div class="container col-12 mt-3">
         <div class="col-12  mt-3">
             <h3>Editar Orden de Compra</h3> 
-
-            {% if profiles.group_id == 1 or profiles.group_id == 3%}
             <form action="" method="post" onsubmit="mostrarAlerta()">
                 {% csrf_token %}
                 <input type="hidden" value="{{ orden_id }}" name="orden_id" id="orden_id">
@@ -88,7 +86,6 @@
                     </div>
                 </div>
             </form>
-            {% endif %}
         </div>
     </div>
 </main>

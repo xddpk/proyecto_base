@@ -10,8 +10,6 @@
                 <h3>Gestión De proveedores </h3> 
                 <div class="col-12" style="margin-bottom: 15px;"></div>               
                 <div class="row mt-4 mb-4">
-                {% if profiles.group_id == 1 or profiles.group_id == 3%}
-
                     <a href="{% url 'proveedor_main2' %}" class="button button--gray form-control">Lista proveedores</a>
                     <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
 
@@ -19,14 +17,10 @@
                 <div class="row mt-4 mb-4">
                     <a href="{% url 'proveedor_main4' %}" class="button button--gray form-control">Lista Ordenes</a>
                     <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
-                    </div>
-                    <div class="row mt-4 mb-4">
-                        <a href="{% url 'proveedor_main4' %}" class="button button--gray form-control">Lista Ordenes</a>
-                        <div class="col-12 col-sm-3 mb-3" style="margin-bottom: 25px;">
 
-                    </div>
-                {% endif %}
+                </div>
 
+                
                 </div>   
                     
                 </div>
