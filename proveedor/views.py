@@ -98,25 +98,53 @@ def agregar_productos(request):
         email = request.POST['email']
         fecha = request.POST['fecha']
         numero = request.POST['numero']
-
+        validar=True
+        if validacion.validar_soloString(proveedor)==False:
+            validar = False
+        if validacion.validar_soloString(proveedor)==False:
+            validar = False
+        if validacion.validar_soloString(proveedor)==False:
+            validar = False
+        if validacion.validar_soloString(proveedor)==False:
+            validar = False
+        if validacion.validar_soloString(proveedor)==False:
+            validar = False
+        if validar==False:
+            messages.add_message(request, messages.INFO, 'Ingresado incorrectamente, por favor revise e ingrse los datos correctamente')
         # Crear la orden
         orden = Orden(proveedor_id=proveedor, telefono_orden=email, creacion=fecha, nota_orden=numero)
         orden.save()
         # Iteramos sobre los datos del formulario
-        for i in range(len(request.POST.getlist('nombre[]'))):
-            nombre = request.POST.getlist('nombre[]')[i]
-            cantidad = request.POST.getlist('cantidad[]')[i]
-            precio = request.POST.getlist('precio[]')[i]
-            producto = Producto.objects.get(nombre_producto=nombre) 
-            OrdenProducto.objects.create(
-                    nombre_producto=nombre,
-                    cantidad_producto=cantidad,
-                    precio_producto=precio,
-                    orden=orden,
-                    producto=producto,
+        if validar==True:
+            for i in range(len(request.POST.getlist('nombre[]'))):
+                nombre = request.POST.getlist('nombre[]')[i]
+                cantidad = request.POST.getlist('cantidad[]')[i]
+                precio = request.POST.getlist('precio[]')[i]
+                producto = Producto.objects.get(nombre_producto=nombre) 
 
-                )
-                # Redireccionamos después de agregar los productos
+
+                # Creamos una instancia de ProductoForm con los datos del formulario
+                """form = OrdenProductoForm({'nombre_producto': nombre, 'cantidad_producto': cantidad, 'precio_producto': precio, 'orden_id': orden, 'producto_id': producto})
+
+                # Verificamos si el formulario es válido
+                if form.is_valid():
+                    # Guardamos el producto en la base de datos
+                    producto = form.save()
+                    # Añaidimos el producto creado a la lista de productos creados
+                    productos_creados.append(producto)
+                else:
+                    # Si el formulario no es válido, podrías manejarlo de alguna manera, como mostrar un mensaje de error
+                    pass"""
+                OrdenProducto.objects.create(
+                        nombre_producto=nombre,
+                        cantidad_producto=cantidad,
+                        precio_producto=precio,
+                        orden=orden,
+                        producto=producto,
+
+                    )
+                    # Redireccionamos a alguna página después de agregar los productos
+            
         return redirect('proveedor_main')
 
     else:
@@ -331,13 +359,23 @@ def editar_orden(request, orden_id):
             total_impuesto = request.POST.get('total_impuesto')
             total_compra = request.POST.get('total_compra')
             nota_orden = request.POST.get('nota_orden')
-
-            orden.orden_id = orden_id
-            Orden.objects.filter(pk = orden_id).update(numero_orden=numero_orden) 
-            Orden.objects.filter(pk = orden_id).update(direccion_orden=direccion_orden)
-            Orden.objects.filter(pk = orden_id).update(telefono_orden=telefono_orden)
-            Orden.objects.filter(pk = orden_id).update(numero_orden=numero_orden)
-            Orden.objects.filter(pk = orden_id).update(nota_orden=nota_orden)
+            validar=True
+            if  validacion.validar_int(numero_orden)==False:
+                validar=False
+            if  validacion.validar_soloString(direccion_orden)==False:
+                validar=False
+            if  validacion.validar_numCelular(telefono_orden)==False:
+                validar=False
+            if  validacion.validar_soloString(nota_orden)==False:
+                validar=False
+            
+                orden.orden_id = orden_id
+                Orden.objects.filter(pk = orden_id).update(numero_orden=numero_orden) 
+                Orden.objects.filter(pk = orden_id).update(direccion_orden=direccion_orden)
+                Orden.objects.filter(pk = orden_id).update(telefono_orden=telefono_orden)
+                Orden.objects.filter(pk = orden_id).update(nota_orden=nota_orden)
+            else:
+                messages.add_message(request, messages.INFO, 'Complete segun lo pedido') 
             
             messages.success(request, 'Orden de compra editada exitosamente.')
             return redirect('orden_compra_activo')

@@ -601,27 +601,33 @@ def carga_masiva_save2(request):
             return redirect('carga_masiva2')
 
         acc = 0
-        accn = 0
+        validar=True
         for item in data.itertuples():
             nombre_producto = str(item[1])
             precio_producto = int(item[2])
             stock_producto = int(item[3])
-            stock_minimo_producto = int(item[4])
-            stock_maximo_producto = int(item[5])
-            descripcion_producto = str(item[6])
-            codigo_producto = str(item[7])
-            producto_state = str(item[8])
-
-            product_exist = Producto.objects.filter(codigo_producto = codigo_producto).count()
-            if product_exist != 1:
+            descripcion_producto = str(item[4])
+            estado_producto = str(item[5])
+            producto_state=str(item[6])
+            if validacion.validar_soloString(nombre_producto)==False:
+                validar=False
+            if validacion.validar_int(precio_producto)==False:
+                validar=False
+            if validacion.validar_int(stock_producto)==False:
+                validar=False
+            if validacion.validar_soloString(descripcion_producto)==False:
+                validar=False
+            if validacion.validar_estado(estado_producto)==False:
+                validar=False
+            if validacion.validar_state(producto_state)==False:
+                validar=False
+            if validar==True:
                 inventario_save = Producto(
                     nombre_producto=nombre_producto,
                     precio_producto=precio_producto,
                     stock_producto=stock_producto,
-                    stock_minimo_producto=stock_minimo_producto,
-                    stock_maximo_producto=stock_maximo_producto,
                     descripcion_producto=descripcion_producto,
-                    codigo_producto=codigo_producto,
+                    estado_producto=estado_producto,
                     producto_state=producto_state,
                 )
                 inventario_save.save()
@@ -629,13 +635,11 @@ def carga_masiva_save2(request):
                     producto_id = inventario_save.id,
                 )
                 category_save.save()
-                
-
                 acc += 1
-            else:
-                accn +=1
 
-        messages.add_message(request, messages.INFO, f'Carga masiva finalizada, registros exitosos: {acc} ,registros fallidos: {accn}' )
+            
+
+        messages.add_message(request, messages.INFO, 'Carga masiva finalizada, se importaron ' + str(acc) + ' registros')
         return redirect('carga_masiva2')
     
 def categories_ver(request, categories_id):
@@ -947,7 +951,7 @@ def categories_ver(request, categories_id):
 
 @login_required    
 def list_categories_deactivate(request,page=None,search=None):
-    
+    prueba(request)
     profiles = Profile.objects.get(user_id = request.user.id)
     if not(profiles.group_id == 1 or profiles.group_id == 2):
         
@@ -990,9 +994,16 @@ def list_categories_deactivate(request,page=None,search=None):
         paginator = Paginator(categories_all, num_elemento)  
         categories_list = paginator.get_page(page)
         template_name = 'inventario/list_categories_deactivate.html'
-        return render(request,template_name,{'profiles':profiles,
-                                            'categories_list':categories_list,
-                                            'paginator':paginator,
-                                            'page':page,
-                                            'search':search })
+        return render(request,template_name,{'profiles':profiles,'categories_list':categories_list,'paginator':paginator,'page':page,'search':search })
+    
+
+def prueba(request):
+    profiles = Profile.objects.get(user_id = request.user.id)
+    if profiles.group_id != 1 and profiles.group_id != 2:
+            messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+            return redirect('check_group_main')
+    template_name='inventario/popupvalidar.html'
+    return (request,template_name,{'profiles':profiles, })
+    
+
     

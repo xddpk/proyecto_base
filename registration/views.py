@@ -14,6 +14,7 @@ from django.http import HttpResponse
 import xlwt
 from django.conf import settings #importamos el archivo settings, para usar constantes declaradas en él
 from django.core.mail import EmailMultiAlternatives #libreria para el envio de correos
+from extensiones import validacion
 
 # Create your views here.
 class SignUpView(CreateView):
@@ -65,12 +66,24 @@ def profile_edit(request):
         last_name = request.POST.get('last_name')
         mobile = request.POST.get('mobile')
         phone = request.POST.get('phone')
-        User.objects.filter(pk=request.user.id).update(first_name=first_name)
-        User.objects.filter(pk=request.user.id).update(last_name=last_name)
-        Profile.objects.filter(user_id=request.user.id).update(phone=phone)
-        Profile.objects.filter(user_id=request.user.id).update(mobile=mobile)
-        messages.add_message(request, messages.INFO, 'Perfil Editado con éxito') 
-    profile = Profile.objects.get(user_id = request.user.id)
+        validar=True
+        if validacion.validar_soloString(first_name)==False:
+            validar=False
+        if validacion.validar_soloString(last_name)==False:
+            validar=False
+        if validacion.validar_numCelular(mobile)==False:
+            validar=False
+        if validacion.validar_numCelular(phone)==False:
+            validar=False
+        if validar==True:
+            User.objects.filter(pk=request.user.id).update(first_name=first_name)
+            User.objects.filter(pk=request.user.id).update(last_name=last_name)
+            Profile.objects.filter(user_id=request.user.id).update(phone=phone)
+            Profile.objects.filter(user_id=request.user.id).update(mobile=mobile)
+            messages.add_message(request, messages.INFO, 'Perfil Editado con éxito') 
+        else:
+            messages.add_message(request, messages.INFO, 'Ingresado incorrectamente, por favor revise e ingrse los datos correctamente')
+        profile = Profile.objects.get(user_id = request.user.id)
     template_name = 'registration/profile_edit.html'
     return render(request,template_name,{'profile':profile})
 

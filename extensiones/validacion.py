@@ -1,3 +1,4 @@
+
 import re
 def validar_soloString(dato):
     regex = r'[a-zA-Z]{3,}'
@@ -57,26 +58,27 @@ def validar_depto(dato):
         return True
     else:
 
-        return False
-    
-    
-def validar_piso(dato):
-    try:
-        # Si dato está vacío, considerarlo válido
-        if dato == "":
-            return True
-        # Intenta convertir dato a un entero
-        valor = int(dato)
-        # Si valor es un entero, es válido
         return True
-    except ValueError:
-        # Si ocurre un ValueError, dato no es un entero válido
+def validar_vacio(dato):
+    if dato=="":
         return False
-
-def validar_calle(dato):
-    regex = r'[a-zA-Z\s]{3,}'
-    # Si el dato está vacío, no es válido
-    if dato == "":
-        return False
-    # Verifica si el dato coincide con el patrón
-    return bool(re.match(regex, dato))
+    else:
+        return True
+def validar_estado(estado):
+    if estado=="":
+        False
+    if estado=="alto":
+        True
+    if estado=="medio":
+        True
+    if estado=="bajo":
+        True
+    else: False
+def validar_state(estado):
+    if estado=="":
+        False
+    if estado=="Activa":
+        True
+    if estado=="Deactivate":
+        True
+    else: False
