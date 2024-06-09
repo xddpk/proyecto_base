@@ -232,7 +232,7 @@ def list_user_active2(request,page=None,search=None):
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
     user_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None" or search == "":# si la cadena de búsqueda viene vacia
+    if search == None or search.strip() == "None" or search.strip() == "":# si la cadena de búsqueda viene vacia:# si la cadena de búsqueda viene vacia
         user_array = User.objects.filter(is_active='t').order_by('first_name')
         
         for us in user_array:
@@ -312,7 +312,7 @@ def list_user_block2(request,page=None,search=None):
         page = None
     #fin logica que permite recibir la cadena de búsqueda y propoga a través del paginador
     user_all = [] #lista vacia para agrega la salida de la lista ya sea con la cadena de búsqueda o no
-    if search == None or search == "None" or search == "" :# si la cadena de búsqueda viene vacia
+    if search == None or search.strip() == "None" or search.strip() == "":# si la cadena de búsqueda viene vacia:# si la cadena de búsqueda viene vacia
         user_array = User.objects.filter(is_active='f').order_by('first_name')
         
         for us in user_array:

@@ -111,7 +111,7 @@ def producto_create(request):
         messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
         return redirect('check_group_main')
     template_name = 'inventario/producto_create.html'
-    category_group_data = Category_group.objects.all()
+    category_group_data = Category_group.objects.filter(category_state='Activa')
     return render(request,template_name,{'category_groups':category_group_data})
 
 
@@ -253,7 +253,7 @@ def producto_ver(request, producto_id):
     producto_data = Producto.objects.get(pk=producto_id)
     category_data = Category.objects.get(producto_id=producto_id)
     category_datas = Category_group.objects.get(pk=category_data.category_group_id) 
-    category_groups = Category_group.objects.all().exclude(pk=0).order_by('category_group_name')    
+    category_groups = Category_group.objects.filter(category_state='Activa').exclude(pk=0).order_by('category_group_name')    
     template_name = 'inventario/producto_ver.html'
     return render(request,template_name,{'producto_data':producto_data,
                                         'category_data':category_data,
@@ -271,8 +271,7 @@ def producto_delete(request,producto_id):
         return redirect('check_group_main')
 
     producto_data_count = Producto.objects.filter(pk=producto_id).count()
-    producto_data = Producto.objects.get(pk=producto_id)
-    category_data = Category.objects.get(producto_id=producto_id)       
+    producto_data = Producto.objects.get(pk=producto_id)  
     if producto_data_count == 1:
         Category.objects.filter(producto_id=producto_id).delete()
         Producto.objects.filter(pk=producto_id).delete()
