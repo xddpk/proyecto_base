@@ -5,16 +5,28 @@
 
 {% endblock %}
     <main role="main">
+<<<<<<< HEAD
                     {% if profiles.group_id == 1 %}  
 
                     <div class="col-12 col-sm-3 mb-3" style="position: absolute; top: 10%; left: 15%; width: 10%; height: 10%;">
                             <div class="col-12" style="margin-bottom: 30px;"></div> 
                             <a href="{% url 'admin_dashboard' %}" class="button">Dashboard</a>
+=======
+                    {% if profiles.group_id == 1%}   
+                    {% endif %}
+                        <div class="col-md-11" style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); width: 50%; height: 5%; text-align: center;">
+                            <i style="font-size: 250px; margin: auto;" class="fa-solid fa-bars-staggered"></i>
+                            <div style="font-size: 100px;">Dashboard</div>
+>>>>>>> bf37bee (cambios rama)
                         </div>
-                        <div class="col-12 col-sm-3 mb-3" style="position: absolute; top: 16%; left: 15%; width: 10%; height: 10%;">
+                        <div class="col-12 col-sm-3 mb-3" style="position: absolute; top: 10%; left: 15%; width: 30%; height: 10%;">
                             <div class="col-12" style="margin-bottom: 25px;"></div>
+<<<<<<< HEAD
                             <a href="{% url 'list_main2' %}" class="button form-control">Listado</a>
                             
+=======
+                            <a href="{% url 'list_user_active2' %}" class="button form-control">Listado de Usuarios</a>
+>>>>>>> bf37bee (cambios rama)
                         </div>
                     {% endif %}
 

@@ -28,7 +28,11 @@ num_elemento = 30
 def venta_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
     if not(profiles.group_id == 1 or profiles.group_id == 4):
+<<<<<<< HEAD
         
+=======
+        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+>>>>>>> bf37bee (cambios rama)
         return redirect('check_group_main')
     template_name = 'venta/venta_main.html'
     return render(request,template_name,{'profiles':profiles})

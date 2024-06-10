@@ -8,8 +8,11 @@
     <main role="main">
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
+<<<<<<< HEAD
                 <h3>Nuevo Producto</h3> 
                 {% if profiles.group_id == 1   or profiles.group_id == 2 %}
+=======
+>>>>>>> bf37bee (cambios rama)
                 <form method="post" action="{% url 'producto_save'%}">
                     {% csrf_token %}
                     <input type="hidden" value="{{ producto_data.id }}" name="producto_id" id="producto_id">
@@ -30,16 +33,16 @@
                     </div>    
                     <div class="row">                       
                         <div class="col-12 col-sm-4 mb-3">
-                            <label for="text">Precio $</label>
-                            <input type="number" class="form-control border" id="precio" name="precio" value="{{producto_data.precio_producto}}"  required/>
+                            <label for="precio" id="precio-label">Precio $</label>
+                            <input type="number" class="form-control" id="precio-input" name="precio" value="{{producto_data.precio_producto}}" required/>
                         </div>
                         <div class="col-12 col-sm-4 mb-3">
-                            <label for="text">Unidades</label>
-                            <input type="number" class="form-control border" id="stock" name="stock" value="{{producto_data.stock_producto}}" required/>
+                            <label for="stock" id="stock-label">Unidades</label>
+                            <input type="number" class="form-control" id="stock-input" name="stock" value="{{producto_data.stock_producto}}" required/>
                         </div>                        
                         <div class="col-12 col-sm-4 mb-3">
-                            <label for="text">Stock minimo producto</label>
-                            <input type="number" class="form-control border" id="stock_minimo" name="stock_minimo" value="{{producto_data.stock_minimo_producto}}" required/>
+                            <label for="stock_minimo" id="stock_minimo-label">Stock minimo producto</label>
+                            <input type="number" class="form-control" id="stock_minimo-input" name="stock_minimo" value="{{producto_data.stock_minimo_producto}}" required/>
                         </div>                        
                     </div>
                     <div class="row"> 
