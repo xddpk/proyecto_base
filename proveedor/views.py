@@ -555,8 +555,11 @@ def orden_block(request, orden_id):
     # Mensaje de éxito
     messages.add_message(request, messages.INFO, 'Orden ha llegado con éxito')
 
-    
-    ejemplos_correo1(request,'pedrozzzlp@gmail.com',str(orden))
+    orden = Orden.objects.get(pk=orden_id)
+    proveedor=Proveedor.objects.get(pk=orden.proveedor_id) 
+
+
+    ejemplos_correo1(request,proveedor.correo_proveedor,str(orden))
 
     return redirect('orden_compra_activo')
    
