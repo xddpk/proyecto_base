@@ -27,14 +27,13 @@ num_elemento = 30
 @login_required
 def venta_main(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
+        
         return redirect('check_group_main')
     template_name = 'venta/venta_main.html'
     return render(request,template_name,{'profiles':profiles})
 
 """
-
 def crear_venta(request):
     if request.method == 'POST':
         form = TuModeloForm(request.POST)
@@ -46,25 +45,22 @@ def crear_venta(request):
         form = TuModeloForm()
     
     return render(request, 'tu_template.html', {'form': form})
-
 """
-
-
 
 @login_required
 def cliente_create(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
+        
         return redirect('check_group_main')
     template_name = 'venta/cliente_create.html'
     category_group_data = Category_group.objects.all()
-    return render(request,template_name,{'category_groups':category_group_data})
+    return render(request,template_name,{'category_groups':category_group_data,'profiles':profiles})
 @login_required
 def cliente_save(request):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
+        
         return redirect('check_group_main')
 
     if request.method == 'POST':
@@ -127,8 +123,8 @@ def cliente_lista_principal(request):
     profiles = Profile.objects.get(user_id = request.user.id)
     #groups = Group.objects.all().exclude(pk=0).order_by('id')
     
-    if profiles.group_id != 1 and profiles.group_id != 4:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
+        
         return redirect('check_group_main')
     
     template_name = 'venta/cliente_lista_principal.html'
@@ -139,8 +135,8 @@ def cliente_lista_principal(request):
 def edit_cliente(request,cliente_id):
     profiles = Profile.objects.get(user_id = request.user.id)
     validar = True
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1):
+        
         return redirect('check_group_main')
     if request.method == 'POST':
         rut = request.POST.get('rut')
@@ -192,8 +188,8 @@ def edit_cliente(request,cliente_id):
 @login_required
 def ver_cliente(request, cliente_id):
     profiles = Profile.objects.get(user_id=request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 2:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 2):
+        
         return redirect('check_group_main') 
     template_name = 'venta/ver_cliente.html'
     cliente_data = Cliente.objects.get(pk=cliente_id)
@@ -202,8 +198,8 @@ def ver_cliente(request, cliente_id):
 @login_required    
 def cliente_lista_activo(request,page=None,search=None):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
+        
         return redirect('check_group_main')
     if page == None:
         page = request.GET.get('page')
@@ -261,8 +257,8 @@ def cliente_lista_activo(request,page=None,search=None):
 def cliente_lista_bloqueado(request,page=None,search=None):
     
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
+        
         return redirect('check_group_main')
     if page == None:
         page = request.GET.get('page')
@@ -319,8 +315,8 @@ def cliente_lista_bloqueado(request,page=None,search=None):
 @login_required
 def cliente_block(request,cliente_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
 
     cliente_data_count = Cliente.objects.filter(pk=cliente_id).count()
@@ -335,8 +331,8 @@ def cliente_block(request,cliente_id):
 @login_required
 def cliente_activate(request,cliente_id):
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 3:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 3):
+        
         return redirect('check_group_main')
 
     cliente_data_count = Cliente.objects.filter(pk=cliente_id).count()
@@ -353,7 +349,7 @@ def cliente_activate(request,cliente_id):
 def cliente_delete(request,cliente_id):
     profiles = Profile.objects.get(user_id = request.user.id)
     if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+        
         return redirect('check_group_main')
 
     cliente_data_count = Cliente.objects.filter(pk=cliente_id).count()
@@ -434,8 +430,8 @@ def finalizar_venta(request,cliente_id):
 def cliente_lista_venta(request,cliente_id,page=None,search=None):
     
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
+        
         return redirect('check_group_main')
 
     if page == None:
@@ -494,8 +490,8 @@ def cliente_lista_venta(request,cliente_id,page=None,search=None):
 def cliente_lista_venta_detalle(request,venta_id,page=None,search=None):
     
     profiles = Profile.objects.get(user_id = request.user.id)
-    if profiles.group_id != 1 and profiles.group_id != 4:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
+    if not(profiles.group_id == 1 or profiles.group_id == 4):
+        
         return redirect('check_group_main')
     if page == None:
         page = request.GET.get('page')

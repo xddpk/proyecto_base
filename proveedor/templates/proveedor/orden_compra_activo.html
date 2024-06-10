@@ -24,7 +24,7 @@
             <h2 class='h2 medium text-blue'>Listado de Ordenes en transito</h2>
         </div>
         <div class="col-12 col-sm-4 mb-3">
-            <a href="{% url 'proveedor_main' %}" class="button button--gray form-control">Volver</a>
+            <a href="{% url 'proveedor_main4' %}" class="button button--gray form-control">Volver</a>
         </div>
     </div>
     <div class="d-flex flex-column flex-lg-row mt-2">
@@ -51,7 +51,7 @@
         <thead>
             <tr>
                 <th width="20%" scope="col">Número de Orden</th>
-                <th width="20%" scope="col">Dirección de Orden</th>
+                <th width="20%" scope="col">Observacion Orden</th>
                 <th width="20%" scope="col">Teléfono de Orden</th>
                 <th width="20%" scope="col">Estado de Orden</th>
                 <th width="20%" scope="col">Proveedor</th>
@@ -64,16 +64,11 @@
             {% for orden in orden_list %}
                 <tr>
                     <th scope="row">{{ orden.numero_orden }}</th>
-                    <th scope="row">{{ orden.direccion_orden }}</th>
+                    <th scope="row">{{ orden.nota_orden }}</th>
                     <th scope="row">{{ orden.telefono_orden }}</th>
                     <th scope="row">{{ orden.estado_orden }}</th>
                     <th scope="row">{{ orden.proveedor.nombre_proveedor }}</th>
                     {% if profiles.group_id == 1 or profiles.group_id == 3 %}
-                        <th scope="row">
-                            <a href="{% url 'editar_orden' orden.id   %}">
-                                Editar 
-                            </a>
-                        </th>
                         <th scope="row">
                             <a href="{% url 'ver_orden' orden.id  %}">
                                 Ver Orden
@@ -81,7 +76,12 @@
                         </th>
                         <th scope="row">
                             <a href="{% url 'orden_block' orden.id %}" onclick="confirmarCambio(event);">
-                                Entregada
+                                Aceptar
+                            </a>
+                        </th>
+                        <th scope="row">
+                            <a href="{% url 'orden_rechazar' orden.id %}" onclick="confirmarCambio(event);">
+                                Rechazar
                             </a>
                         </th>
                     {% endif %}                            

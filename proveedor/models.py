@@ -42,7 +42,7 @@ class Orden(models.Model):
         ordering = ['numero_orden']
     
     def __str__(self):
-        return self.numero_orden
+        return f"Número de Orden: {self.numero_orden}, Dirección de Orden: {self.direccion_orden}, Teléfono de Orden: {self.telefono_orden}, Estado de Orden: {self.estado_orden}, Descuento: {self.descuento}, Tasa: {self.tasa}, Total de Impuesto: {self.total_impuesto}, Total de Compra: {self.total_compra}, Creación: {self.creacion}, Actualizado: {self.updated}, Proveedor: {self.proveedor}, Nota de Orden: {self.nota_orden}, Número de Orden Formateado: {self.formatted_numero_orden}"
     def save(self, *args, **kwargs):
         if not self.numero_orden: # si no hay ningun registro 
             last_record = Orden.objects.all().order_by('numero_orden').last() #busca el ultimo registro, obtiene el codigo de venta
@@ -81,7 +81,7 @@ class Comuna(models.Model):
 class Direccion(models.Model):
     numero_direccion = models.IntegerField(null=True, blank=True, default=0)
     nombre_calle = models.CharField(max_length=100, null=True, blank=True, default='')
-    departamento = models.IntegerField(null=True, blank=True, default=0)
+    departamento = models.CharField(max_length=100,null=True, blank=True, default=0)
     piso = models.IntegerField(null=True, blank=True, default=0)
     comuna = models.ForeignKey(Comuna, on_delete=models.CASCADE) 
 
@@ -129,7 +129,7 @@ class OrdenProducto(models.Model):
     class Meta:
         verbose_name = 'OrdenProducto'
         verbose_name_plural = 'OrdenProductos'  
-        ordering = ['cantidad_producto']
+        ordering = ['nombre_producto']
 
 class OrdenProductoForm(forms.ModelForm):
     class Meta:

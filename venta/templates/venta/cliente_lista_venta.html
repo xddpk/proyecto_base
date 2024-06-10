@@ -34,6 +34,7 @@
     </div>
 
 </header>
+{% if profiles.group_id == 1 or profiles.group_id == 4 %}
 <div class="d-flex flex-column flex-lg-row my-5">
     <div class="my-auto d-flex flex-column flex-lg-row ms-lg-auto">
         <div class="feedback body--small normal"></div>
@@ -57,9 +58,9 @@
                 <th width="20%" scope="col">Fecha</th>
                 <th width="30%" scope="col">Total $</th>
 
-                {% if profiles.group_id == 1 or profiles.group_id == 4 %}
+                
                     <th width="15%" scope="col">Funciones</th>
-                {% endif %}
+                
             </tr>
         </thead>
         <tbody>
@@ -68,7 +69,6 @@
                     <th scope="row">{{s.codigo_venta}}</th>
                     <th scope="row">{{s.creacion_venta}}</th>
                     <th scope="row">{{s.total_venta}}</th>    
-                    {% if profiles.group_id == 1 %}
                             <th scope="row">
                             
                                 <a href="{% url 'cliente_lista_venta_detalle' s.id %}">
@@ -76,11 +76,12 @@
                                 </a>
                             
                         </th>   
-                    {% endif %}                            
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+{% endif %}
+                    
     <!-- Paginación -->
         {% if paginator.num_pages > 1 %}
             <div class="d-flex">
@@ -117,5 +118,6 @@
                 </nav>
             </div>
         {% endif %}  
+        
     <!-- Paginación -->   
 {% endblock %}

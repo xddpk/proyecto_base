@@ -3,39 +3,37 @@ from django.db import models #importa los metodos necesarios para trabajar con m
 # Create your models here.
 from django import forms
 
-
-
-
 class Producto(models.Model):
-    codigo_producto = models.CharField(max_length = 100,null=True, blank=True)  
-    nombre_producto = models.CharField(max_length = 100,null=True, blank=True)  
+    codigo_producto = models.CharField(max_length=100, null=True, blank=True)
+    nombre_producto = models.CharField(max_length=100, null=True, blank=True)
     precio_producto = models.IntegerField(null=True, blank=True)
     stock_producto = models.IntegerField(null=True, blank=True)
     stock_minimo_producto = models.IntegerField(null=True, blank=True)
     stock_maximo_producto = models.IntegerField(null=True, blank=True)
-    descripcion_producto = models.CharField(max_length = 100,null=True, blank=True)  
-    
-    imagen_producto = models.CharField(max_length=240, null=True, blank=True)
-    estado_producto = models.CharField(max_length=100, null=True, blank=True, default='medio')
-    producto_estado= models.CharField(max_length=100,null=True,blank=True,default="Activo")
-    producto_state= models.CharField(max_length=100,null=True,blank=True,default="Activa")
+    descripcion_producto = models.CharField(max_length=100, null=True, blank=True)
+    imagen_producto = models.ImageField(null=True, blank=True)
+    estado_producto = models.CharField(max_length=100, null=True, blank=True, default='Bueno')
+    producto_state = models.CharField(max_length=100, null=True, blank=True, default="Activa")
     
     class Meta:
         verbose_name = 'Producto'
         verbose_name_plural = 'Productos'
         ordering = ['stock_producto']
-    #falta perfeccionar logica para caluclar estado
+    
     def calcular_estado(self):
-        if self.stock_producto <= self.stock_minimo_producto:
-            self.estado_producto = 'bajo'
+        if self.stock_producto is not None:
+            if self.stock_producto <= self.stock_minimo_producto:
+                self.estado_producto = 'Bajo'
+            else:
+                self.estado_producto = 'Bueno'
 
-        if ((self.stock_producto >= self.stock_minimo_producto) and (self.stock_producto <= self.stock_maximo_producto)) :
-            self.estado_producto = 'medio'
-        else:
-            self.estado_producto = 'alto'
+    def save(self, *args, **kwargs):
+        self.calcular_estado()
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.stock_producto
+        return f'{self.nombre_producto} - Estado: {self.estado_producto}'
+
 
 class ProductoForm(forms.ModelForm):
     class Meta:

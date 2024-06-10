@@ -21,16 +21,14 @@
 <header class='mb-5'>
     <div class="row">
         <div class="col-12 col-sm-8 mb-3">
-            <h2 class='h2 medium text-blue'>Listado de Proveedores activos </h2>
+            <h2 class='h2 medium text-blue'>Listado de Ordenes no aceptada</h2>
         </div>
         <div class="col-12 col-sm-4 mb-3">
-            <button id="volverButton">Volver</button>
+            <a href="{% url 'proveedor_main4' %}" class="button button--gray form-control">Volver</a>
         </div>
     </div>
     <div class="d-flex flex-column flex-lg-row mt-2">
-        <p class='body--normal text-gray'>
-            {% lorem 2 b random %}
-        </p>
+
     </div>
 
 </header>
@@ -40,58 +38,46 @@
     </div>
     <form method="post" action="" class='col-12 col-lg-6 input-container-search my-auto me-3'>
         {% csrf_token %}
-        <input name="search" id="search" type="text" placeholder='Buscar por Rut,  Nombre'/>
+        <input name="search" id="search" type="text" placeholder='Buscar por Número de Orden, Dirección'/>
         <button type="submit" class="button button--gray">
             <span class="material-icons-outlined">
                 search
             </span>
         </button>
-        
-    <form>       
+    </form>       
 </div>
 <div class="table-container mt-5">
     <table class="table table-user">
         <thead>
             <tr>
-                <th width="20%" scope="col">Rut Proveedor</th>
-                <th width="20%" scope="col">Nombre Proveedor</th>
-                <th width="30%" scope="col">Correo Proveedor</th>
-                <th width="30%" scope="col">Telefono</th>
+                <th width="20%" scope="col">Número de Orden</th>
+                <th width="20%" scope="col">Observacion Orden</th>
+                <th width="20%" scope="col">Teléfono de Orden</th>
+                <th width="20%" scope="col">Estado de Orden</th>
+                <th width="20%" scope="col">Proveedor</th>
                 {% if profiles.group_id == 1 %}
                     <th width="15%" scope="col">Funciones</th>
                 {% endif %}
             </tr>
         </thead>
         <tbody>
-            {% for s in proveedor_list %}
+            {% for orden in orden_list %}
                 <tr>
-                    <th scope="row">{{s.rut_proveedor}}</th>
-                    <th scope="row">{{s.nombre_proveedor}}</th>
-                    <th scope="row">{{s.correo_proveedor}}</th>
-                    <th scope="row">{{s.telefono_proveedor}}</th>      
-                    {% if profiles.group_id == 1 or profiles.group_id == 3%}
-                            <th scope="row">
-                            
-                                <a href="{% url 'edit_proveedor' s.id %}">
-                                    Editar 
-                                </a>
-                            </th>
-                            <th scope="row">
-                            
-                                <a href="{% url 'ver_proveedor' s.id %}">
-                                    Ver Proveedor
-                                </a>
-                            </th>
-                            
-                                
-                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                    <th scope="row">
-                                        <a href="{% url 'proveedor_block' s.id %}" onclick="confirmarCambio(event);">
-                                            Bloquear
-                                        </a>
-                                    </th>
-                                
-                        </th>   
+                    <th scope="row">{{ orden.numero_orden }}</th>
+                    <th scope="row">{{ orden.nota_orden }}</th>
+                    <th scope="row">{{ orden.telefono_orden }}</th>
+                    <th scope="row">{{ orden.estado_orden }}</th>
+                    <th scope="row">{{ orden.proveedor.nombre_proveedor }}</th>
+                    {% if profiles.group_id == 1 or profiles.group_id == 3 %}
+                        <th scope="row">
+                            <a href="{% url 'ver_orden' orden.id  %}">
+                                Ver Orden Finalizada
+                            </a>
+                        </th>
+                        <th scope="row">
+                        </th>
+                        <th scope="row">
+                        </th>
                     {% endif %}                            
                 </tr>
             {% endfor %}
@@ -100,11 +86,10 @@
     <!-- Paginación -->
         {% if paginator.num_pages > 1 %}
             <div class="d-flex">
-                <nav aria-label="Page navigation example" class="ms-auto">
                     <ul class="pagination pagination-table">
-                        {% if proveedor_list.has_previous %}
+                        {% if orden_list.has_previous %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ proveedor_list.previous_page_number}}&search={{search}}" aria-label="Previous">
+                                <a class="page-link" href="?page={{ orden_list.previous_page_number}}&search={{search}}" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
@@ -115,14 +100,14 @@
                         {% endif %}
                         {% for i in paginator.page_range %}
                             {% if i >= page|sub:2  and i < page|add:3  %}
-                                <li class="page-item {% if proveedor_list.number == i %}active{% endif %}">
+                                <li class="page-item {% if orden_list.number == i %}active{% endif %}">
                                     <a class="page-link" href="?page={{ i }}&search={{search}}">{{ i }}</a>
                                 </li>                        
                             {% endif %}
                         {% endfor %}
-                        {% if proveedor_list.has_next %}
+                        {% if orden_list.has_next %}
                             <li class="page-item ">
-                                <a class="page-link" href="?page={{ proveedor_list.next_page_number }}&search={{search}}">&raquo;</a>
+                                <a class="page-link" href="?page={{ orden_list.next_page_number }}&search={{search}}">&raquo;</a>
                             </li>
                         {% else %}
                             <li class="page-item disabled">

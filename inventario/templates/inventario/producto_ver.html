@@ -9,20 +9,22 @@
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
                 <h3>Nuevo Producto</h3> 
+                {% if profiles.group_id == 1 or profiles.group_id == 2 %}
                 <form method="post" action="{% url 'producto_edit' producto_data.id %}">
                     {% csrf_token %}
                     <input type="hidden" value="{{ producto_data.id }}" name="producto_id" id="producto_id">
                     <div class="row"> 
                         <div class="col-12 col-sm-8 mb-3">
                             <label for="text">Nombre Producto</label>
-                            <input type="text" name="nombre" value="{{producto_data.nombre_producto}}" placeholder="Nombre del producto" />
+
+                            <input type="text" name="nombre" value="{{producto_data.nombre_producto}}" placeholder="Nombre del producto" readonly/>
                         </div>  
                         <div class="col-12 col-sm-4 mb-3">
                             <label for="text">Categoria</label>
-                            <select name="category_group_id" id="category_group_id" class="form-control border" required>
-                                <option value="">----------</option>
+                            <select name="category_group_id" id="category_group_id" class="form-control border"  >
+                                <option value="" >----------</option>
                                 {% for g in category_groups %}
-                                <option value="{{g.id}}" {% if g.id == category_datas.id %} selected {% endif %}>{{g.category_group_name}}</option>
+                                <option value="{{g.id}}" readonly {% if g.id == category_datas.id %} selected {% endif %}>{{g.category_group_name}} </option>
                                 {% endfor %}
                             </select>
                         </div>  
@@ -60,6 +62,7 @@
                         </div>
                     </div>
                 </form>
+                {% endif %}
             </div>
         </div>
     </main>

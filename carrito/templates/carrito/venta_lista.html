@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido a la Tienda</title>
+
     <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <link href="{% static 'css/styles.css' %}" rel="stylesheet">
@@ -18,11 +19,13 @@
         <div class="row">
             <div class="col-12 align-self-center">
                 <h1> Tienda</h1>
+
             </div>
         </div>
 
 
         <div class="row">
+            {% if profiles.group_id 1 ==  or profiles.group_id == 4 %}
             <form method="post" action="{% url 'finalizar_venta' %}">
                 {% csrf_token %}
                 <label for="text">Cliente</label>
@@ -74,11 +77,12 @@
                 <input type="submit" value="Finalizar Venta" class="button form-control">
             </div>
         </form>
+        
         </div>
     </div>
     
     <br><a href="{% url 'venta_main' %}" class="button button--gray form-control">Volver</a>
-
+    {% endif %}
     <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
 </body>
 

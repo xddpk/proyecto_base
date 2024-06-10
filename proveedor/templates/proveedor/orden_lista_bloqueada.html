@@ -18,10 +18,10 @@
 <header class='mb-5'>
     <div class="row">
         <div class="col-12 col-sm-8 mb-3">
-            <h2 class='h2 medium text-blue'>Listado de Órdenes Entregadas</h2>
+            <h2 class='h2 medium text-blue'>Listado de Órdenes Aceptadas</h2>
         </div>
         <div class="col-12 col-sm-4 mb-3">
-            <a href="{% url 'proveedor_main' %}" class="button button--gray form-control">Volver</a>
+            <a href="{% url 'proveedor_main4' %}" class="button button--gray form-control">Volver</a>
         </div>
     </div>
     <div class="d-flex flex-column flex-lg-row mt-2">
@@ -44,11 +44,11 @@
     <table class="table table-user">
         <thead>
             <tr>
-                <th width="20%" scope="col">Número de Orden</th>
-                <th width="20%" scope="col">Dirección</th>
-                <th width="20%" scope="col">Teléfono</th>
-                <th width="20%" scope="col">Estado</th>
-                <th width="20%" scope="col">Proveedor</th>
+                <th width="25%" scope="col">Número de Orden</th>
+                <th width="25%" scope="col">Dirección</th>
+                <th width="25%" scope="col">Teléfono</th>
+                <th width="25%" scope="col">Estado</th>
+                <th width="25%" scope="col">Proveedor</th>
                 {% if profiles.group_id == 1 %}
                     <th width="15%" scope="col">Funciones</th>
                 {% endif %}
@@ -58,15 +58,15 @@
             {% for orden in orden_list %}
                 <tr>
                     <th scope="row">{{ orden.numero_orden }}</th>
-                    <td>{{ orden.direccion_orden }}</td>
-                    <td>{{ orden.telefono_orden }}</td>
-                    <td>{{ orden.estado_orden }}</td>
-                    <td>{{ orden.proveedor }}</td>
+                    <td style="text-align: center;">{{ orden.nota_orden }}</td>
+                    <td style="text-align: center;">{{ orden.telefono_orden }}</td>
+                    <td style="text-align: center;">{{ orden.estado_orden }}</td>
+                    <td style="text-align: center;">{{ orden.proveedor }}</td>
                     {% if profiles.group_id == 1 %}
-                        <td>
+                        <td style="text-align: center;">
                             <a href="{% url 'ver_orden' orden.id%}">Ver Orden</a>
-                            <a href="{% url 'orden_activate' orden.id %}" onclick="confirmarCambio(event);">No Entregado</a>
-                            <a href="{% url 'orden_delete' orden.id %}" onclick="confirmarCambio(event);">Eliminar</a>
+                            <a href="{% url 'orden_activate' orden.id %}" onclick="confirmarCambio(event);">Entrega No Realizada</a>
+                            <a href="{% url 'orden_delete' orden.id %}" onclick="confirmarCambio(event);">Finalizar</a>
                         </td>
                     {% endif %}
                 </tr>

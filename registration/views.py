@@ -11,9 +11,10 @@ from django import forms
 from .models import Profile
 from django.core.mail import send_mail
 from django.http import HttpResponse
-
+import xlwt
 from django.conf import settings #importamos el archivo settings, para usar constantes declaradas en él
 from django.core.mail import EmailMultiAlternatives #libreria para el envio de correos
+from extensiones import validacion
 
 # Create your views here.
 class SignUpView(CreateView):
@@ -65,12 +66,24 @@ def profile_edit(request):
         last_name = request.POST.get('last_name')
         mobile = request.POST.get('mobile')
         phone = request.POST.get('phone')
-        User.objects.filter(pk=request.user.id).update(first_name=first_name)
-        User.objects.filter(pk=request.user.id).update(last_name=last_name)
-        Profile.objects.filter(user_id=request.user.id).update(phone=phone)
-        Profile.objects.filter(user_id=request.user.id).update(mobile=mobile)
-        messages.add_message(request, messages.INFO, 'Perfil Editado con éxito') 
-    profile = Profile.objects.get(user_id = request.user.id)
+        validar=True
+        if validacion.validar_soloString(first_name)==False:
+            validar=False
+        if validacion.validar_soloString(last_name)==False:
+            validar=False
+        if validacion.validar_numCelular(mobile)==False:
+            validar=False
+        if validacion.validar_numCelular(phone)==False:
+            validar=False
+        if validar==True:
+            User.objects.filter(pk=request.user.id).update(first_name=first_name)
+            User.objects.filter(pk=request.user.id).update(last_name=last_name)
+            Profile.objects.filter(user_id=request.user.id).update(phone=phone)
+            Profile.objects.filter(user_id=request.user.id).update(mobile=mobile)
+            messages.add_message(request, messages.INFO, 'Perfil Editado con éxito') 
+        else:
+            messages.add_message(request, messages.INFO, 'Ingresado incorrectamente, por favor revise e ingrse los datos correctamente')
+        profile = Profile.objects.get(user_id = request.user.id)
     template_name = 'registration/profile_edit.html'
     return render(request,template_name,{'profile':profile})
 
@@ -104,7 +117,7 @@ def ejemplos_correo1(request,mail_to,data_1):
                         <head>
                             <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                         </head>
-                         <body>
+                        <body>
                             <h3>Estimad@</h3>
                             <p>Es es el cuerpo que agrega el dato por parametro """+str(data_1)+""" mas texto .</p>
                             <p>otro párrafo</p>
@@ -208,36 +221,3 @@ def send_mail_ejemplo2(request,mail_to,data_1):
 
     msg.send()
 
-"""
-@login_required
-def password_change2(request):
-    profiles = Profile.objects.get(user_id = request.user.id)
-    user_id = request.user.id
-    if profiles.group_id != 1:
-        messages.add_message(request, messages.INFO, 'Intenta ingresar a una area para la que no tiene permisos')
-        return redirect('check_group_main')
-    if request.method == 'POST':
-        
-        old_password = request.POST.get('id_old_password')
-        new_password1 = request.POST.get('id_new_password1')
-        new_password2 = request.POST.get('id_new_password2')
-
-        #el metodo no contempla validacioens deberá realizarlas
-        rut_exist = User.objects.filter(username=old_password).count()
-        
-        if new_password1 == new_password2 :
-            User.objects.filter(pk = user_id).update(password = new_password1)  
-            Profile.objects.filter(user_id = user_id).update(first_session = 'No')  
-            Profile.objects.filter(user_id = user_id).update(token_app_session = 'No')  
-            
-        
-        
-            
-        else:
-            messages.add_message(request, messages.INFO, 'Las contraseñas no coinciden') 
-
-    template_name = 'registration/password_change_done.html'
-    
-    
-    return render(request,template_name)
-    """

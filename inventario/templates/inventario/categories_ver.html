@@ -9,6 +9,7 @@
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
                 <h3>Nuevo Producto</h3> 
+                {% if profiles.group_id == 1   or profiles.group_id == 2 %}
                 <form method="post" action="{% url 'categories_edit' category_data.id %}">
                     {% csrf_token %}
                     <input type="hidden" value="{{ category_data.id }}" name="category_id" id="category_id">
@@ -32,6 +33,7 @@
                         </div>
                     </div>
                 </form>
+                {% endif %}
             </div>
         </div>
     </main>

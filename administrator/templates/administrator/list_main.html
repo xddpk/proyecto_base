@@ -6,9 +6,11 @@
     <main role="main">
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
+                {% if profiles.group_id == 1 %}
                 <h3>Listado Perfil {{group.name}} </h3> 
                 <div class="col-12" style="margin-bottom: 15px;"></div>
                 <div class="row mt-4 mb-4">
+                    
                     <div class="col-12 col-sm-3 mb-3">
                         <a href="{% url 'list_user_active' group.id %}" class="button form-control">Activos</a>
                     <div class="col-12" style="margin-bottom: 30px;"></div>
@@ -20,8 +22,10 @@
                     <div class="col-12 col-sm-3 mb-3">
                         <a href="{% url 'users_main' %}" class="button button--gray form-control">Volver</a>
                     <div class="col-12" style="margin-bottom: 30px;"></div>
+                    
                     </div>
                 </div>
+                {% endif %}    
             </div>
         </div>
     </main>

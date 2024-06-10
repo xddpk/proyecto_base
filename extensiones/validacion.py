@@ -1,3 +1,4 @@
+
 import re
 def validar_soloString(dato):
     regex = r'[a-zA-Z]{3,}'
@@ -47,9 +48,37 @@ def validar_email(email):
     else:
         return False
 
-def validar_depto(departamento):
-    if departamento=="":
-        return False
+    
+    
+def validar_depto(dato):
+    regex = r'^[a-zA-Z0-9]+$'
+    if dato=="":
+        return True
+    if re.match(regex,dato):
+        return True
     else:
 
+        return True
+def validar_vacio(dato):
+    if dato=="":
         return False
+    else:
+        return True
+def validar_estado(estado):
+    if estado=="":
+        False
+    if estado=="alto":
+        True
+    if estado=="medio":
+        True
+    if estado=="bajo":
+        True
+    else: False
+def validar_state(estado):
+    if estado=="":
+        False
+    if estado=="Activa":
+        True
+    if estado=="Deactivate":
+        True
+    else: False

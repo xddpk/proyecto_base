@@ -1,0 +1,500 @@
+[33mcommit 374b60c74abdc90549b903b5b107f484e2d8e3e7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mhtml[m[33m, [m[1;32morden_compra_listado[m[33m, [m[1;32mmain[m[33m)[m
+Author: Fortras <toledobravo.nicolas@gmail.com>
+Date:   Mon Jun 3 17:27:54 2024 -0400
+
+    Se agrego el nav y el login tambien se empezo a modificar carga masiva
+
+[33mcommit e38ffc9a044d4bbfed86484b941ecb124e8e72df[m[33m ([m[1;31morigin/Lobos_listados[m[33m)[m
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Mon Jun 3 16:59:15 2024 -0400
+
+    Simplificacion core
+
+[33mcommit e24720f4178fdcf2173527ad0bc16fb50274766d[m
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Sat Jun 1 23:52:55 2024 -0400
+
+    Creacion listados activos y bloqueados para listados de productos y categorias, nuevas funciones para ambos, activar y desactivar
+
+[33mcommit 0b49f9aecf3db48cc96593704da55c131f33f377[m
+Merge: 46fc05e 9fb537a
+Author: DgALS <165919748+DgALS@users.noreply.github.com>
+Date:   Tue May 28 09:46:05 2024 -0400
+
+    Merge branch 'main' of https://github.com/xddpk/proyecto_base
+
+[33mcommit 9fb537ad5e583da4dd0e1b559575066cdf6e0ee6[m
+Merge: 6baa91e 7c58814
+Author: Pedro Perlaza <32093177+ZuritaX@users.noreply.github.com>
+Date:   Tue May 28 07:45:11 2024 -0400
+
+    Merge pull request #7 from xddpk/CambiosEnRamaMaxi_Pedro
+    
+    Proveedor Orden de Venta
+
+[33mcommit 7c5881480425a8fb1bdeaa74acc10fe7e4b7cd99[m
+Author: Pedro Perlaza <32093177+ZuritaX@users.noreply.github.com>
+Date:   Tue May 28 07:44:40 2024 -0400
+
+    Proveedor Orden de Venta
+    
+    No se pudo terminar Error de Modelado
+
+[33mcommit 6baa91ee93a88061ca879753057c7cc07a0b6f8d[m
+Merge: 9e7c3a3 2c25e6b
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Mon May 27 21:53:33 2024 -0400
+
+    Fusion rama Lobos-validaciones con rama main
+
+[33mcommit 46fc05e7d70cfbd168c0bbccc35ad19deeac429a[m
+Merge: 3bced5b 9e7c3a3
+Author: DgALS <165919748+DgALS@users.noreply.github.com>
+Date:   Mon May 27 21:08:55 2024 -0400
+
+    Merge branch 'main' of https://github.com/xddpk/proyecto_base
+
+[33mcommit 3bced5b3dbe5861eb15588de628a8ec120b30f20[m
+Author: DgALS <165919748+DgALS@users.noreply.github.com>
+Date:   Mon May 27 20:47:25 2024 -0400
+
+    cambios diego
+
+[33mcommit 9e7c3a35e040d4a661c9eb495cfdcbd105853b5b[m[33m ([m[1;31morigin/barria_venta[m[33m, [m[1;31morigin/Front_end_Arcani[m[33m)[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Mon May 27 19:58:58 2024 -0400
+
+    se termina lo basico del módulo de ventas
+
+[33mcommit 5397841e777f603496e4da4bf06db27021d3f9de[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Mon May 27 19:10:39 2024 -0400
+
+    se agrega elementos al modelo VentaProducto
+
+[33mcommit aec3668965f3e5f4f7d29e9fe3b981539e5fcac7[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Mon May 27 18:52:39 2024 -0400
+
+    se agrega funcionalidad de finalizar venta
+
+[33mcommit cbf607be3ff414fc3d17447ad8df6b0883716044[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Mon May 27 17:16:48 2024 -0400
+
+    se agrega funcionalidad carrito parte 2
+
+[33mcommit 17e4ab2a1106e7339ae5c86cfbfc0f409c470e87[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Mon May 27 15:07:54 2024 -0400
+
+    se agrega app carrito parte 1
+
+[33mcommit eead1a3041ae2ce9e59bea2628143a6fe98790e8[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Mon May 27 13:57:32 2024 -0400
+
+    se agrega funcionalidad eliminar cliente
+
+[33mcommit 2c25e6b669fd5a8d9a774f1fc70c9709ff110cc3[m[33m ([m[1;31morigin/Lobos-validaciones[m[33m)[m
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Mon May 27 12:51:54 2024 -0400
+
+    Modificacion grupos de usuarios permitidos para acceso inventario
+
+[33mcommit 82d9096b64d78a2e511cbcea30e16f166202d124[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Sat May 25 21:05:58 2024 -0400
+
+    se agrega funcionalidad crud de clientes excepto la de eliminar ya que falta parte de crear venta
+
+[33mcommit 8d4d61b35d4aaba03189100c14f94641eac883e3[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Sat May 25 19:15:58 2024 -0400
+
+    se agrega el modelo de venta
+
+[33mcommit 7af2c8dc6869779bd7bbd5395f0bfaa0cbdad059[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Sat May 25 17:39:37 2024 -0400
+
+    Se agrega app de venta y se agrega a la barra de tareas proveedor y ventas
+
+[33mcommit e092b47ff674665fa6cba850199c298256825bfd[m
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Sat May 25 13:20:51 2024 -0400
+
+    validaciones agregadas a inventario y proveedor
+
+[33mcommit 92659c24b7063602985b3c55bb54e60ac944acff[m[33m ([m[1;31morigin/barria_proveedor[m[33m)[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Fri May 24 00:07:55 2024 -0400
+
+    se agrega funcionalidad listar direcciones, buscar por nombre y numero de calle, editar y eliminar direccion
+
+[33mcommit 45236078e34d504ed9e27b0ad32b8f854bc49bcc[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Thu May 23 19:27:28 2024 -0400
+
+    Se agrega funcionalidad crear nueva dirrecion
+
+[33mcommit 80071232d5cf12dba8b96e4d275c2f7f44edf332[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Thu May 23 18:50:40 2024 -0400
+
+    se modificó modelo
+
+[33mcommit 35499fdd62ed98087c148206d5a7dc8088b2f685[m
+Author: maxi-barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Tue May 21 21:15:53 2024 -0400
+
+    falta editar usuario y tengo que modificar el modelo referente a las dirreciones
+
+[33mcommit bb8abb5da6773ab42ea1be5b5a0a039fa4b2960f[m
+Author: maxi-barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Tue May 21 17:54:36 2024 -0400
+
+    se agrega funcionalidad nuevo proveedor, ademas se modifico el template base_admin agregandole un script
+
+[33mcommit a2fddb9a3bb8293c5ff18624c6c83b66300b7f31[m[33m ([m[1;31morigin/Perlaza_proveedor[m[33m)[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Thu May 16 18:23:54 2024 -0400
+
+    Se crean modelos
+
+[33mcommit dbe5e701e202b55bfa8d8cc2dee0fe803d56fb8a[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Thu May 16 17:03:04 2024 -0400
+
+    se agrega app proveedor
+
+[33mcommit 1f58116cb6b9390ffc7eb0307538bdc842c3ba72[m
+Merge: f2acddf dc67bd7
+Author: Pedro Perlaza <32093177+ZuritaX@users.noreply.github.com>
+Date:   Tue May 14 03:29:15 2024 -0400
+
+    Merge pull request #6 from xddpk/Avance_Semana4
+    
+    Alertas
+
+[33mcommit dc67bd7e39b4a64a01384001233b37ed55dc9e98[m[33m ([m[1;31morigin/Avance_Semana4[m[33m)[m
+Author: Pedro Perlaza <32093177+ZuritaX@users.noreply.github.com>
+Date:   Tue May 14 03:28:40 2024 -0400
+
+    Alertas
+    
+    Alertas
+
+[33mcommit f2acddf0a929f8a2c5eed87b2bca6831102c2053[m
+Author: Pedro Perlaza <32093177+ZuritaX@users.noreply.github.com>
+Date:   Tue May 14 03:25:17 2024 -0400
+
+    Revert "Cambios Alertas"
+    
+    This reverts commit 91e25f281a73c1b92de3474b4631bb01f204f2a4.
+
+[33mcommit 91e25f281a73c1b92de3474b4631bb01f204f2a4[m
+Author: Pedro Perlaza <32093177+ZuritaX@users.noreply.github.com>
+Date:   Tue May 14 03:24:13 2024 -0400
+
+    Cambios Alertas
+    
+    Cambios Alertas
+
+[33mcommit b814b87d06b690ab7e083afe2fcefc93620d146e[m
+Author: xddpk <162989148+xddpk@users.noreply.github.com>
+Date:   Mon May 13 23:52:20 2024 -0400
+
+    cambios html usuario
+
+[33mcommit 91503b984a5296bde6e15a1f78b158326f85b111[m
+Merge: bf1fe27 9110a75
+Author: xddpk <162989148+xddpk@users.noreply.github.com>
+Date:   Mon May 13 23:18:30 2024 -0400
+
+    Merge pull request #5 from xddpk/Toledo
+    
+    validaciones
+
+[33mcommit 9110a75cb1b06ae7016f3721725e6c63e4a500a6[m
+Merge: 3fec908 bf1fe27
+Author: xddpk <162989148+xddpk@users.noreply.github.com>
+Date:   Mon May 13 23:18:20 2024 -0400
+
+    Merge branch 'main' into Toledo
+
+[33mcommit 3fec908cb2227d0751940275355b93dba3e883ea[m
+Author: Enzo <ejemplo@gmail.com>
+Date:   Mon May 13 23:10:35 2024 -0400
+
+    validaciones
+
+[33mcommit bf1fe27639bfda2e203430c898d2d223cd55a3ce[m
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Mon May 13 22:39:55 2024 -0400
+
+    Problemas merge solucionados
+
+[33mcommit f4171cc64a0c0a3878cfbdad94e8aebc1f488fd0[m
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Mon May 13 22:33:35 2024 -0400
+
+    arreglo merge
+
+[33mcommit 67d08ebe79d61f643dd6449f6151380dbbae27f5[m
+Merge: 10fba40 7026e63
+Author: Pedro Perlaza <32093177+ZuritaX@users.noreply.github.com>
+Date:   Mon May 13 21:37:04 2024 -0400
+
+    Orlando
+
+[33mcommit 7026e630335305557b8f88d86606279590c05a4b[m
+Merge: d7c3ec3 16934d0
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Mon May 13 21:26:31 2024 -0400
+
+    t
+
+[33mcommit d7c3ec3e63addbdd8cbb2366030f44412b75ddf0[m
+Author: DgALS <165919748+DgALS@users.noreply.github.com>
+Date:   Mon May 13 20:42:29 2024 -0400
+
+    orden de html
+
+[33mcommit 05c5f2a9c735cda8f3ba325ed014df7f49d7a0cb[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Mon May 13 19:43:43 2024 -0400
+
+    se ordenó html
+
+[33mcommit 418701acb2b1cf30530dce89b3141908e07042c5[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Mon May 13 19:37:36 2024 -0400
+
+    se agrega carga masiva y se ordena un pco el html
+
+[33mcommit 3de0c0218485c21be00595b3bd870e5318991a17[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Mon May 13 16:08:01 2024 -0400
+
+    Se terminó el cambio de contraseña tanto para first session y olvidé mi contra
+
+[33mcommit b971bcdbf83bd0a9ba35c4f5dfe550a05dabd14d[m
+Author: Enzo <ejemplo@gmail.com>
+Date:   Mon May 13 20:04:47 2024 -0400
+
+    Validacion ultima
+
+[33mcommit c202548a8cab694b2aa3658646c0b15a4fa31cf5[m
+Author: Enzo <ejemplo@gmail.com>
+Date:   Mon May 13 20:03:26 2024 -0400
+
+    Validaciones
+
+[33mcommit 12a43975c3164e7229775b6255d2586cd27aab0e[m
+Merge: dc8a91f e9ed1e1
+Author: Enzo <ejemplo@gmail.com>
+Date:   Mon May 13 17:37:05 2024 -0400
+
+    rama de toledo, validaciones en admin views y extenciones
+
+[33mcommit e9ed1e1db5f3a0d6e41ccbdb52828994d22b15f6[m
+Author: Enzo <ejemplo@gmail.com>
+Date:   Mon May 13 17:21:03 2024 -0400
+
+    Se agregan validaciones como telefono (cel), cargo y correo es editado como posibilidad de cambiar el regex
+
+[33mcommit b5ada10a298f882381cf262f5b9e6db23e492db8[m
+Author: Enzo <ejemplo@gmail.com>
+Date:   Mon May 13 17:19:21 2024 -0400
+
+    Mismas lineas, se agrega telefono, y hay cambios en la estructura
+
+[33mcommit 16934d030efbff60a5761db961392befb9616219[m
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Mon May 13 14:14:24 2024 -0400
+
+    cambios de buscador semana 6
+
+[33mcommit dc8a91f8b677144411a46c2f5bef15d08ed56b3c[m
+Merge: 064b80d 60ce094
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Mon May 13 12:43:24 2024 -0400
+
+    Merge branch 'main' of https://github.com/xddpk/proyecto_base
+    pull hacia mi repositorio local
+
+[33mcommit 60ce094b9e9212f6d374d65b39ac34d1403d1bf4[m
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Sun May 12 19:52:52 2024 -0400
+
+    persistencia en buscador de listas
+
+[33mcommit 8da51ab0c8b22a1bfa2ae2b7c154312532adfb4d[m
+Author: Enzo <ejemplo@gmail.com>
+Date:   Sat May 11 15:32:57 2024 -0400
+
+    Codigo de if y else en linea 65 y 67
+
+[33mcommit 3c0afce4cc0bbfe53f08404f473630b3c0cad69b[m
+Author: Enzo <ejemplo@gmail.com>
+Date:   Sat May 11 15:30:45 2024 -0400
+
+    Se agrega archivo de validaciones, solo lleva regex rut correo
+
+[33mcommit 4c261a6f489a2699aac64edcf9caa8e3fa5116dc[m
+Author: Enzo <ejemplo@gmail.com>
+Date:   Sat May 11 15:21:23 2024 -0400
+
+    aqui nos comunicaremos
+
+[33mcommit 16f3da4fe4b5b80fbe6ad637cecc3e6c45862a7b[m
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Fri May 10 17:57:21 2024 -0400
+
+    Cambios de inventario semana 6
+
+[33mcommit 0d6dc8df637601bf6867c44a166bdc7348d7a3b6[m
+Author: Enzo <ejemplo@gmail.com>
+Date:   Fri May 10 16:53:29 2024 -0400
+
+    rep
+
+[33mcommit 064b80db95ff81cda0d731e32747e580558f353d[m
+Merge: 8cd6ab0 7a87b6c
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Thu May 9 21:13:51 2024 -0400
+
+    Merge branch 'main' of https://github.com/xddpk/proyecto_base
+    hola
+
+[33mcommit 7a87b6cb0d792473fb5d9886e28546988b134a31[m
+Author: Fortras <toledobravo.nicolas@gmail.com>
+Date:   Thu May 9 21:03:47 2024 -0400
+
+    agregando rama toledo
+
+[33mcommit 10fba40187a00d603856680d6d39a174096266a4[m[33m ([m[1;31morigin/RamaPedro[m[33m)[m
+Author: Pedro Perlaza <32093177+ZuritaX@users.noreply.github.com>
+Date:   Thu May 9 20:57:35 2024 -0400
+
+    Cambio en hola
+
+[33mcommit 70256d4d87045056d65b7f7916ba6120da89afd3[m
+Merge: 5120004 0e10cce
+Author: Pedro Perlaza <32093177+ZuritaX@users.noreply.github.com>
+Date:   Thu May 9 20:48:43 2024 -0400
+
+    Merge branch 'main' of https://github.com/xddpk/proyecto_base
+
+[33mcommit 0e10cce84c00548c92a75f48185b4548c117ff25[m
+Merge: 0792400 863a30a
+Author: doble77 <alan.arcani1@gmail.com>
+Date:   Thu May 9 20:44:40 2024 -0400
+
+    aaaaa
+
+[33mcommit 0792400d0270e832d37fe6a1165c64bd818408da[m
+Merge: 895ebee d782866
+Author: doble77 <alan.arcani1@gmail.com>
+Date:   Thu May 9 20:42:48 2024 -0400
+
+    paso 3
+
+[33mcommit 863a30a76a8c946a3398184408f3adfdce722557[m
+Author: doble77 <alan.arcani1@gmail.com>
+Date:   Thu May 9 20:39:16 2024 -0400
+
+    cambio 2
+
+[33mcommit 895ebee5fe0bf5d4d9884e0933a1bde2e5995b8e[m
+Author: doble77 <alan.arcani1@gmail.com>
+Date:   Thu May 9 20:31:20 2024 -0400
+
+    alan trabaja aqui es responsable
+
+[33mcommit d7828663640d270d15c3b974066f250396126cad[m[33m ([m[1;31morigin/Gajardo[m[33m)[m
+Author: Xtronksito <163474190+Xtronksito@users.noreply.github.com>
+Date:   Thu May 9 20:25:53 2024 -0400
+
+    Potito
+
+[33mcommit 5120004134fc1318a06530bd63da33d0d5a0a8b8[m
+Merge: 822c488 2ebf150
+Author: Pedro Perlaza <32093177+ZuritaX@users.noreply.github.com>
+Date:   Thu May 9 20:08:48 2024 -0400
+
+    Merge branch 'main' of https://github.com/xddpk/proyecto_base
+
+[33mcommit bfd579191e90cc78e01b21393b54c0c6c30e8061[m
+Merge: 9ae7244 2ebf150
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Thu May 9 20:06:59 2024 -0400
+
+    Merge branch 'main' of https://github.com/xddpk/proyecto_base into Lobos
+
+[33mcommit 2ebf150b95def2efa1cf32d5903c11473876e0d8[m
+Merge: a097aed 38675ae
+Author: Enzo <ejemplo@gmail.com>
+Date:   Thu May 9 20:01:59 2024 -0400
+
+    Merge branch 'main' of https://github.com/xddpk/proyecto_base
+
+[33mcommit 8cd6ab0cb5567d896f1e8965dabe5e7f5ebfcf1b[m
+Merge: 6b33990 fedf9f9
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Thu May 9 20:00:57 2024 -0400
+
+    Merge branch 'Barria'
+    
+    se juntan las ramas
+
+[33mcommit a097aedeb09f91eaf43242b5b866011f7d1d6ea4[m
+Author: Enzo <ejemplo@gmail.com>
+Date:   Thu May 9 20:00:40 2024 -0400
+
+    merge
+
+[33mcommit b38c9b62018651b9a8394c5cad4a36c912f4de74[m[33m ([m[1;31morigin/Vera[m[33m)[m
+Author: Enzo <ejemplo@gmail.com>
+Date:   Thu May 9 19:58:59 2024 -0400
+
+    Rama de Enzo
+
+[33mcommit 38675aefd64af7cf43b481509780e35f1dbd7ddf[m
+Merge: 6b33990 fedf9f9
+Author: xddpk <162989148+xddpk@users.noreply.github.com>
+Date:   Thu May 9 19:57:26 2024 -0400
+
+    Merge pull request #1 from xddpk/Barria
+    
+    holaaaaaa
+
+[33mcommit 9ae72443d102eb613b6f5382d6a923e4092161b5[m
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Thu May 9 19:56:34 2024 -0400
+
+    prueba de rama
+
+[33mcommit 822c488ac67831cc71407c61d20dd38572cd864e[m
+Author: Pedro Perlaza <32093177+ZuritaX@users.noreply.github.com>
+Date:   Thu May 9 19:51:47 2024 -0400
+
+    Update BENJAAAA.txt
+    
+    Cambiopp
+
+[33mcommit fedf9f958316b9215e6a169200f4933dc9d74cd9[m
+Author: Maximiliano Barria <maximiliano.barria@cloud.uautonoma.cl>
+Date:   Thu May 9 19:49:40 2024 -0400
+
+    holaaaaaa
+
+[33mcommit 6b3399014ad154cb2249bc8db47f249fab6f9204[m[33m ([m[1;31morigin/Rey-Potito[m[33m)[m
+Merge: 7d3a0d9 3545bcd
+Author: benja0702 <benjamin.lobos1@cloud.uautonoma.cl>
+Date:   Thu May 9 19:38:02 2024 -0400
+
+    Merge branch 'main' of https://github.com/xddpk/proyecto_base
+
+[33

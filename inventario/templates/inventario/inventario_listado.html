@@ -12,6 +12,7 @@
         </div>
     </div>
 </header>
+{% if profiles.group_id == 1 or profiles.group_id == 2 %}
 
 <div class="col-md-11" style="position: absolute; top: 20%; left: 15%; width: 40%; height: 60%; border-radius: 90px;">
     <div class="position-relative h-100">
@@ -47,15 +48,9 @@
                 <th width="7%" scope="col">Precio $</th>
                 <th width="5%" scope="col">Categoría</th>
                 <th width="5%" scope="col">Estado</th>
-                {% if profiles.group_id == 1 %}
-                    <th width="2%" scope="col">
-                        {% if profiles.group_id == 1 %}
-                            <i class="fas fa-cogs" title="Funciones"></i>
-                            
-                        {% endif %}
-                    </th>
-                {% endif %}
-            </tr>
+                <th width="2%" scope="col">
+                <i class="fas fa-cogs" title="Funciones"></i>
+
         </thead>
         <tbody>
 
@@ -67,20 +62,16 @@
                     <th style="background-color: lightgray;"scope="row">{{ p.precio_producto }}</th> 
                     <th style="background-color: lightgray;"scope="row">{{ p.categoria_data }}</th> 
                     <th scope="row">
-                        {% if p.stock_producto < p.stock_minimo_producto %}
+                        {% if p.estado_producto == 'Bajo' %}
                             <div style="background-color: red;border-radius: 90px;">
-                                <a href="{% url 'producto_create3' p.id %}">
+                                <a href="">
                                     Bajo
                                 </a>
                             </div>
-                        {% elif p.stock_maximo_producto < p.stock_producto  %}
+                        {% elif p.estado_producto == 'Bueno'  %}
                                 <div style="background-color: green; border-radius: 90px;">
-                                    Alto
+                                    Bueno
                                 </div>
-                        {% else %}
-                           <div style="background-color: yellow; border-radius: 90px;">
-                                 Medio
-                            </div>
                         {% endif %}
                     </th>   
                     <!-- acá debe ir logica y boton para el estado-->  
@@ -93,11 +84,13 @@
                                     <i class="fas fa-ban"></i>
                                 </a>
                             </th>
+
                     {% endif %}                            
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% endif %}
     <script>
         console.log(producto_list);
     </script>
