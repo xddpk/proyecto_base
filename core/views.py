@@ -16,51 +16,45 @@ from registration.models import Profile #importa el modelo profile, el que usare
 def home(request):
     return redirect('login')
 
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+
+
+def num_pag():
+    return 10
+
+
+
 @login_required
 def pre_check_profile(request):
-    profile = Profile.objects.filter(user_id=request.user.id).first() # Obtener el perfil del usuario
-    if profile: # Si el perfil existe
-        if profile.first_session == 'Si': # Si es la primera sesión
-            Profile.objects.filter(user_id = request.user.id).update(first_session = 'No')  
-            Profile.objects.filter(user_id = request.user.id).update(token_app_session = 'No') 
-            return redirect('admin_main') # Redirigir a la página de cambio de contraseña
+    profile = Profile.objects.filter(user_id=request.user.id).first()  # Obtener el perfil del usuario
     
+    if profile:  # Si el perfil existe
+        
+        if profile.first_session == 'Si':  # Si es la primera sesión
+            print('hola2')
+            #profile.first_session = 'No'
+            #profile.token_app_session = 'No'
+            #profile.save(update_fields=['first_session', 'token_app_session'])  # Guardar cambios en una sola consulta
+            return render(request,'registration/password_change_form.html')
+
+    else:
+        messages.add_message(request, messages.INFO, 'Perfil no encontrado. Por favor, contacte al administrador.')
+        return redirect('login')
+    
+    return redirect('login')  # Redirigir a una vista predeterminada si no se cumple ninguna condición
+
 def check_profile(request):
     try:
         profile = Profile.objects.get(user_id=request.user.id)
     except Profile.DoesNotExist:
-        messages.add_message(request, messages.INFO, 'No se encontró el perfil asociado a su usuario. Por favor, contacte a los administradores.')
-        return redirect('login')
-    profile_datos=Profile.objects.get(user_id=request.user.id)
-    if profile.group_id == 1:
-        inicio_sesion = profile.first_session
-        if inicio_sesion == 'No':
-            return redirect('admin_main')
-<<<<<<< HEAD
-        else:
-            #Profile.objects.filter(user_id = request.user.id).update(first_session = 'No')  
-            #Profile.objects.filter(user_id = request.user.id).update(token_app_session = 'No')  
-            return render(request, 'registration/password_change_form.html', {'profile_id': Profile.objects.get(user_id=request.user.id).id})
-=======
-        elif inicio_sesion == 'Si':
-            profile.first_session = 'No'
-            profile.save()
-    
-        return render(request, 'registration/password_change_form.html', {'profile_id': Profile.objects.get(user_id=request.user.id).id})
->>>>>>> 16934d030efbff60a5761db961392befb9616219
-    else:
-        return redirect('logout')
-        
-"""@login_required
-def check_profile(request):  
-    try:
-        profile = Profile.objects.filter(user_id=request.user.id).get()    
-    except:
         messages.add_message(request, messages.INFO, 'Hubo un error con su usuario, por favor contactese con los administradores')              
         return redirect('login')
-    if profile.group_id == 1:        
-        #return HttpResponse('Usted se ha autentificado')
+    
+    if profile.group_id in [0,1, 2, 3, 4]:        
         return redirect('admin_main')
     else:
-        return redirect('logout')"""
-
+        messages.add_message(request, messages.WARNING, 'No tiene permisos suficientes para acceder a esta área.')
+        return redirect('logout')
