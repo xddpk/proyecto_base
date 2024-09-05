@@ -46,6 +46,7 @@ body {
 }
 
 a {
+    color: white;
     text-decoration: none;
 }
 
@@ -85,7 +86,7 @@ textarea {
 }
 
 .button {
-    background-color: var(--blue);
+    background-color: #4A90E2 ;
     border: 2px solid var(--blue);
     padding: 12px 34px 12px 34px;
     color: white;

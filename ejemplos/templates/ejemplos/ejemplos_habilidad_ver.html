@@ -10,17 +10,17 @@
     <div class="col-md-11">
         <div class="mb-3">
             <div class="d-flex flex-column align-items-center align-items-lg-start">
-                <form action="{% url 'ejemplos_habilidad_save' habilidad_data.id%}" method="POST">
+                <form method="post" action="{% url 'ejemplos_habilidad_save' %}">
                     {% csrf_token %}
                     <div class="col-12 col-lg-12 row row-cols-1 row-cols-md-1 g-2 p-lg-0-5">
                         <div class="mb-0 col-md-12">
                             <label for="category_name" class="form-label">Nombre Habilidad</label>
-                            <input type="text" class="form-control" name="nombre" id="nombre" value="{{habilidad_data.nombre}}" placeholder="Nombre Habilidad" required>
+                            <input type="text" class="form-control" name="nombre" id="nombre" value="{{habildad_data.nombre}}" placeholder="Nombre Habilidad" required>
                             <div class="feedback body--small normal"></div>
                         </div>
                         <div class="mb-0 col-md-12">
-                             <label for="category_description" class="form-label">Nivel</label>
-                            <input type="text" class="form-control" name="nivel" id="nivel" value="{{habilidad_data.nivel}}" placeholder="Nivel" required>
+                            <label for="category_description" class="form-label">Nivel</label>
+                            <input type="text" class="form-control" name="nivel" id="nivel" value="{{habildad_data.nivel}}" placeholder="Nivel" required>
                             <div class="feedback body--small normal"></div>
                         </div>
                         <div class="mb-0 col-md-12">

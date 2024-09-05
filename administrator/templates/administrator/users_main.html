@@ -8,26 +8,18 @@
         <div class="container col-12 mt-3">
             <div class="col-12  mt-3">
                 <h3>Gestión De Usuarios </h3> 
-                <div class="col-12" style="margin-bottom: 15px;"></div>               
                 <div class="row mt-4 mb-4">
                     {% if profiles.group_id == 1%}
                         <div class="col-12 col-sm-3 mb-3">
                             <a href="{% url 'new_user' %}" class="button form-control">Nuevo Usuario</a>
-                            <div class="col-12" style="margin-bottom: 30px;"></div> 
                         </div>
                     {% endif %}
-                    
+                    {% for g in groups %}
                         <div class="col-12 col-sm-3 mb-3">
-                            <div class="col-12" style="margin-bottom: 25px;"></div>
-                            <a href="{% url 'list_main2' %}" class="button form-control">Listado</a>
+                            <a href="{% url 'list_main' g.id %}" class="button form-control">{{g.name}}</a>
                         </div>
-                    
+                    {% endfor %}
                     <div class="col-12 col-sm-3 mb-3">
-                        <div class="col-12" style="margin-bottom: 25px;"></div>
-                        <a href="{% url 'carga_masiva' %}" class="button">Carga Masiva</a>
-                        <div class="col-12" style="margin-bottom: 30px;"></div> 
-                        <a href="{% url 'admin_dashboard' %}" class="button">Dashboard</a>
-                        <div class="col-12" style="margin-bottom: 30px;"></div>
                         <a href="{% url 'admin_main' %}" class="button button--gray form-control">Volver</a>
                     </div>
                 </div>

@@ -6,77 +6,63 @@
     <header class='mb-5'>
         <div class="row">
             <div class="col-12 col-sm-8 mb-3">
-                <div class="col-12" style="margin-bottom: 20px;"></div>
                 <h2 class='h2 medium text-blue'>Módulo Ejemplo</h2>
-                <div class="col-12" style="margin-bottom: 20px;"></div>
-
             </div>
             <div class="col-12 col-sm-4 mb-3">
                 <a href="{% url 'admin_main'%}" class="button button--gray form-control">Volver</a>
-                <div class="col-12" style="margin-bottom: 20px;"></div>
             </div>
         </div>
         <div class="d-flex flex-column flex-lg-row mt-2">
             <p class='body--normal text-gray'>
                 {% lorem 2 b random %}
             </p>
-        <div class="col-12" style="margin-bottom: 20px;"></div>
         </div>
         <div class="row">
             <div class="col-12 col-sm-4 mt-4 mb-3">
                 <a href="{% url 'ejemplos_list_habilidades' %}" class="button form-control" >
                     Listado
                 </a>
-            <div class="col-12" style="margin-bottom: 25px;"></div>
             </div>
             <div class="col-12 col-sm-4 mt-4 mb-3">
                 <a href="{% url 'ejemplos_habilidad_add' %}" class="button form-control" >
                     Nuevo
                 </a>
             </div>
-            <div class="col-12" style="margin-bottom: 25px;"></div>
             <div class="col-12 col-sm-4 mt-4 mb-3">
                 <a href="{% url 'ejemplos_carga_masiva' %}" class="button form-control" >
                     Carga masiva
                 </a>
             </div>
-            <div class="col-12" style="margin-bottom: 25px;"></div>
             <div class="col-12 col-sm-4 mt-4 mb-3">
                 <a href="{% url 'ejemplos_autor_new' %}" class="button form-control" >
                     Nuevo Autor
                 </a>
             </div>
-            <div class="col-12" style="margin-bottom: 25px;"></div>
             <div class="col-12 col-sm-4 mt-4 mb-3">
-                <a href="{% url 'ejemplos_autor_list' %}" class="button form-control" >
+                <a href="{% url 'ejemplos_carga_masiva' %}" class="button form-control" >
                     Listado Autores
                 </a>
             </div>
-            <div class="col-12" style="margin-bottom: 25px;"></div>
             <div class="col-12 col-sm-4 mt-4 mb-3">
                 <a href="{% url 'ejemplos_carga_masiva' %}" class="button form-control" >
                     Nuevo Proyecto
                 </a>
-            </div>
-            <div class="col-12" style="margin-bottom: 25px;"></div>         
+            </div>            
             <div class="col-12 col-sm-4 mt-4 mb-3">
-                <a href="{% url 'ejemplos_proyect_list' %}" class="button form-control" >
+                <a href="{% url 'ejemplos_carga_masiva' %}" class="button form-control" >
                     Listado Proyectos
                 </a>
-            </div> 
-            <div class="col-12" style="margin-bottom: 25px;"></div>
+            </div>  
             <div class="col-12 col-sm-4 mt-4 mb-3">
                 <a href="{% url 'ejemplos_correo1' %}" class="button form-control" >
                     Ejemplo Correo 1
                 </a>
-            </div> 
-            <div class="col-12" style="margin-bottom: 25px;"></div>                                 
+            </div>                                   
             <div class="col-12 col-sm-4 mt-4 mb-3">
                 <a href="{% url 'ejemplos_correo2' %}" class="button form-control" >
                     Ejemplo Correo 2
                 </a>
-            </div> 
-            <div class="col-12" style="margin-bottom: 25px;"></div> 
+            </div>  
             <div class="col-12 col-sm-4 mt-4 mb-3">
                 <a href="{% url 'ejemplos_dashboard' %}" class="button form-control" >
                     Ejemplo Dashboard
